@@ -101,6 +101,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .th b { display: block; font-family: var(--display); font-size: 1.7rem; font-variant-numeric: tabular-nums; }
 .th span { color: var(--muted); font-size: 0.88rem; }
 .feature > a { justify-self: start; }
+.payload { margin: 0; overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.payload code { font-family: var(--mono); font-size: 0.82rem; line-height: 1.55; color: var(--ink); }
+.note { color: var(--muted); font-size: 0.9rem; }
 .contrib { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 70ch; }
 
 /* Outros projetos */
@@ -316,6 +319,89 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
     <a href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes</a>
   </section>
 
+  <section class="feature" aria-labelledby="n8n">
+    <div class="feature-head">
+      <div class="label">Automação e integração · Prefeitura de Niterói · homologação e prova de conceito</div>
+      <h2 id="n8n">Plataforma de automação com n8n</h2>
+      <p>Uma instância própria do n8n, montada por mim na VM de homologação do Escritório de Dados, para que a equipe possa criar e testar integrações entre sistemas sem depender de um serviço externo. Preparei a infraestrutura em contêineres e construí um primeiro fluxo que recebe eventos de outro sistema, confere os dados e grava o que é válido no banco.</p>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Fluxo do workflow: um webhook recebe o evento em JSON, um nó Code valida os campos, um nó IF separa os caminhos, os eventos válidos são gravados no PostgreSQL e o fluxo responde HTTP 200. Eventos inválidos seguem pelo caminho de erro e não são gravados.">
+      <svg class="cycle" viewBox="0 0 760 215">
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <rect class="node" x="10" y="20" width="120" height="120" rx="10"></rect>
+        <text x="24" y="48">Webhook</text>
+        <text class="sub" x="24" y="74">evento HTTP</text>
+        <text class="sub" x="24" y="94">em JSON</text>
+        <text class="sub" x="24" y="114">Bearer token</text>
+
+        <rect class="node" x="165" y="20" width="120" height="120" rx="10"></rect>
+        <text x="179" y="48">Code</text>
+        <text class="sub" x="179" y="74">valida os</text>
+        <text class="sub" x="179" y="94">4 campos</text>
+        <text class="sub" x="179" y="114">JavaScript</text>
+
+        <rect class="core" x="320" y="20" width="120" height="120" rx="10"></rect>
+        <text x="334" y="48">IF</text>
+        <text class="sub" x="334" y="74">válido ou</text>
+        <text class="sub" x="334" y="94">inválido</text>
+
+        <rect class="node" x="475" y="20" width="120" height="120" rx="10"></rect>
+        <text x="489" y="48">PostgreSQL</text>
+        <text class="sub" x="489" y="74">tabela</text>
+        <text class="sub" x="489" y="94">webhook_events</text>
+
+        <rect class="node" x="630" y="20" width="120" height="120" rx="10"></rect>
+        <text x="644" y="48">Resposta</text>
+        <text class="sub" x="644" y="74">HTTP 200</text>
+        <text class="sub" x="644" y="94">no sucesso</text>
+
+        <path d="M130,80 L161,80" marker-end="url(#ar3)"></path>
+        <path d="M285,80 L316,80" marker-end="url(#ar3)"></path>
+        <path d="M440,80 L471,80" marker-end="url(#ar3)"></path>
+        <path d="M595,80 L626,80" marker-end="url(#ar3)"></path>
+        <path d="M380,140 L380,176" stroke-dasharray="4 4" marker-end="url(#ar3)"></path>
+        <text class="sub" x="300" y="198">inválido: caminho de erro, nada é gravado</text>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Contrato do evento · exemplo fictício</div>
+      <pre class="payload"><code>{
+  "event_id": "evt-0001",
+  "source": "sistema-exemplo",
+  "timestamp": "2026-03-10T14:32:00-03:00",
+  "data": { "tipo": "teste", "descricao": "payload de exemplo" }
+}</code></pre>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>3 serviços</b><span>n8n, PostgreSQL e Redis no mesmo Docker Compose</span></div>
+      <div class="th"><b>5 etapas</b><span>do webhook à resposta HTTP no fluxo de teste</span></div>
+      <div class="th"><b>4 campos</b><span>event_id, source, timestamp e data no contrato</span></div>
+      <div class="th"><b>1.x → 2.x</b><span>atualização da versão do n8n feita na instância</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Stack com Docker Compose reunindo n8n, PostgreSQL e Redis, com rede dedicada, volumes persistentes, healthchecks, reinício automático e rotação de logs.</li>
+        <li>Configuração por variáveis de ambiente, com credenciais e segredos fora dos arquivos do projeto.</li>
+        <li>Workflow de prova de conceito: webhook com autenticação Bearer, validação dos campos em um Code Node, lógica condicional e gravação dos eventos válidos no PostgreSQL.</li>
+        <li>Testes com payloads válidos e inválidos, incluindo os casos em que o JSON chega como objeto ou como lista.</li>
+        <li>Diagnóstico pelos logs, testes de Code Nodes em JavaScript e Python e atualização da instância da versão 1.108 para a 2.32.</li>
+      </ul>
+    </div>
+    <p class="note">Ambiente de homologação: os workflows seguem em rascunho e ainda não foram publicados em produção.</p>
+    <ul class="tags">
+      <li>n8n</li><li>Docker Compose</li><li>PostgreSQL</li><li>Redis</li><li>Webhooks</li><li>JSON</li><li>JavaScript</li><li>Python</li><li>Linux</li>
+    </ul>
+  </section>
+
   <section class="stack" aria-labelledby="outros">
     <h2 id="outros">Outros projetos</h2>
     <div class="grid">
@@ -342,7 +428,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
       <article class="card">
         <div class="meta">Automação · Prefeitura de Niterói</div>
         <h3>Ingestão por webhook</h3>
-        <p>Prova de conceito que recebe ocorrências em JSON por webhook (FastAPI), valida os campos e grava no Microsoft Fabric/OneLake organizado por data. Também configurei workflows no n8n.</p>
+        <p>Prova de conceito que recebe ocorrências em JSON por webhook (FastAPI), valida os campos e grava no Microsoft Fabric/OneLake, com os arquivos organizados por ano, mês e dia.</p>
       </article>
     </div>
   </section>
@@ -370,7 +456,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
     <div class="skills">
       <div><div class="label">Front-end</div><ul class="tags"><li>React</li><li>Next.js</li><li>TypeScript</li><li>JavaScript</li><li>HTML/CSS</li><li>Tailwind</li><li>styled-components</li><li>Zustand</li><li>ArcGIS</li></ul></div>
       <div><div class="label">Back-end</div><ul class="tags"><li>Node.js</li><li>Express</li><li>APIs REST</li><li>Zod</li><li>Python</li><li>FastAPI</li></ul></div>
-      <div><div class="label">Dados e automação</div><ul class="tags"><li>Prefect</li><li>n8n</li><li>Fabric/OneLake</li><li>PostgreSQL</li><li>Supabase</li><li>Redis</li><li>SQL</li></ul></div>
+      <div><div class="label">Dados e automação</div><ul class="tags"><li>n8n</li><li>Prefect</li><li>Webhooks</li><li>Fabric/OneLake</li><li>PostgreSQL</li><li>Supabase</li><li>Redis</li><li>SQL</li></ul></div>
       <div><div class="label">Infra e qualidade</div><ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>Netlify</li><li>GitHub Actions</li><li>Git</li><li>Jest</li><li>Supertest</li></ul></div>
       <div><div class="label">Análise de sistemas</div><ul class="tags"><li>Requisitos</li><li>Casos de uso</li><li>UML</li><li>Documentação</li></ul></div>
     </div>
