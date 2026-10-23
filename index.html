@@ -107,6 +107,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .card { display: grid; gap: 10px; align-content: start; padding-top: 16px; border-top: 2px solid var(--ink); min-width: 0; }
 .card .meta { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
 .card p { color: var(--muted); }
+.card-wide { grid-column: 1 / -1; }
+.card-wide p { max-width: 75ch; }
 
 /* Experiência */
 .timeline { display: grid; gap: 22px; }
@@ -227,10 +229,14 @@ footer { border-top: 1px solid var(--line); padding-top: 24px; display: grid; ga
   <section class="stack" aria-labelledby="outros">
     <h2 id="outros">Outros projetos</h2>
     <div class="grid">
-      <article class="card">
-        <div class="meta">Projeto pessoal · web</div>
-        <h3>Site Carol Rios Curly Studio</h3>
-        <p>Site institucional para um salão especializado em cabelos cacheados, construído a partir do brandbook e da identidade visual da marca.</p>
+      <article class="card card-wide">
+        <div class="meta">Projeto full stack · set/2026 · em testes com a cliente</div>
+        <h3>Carol Rios Curly Studio</h3>
+        <p>Site e sistema para um salão especializado em cabelos cacheados, feito sobre o brandbook da marca. Clientes entram com email e senha ou com a conta Google, o endereço é preenchido pelo CEP, o pagamento sai por Pix com QR Code ou copia e cola, e as fotos de antes e depois ficam guardadas no Supabase. Cada envio para a branch main publica o site no Netlify, e o banco tem backup criptografado duas vezes por semana via GitHub Actions. A dona está testando antes do lançamento oficial, e algumas funcionalidades ainda estão sendo finalizadas.</p>
+        <ul class="tags">
+          <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>Google OAuth</li><li>Netlify</li><li>GitHub Actions</li><li>ViaCEP</li><li>Pix · Asaas</li><li>WhatsApp</li>
+        </ul>
+        <a href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes</a>
       </article>
       <article class="card">
         <div class="meta">Extensão UFF · out/2024 – out/2025</div>
@@ -281,10 +287,10 @@ footer { border-top: 1px solid var(--line); padding-top: 24px; display: grid; ga
   <section class="stack" aria-labelledby="hab">
     <h2 id="hab">Habilidades</h2>
     <div class="skills">
-      <div><div class="label">Front-end</div><ul class="tags"><li>React</li><li>TypeScript</li><li>JavaScript</li><li>HTML/CSS</li><li>Tailwind</li><li>styled-components</li><li>Zustand</li><li>ArcGIS</li></ul></div>
+      <div><div class="label">Front-end</div><ul class="tags"><li>React</li><li>Next.js</li><li>TypeScript</li><li>JavaScript</li><li>HTML/CSS</li><li>Tailwind</li><li>styled-components</li><li>Zustand</li><li>ArcGIS</li></ul></div>
       <div><div class="label">Back-end</div><ul class="tags"><li>Node.js</li><li>Express</li><li>APIs REST</li><li>Zod</li><li>Python</li><li>FastAPI</li></ul></div>
-      <div><div class="label">Dados e automação</div><ul class="tags"><li>Prefect</li><li>n8n</li><li>Fabric/OneLake</li><li>PostgreSQL</li><li>Redis</li><li>SQL</li></ul></div>
-      <div><div class="label">Infra e qualidade</div><ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>Git</li><li>Jest</li><li>Supertest</li></ul></div>
+      <div><div class="label">Dados e automação</div><ul class="tags"><li>Prefect</li><li>n8n</li><li>Fabric/OneLake</li><li>PostgreSQL</li><li>Supabase</li><li>Redis</li><li>SQL</li></ul></div>
+      <div><div class="label">Infra e qualidade</div><ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>Netlify</li><li>GitHub Actions</li><li>Git</li><li>Jest</li><li>Supertest</li></ul></div>
       <div><div class="label">Engenharia de software</div><ul class="tags"><li>Requisitos</li><li>Casos de uso</li><li>UML</li><li>Documentação</li></ul></div>
     </div>
   </section>
