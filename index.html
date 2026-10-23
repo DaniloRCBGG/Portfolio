@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor web front-end (React, TypeScript, Node.js).">
+<title>Danilo Rios · Portfólio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: uma coluna editorial; o projeto principal é lido como a legenda de um mapa (camadas, estados, limiares) */
+:root {
+  --bg: #f3f5f7;
+  --surface: #ffffff;
+  --ink: #142033;
+  --muted: #5a6779;
+  --line: #d8dee6;
+  --accent: #1d5fa8;
+  --s-normal: #2f8f5b;
+  --s-alert: #d9822b;
+  --s-jam: #c4453b;
+  --s-both: #7b3fa0;
+  --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --body: "Instrument Sans", "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1520; --surface: #152031; --ink: #e6ecf3; --muted: #9aa8ba; --line: #26354a;
+    --accent: #6aa8ec; --s-normal: #52b97f; --s-alert: #f0a04f; --s-jam: #ec6b60; --s-both: #b07ad4;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1520; --surface: #152031; --ink: #e6ecf3; --muted: #9aa8ba; --line: #26354a;
+  --accent: #6aa8ec; --s-normal: #52b97f; --s-alert: #f0a04f; --s-jam: #ec6b60; --s-both: #b07ad4;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 16px; line-height: 1.6;
+}
+.wrap {
+  max-width: 920px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 56px 72px;
+  display: grid; gap: 72px;
+}
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: 1.2rem; font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.label {
+  font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--muted);
+}
+.stack { display: grid; gap: 16px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.tags li {
+  font-family: var(--mono); font-size: 0.76rem; padding: 3px 9px;
+  border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
+}
+
+/* Hero */
+.hero { display: grid; gap: 20px; }
+.hero .role { font-size: 1.2rem; color: var(--muted); max-width: 60ch; }
+.hero .role strong { color: var(--ink); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; }
+.copy {
+  font: inherit; font-family: var(--mono); font-size: 0.85rem;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 12px; cursor: pointer;
+}
+.copy:hover { border-color: var(--accent); }
+
+/* Projeto principal */
+.feature {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: clamp(20px, 4vw, 36px); display: grid; gap: 28px;
+}
+.feature-head { display: grid; gap: 10px; }
+.cycle-wrap { overflow-x: auto; }
+.cycle { display: block; width: 100%; min-width: 560px; height: auto; }
+.cycle text { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+.cycle .sub { fill: var(--muted); font-size: 10.5px; }
+.cycle rect.node { fill: var(--bg); stroke: var(--line); stroke-width: 1.2; }
+.cycle rect.core { fill: var(--bg); stroke: var(--accent); stroke-width: 1.6; }
+.cycle path { fill: none; stroke: var(--muted); stroke-width: 1.3; }
+.cycle .arrow { fill: var(--muted); stroke: none; }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 24px; }
+.state { display: flex; gap: 10px; align-items: baseline; }
+.dot { width: 11px; height: 11px; border-radius: 50%; flex: none; transform: translateY(1px); }
+.state code { font-family: var(--mono); font-size: 0.82rem; }
+.state span { color: var(--muted); font-size: 0.9rem; }
+.thresholds { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; border-top: 1px solid var(--line); padding-top: 20px; }
+.th b { display: block; font-family: var(--display); font-size: 1.7rem; font-variant-numeric: tabular-nums; }
+.th span { color: var(--muted); font-size: 0.88rem; }
+.contrib { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 70ch; }
+
+/* Outros projetos */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.card { display: grid; gap: 10px; align-content: start; padding-top: 16px; border-top: 2px solid var(--ink); min-width: 0; }
+.card .meta { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.card p { color: var(--muted); }
+
+/* Experiência */
+.timeline { display: grid; gap: 22px; }
+.job { display: grid; grid-template-columns: 150px 1fr; gap: 6px 24px; }
+.job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.job > div { min-width: 0; display: grid; gap: 4px; }
+.job .org { color: var(--muted); }
+
+/* Habilidades */
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px 28px; }
+.skills div { display: grid; gap: 8px; }
+
+footer { border-top: 1px solid var(--line); padding-top: 24px; display: grid; gap: 12px; }
+
+@media (max-width: 560px) {
+  .wrap { padding-block: 36px 56px; gap: 56px; }
+  .job { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="label">Desenvolvedor web · Rio de Janeiro</div>
+    <h1>Danilo Rios</h1>
+    <p class="role">Desenvolvo interfaces em <strong>React e TypeScript</strong> para o setor público. Hoje trabalho no Gêmeo Digital de Niterói, um mapa 3D da cidade que mostra ônibus, trânsito e chuva em tempo real. Cuido também da integração com o back-end, da automação de dados e da publicação dos sistemas.</p>
+    <div class="links">
+      <button class="copy" id="copy-email" type="button" data-email="danilorios67@gmail.com">danilorios67@gmail.com · copiar</button>
+      <a href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://gemeo.niteroi.rj.gov.br" target="_blank" rel="noopener">Gêmeo Digital ao vivo</a>
+    </div>
+  </section>
+
+  <section class="feature" aria-labelledby="gdn">
+    <div class="feature-head">
+      <div class="label">Projeto principal · Escritório de Dados de Niterói · desde jul/2025</div>
+      <h2 id="gdn">Gêmeo Digital de Niterói</h2>
+      <p>O alerta do Waze e a posição do ônibus já existiam, cada um no seu sistema. O Gêmeo cruza essas fontes no servidor a cada 30 segundos e entrega ao navegador um estado pronto: cada ônibus aparece no mapa 3D com a cor que diz se ele está numa área de alerta, num trecho congestionado ou nos dois.</p>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Ciclo de 30 segundos: fontes de dados entram no BFF, que cruza os dados, grava no Redis e envia por SSE para a cena 3D no navegador">
+      <svg class="cycle" viewBox="0 0 760 190">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <rect class="node" x="10" y="20" width="150" height="150" rx="10"></rect>
+        <text x="26" y="48">Fontes</text>
+        <text class="sub" x="26" y="74">ônibus · MobNit</text>
+        <text class="sub" x="26" y="94">alertas · Waze</text>
+        <text class="sub" x="26" y="114">lentidão · Waze</text>
+        <text class="sub" x="26" y="134">chuva · Defesa Civil</text>
+        <text class="sub" x="26" y="154">via Prefect + ArcGIS</text>
+
+        <rect class="core" x="215" y="45" width="180" height="100" rx="10"></rect>
+        <text x="231" y="74">BFF · Node.js</text>
+        <text class="sub" x="231" y="98">valida com Zod</text>
+        <text class="sub" x="231" y="116">cruza camadas</text>
+        <text class="sub" x="231" y="134">ciclo de 30 s</text>
+
+        <rect class="node" x="450" y="20" width="130" height="62" rx="10"></rect>
+        <text x="466" y="46">Redis</text>
+        <text class="sub" x="466" y="66">TTL 60 s</text>
+
+        <rect class="node" x="450" y="108" width="130" height="62" rx="10"></rect>
+        <text x="466" y="134">SSE</text>
+        <text class="sub" x="466" y="154">1 evento/ciclo</text>
+
+        <rect class="node" x="625" y="45" width="125" height="100" rx="10"></rect>
+        <text x="641" y="74">Navegador</text>
+        <text class="sub" x="641" y="98">React + TS</text>
+        <text class="sub" x="641" y="116">ArcGIS 3D</text>
+
+        <path d="M160,95 L211,95" marker-end="url(#ar)"></path>
+        <path d="M395,80 C420,80 425,51 446,51" marker-end="url(#ar)"></path>
+        <path d="M395,110 C420,110 425,139 446,139" marker-end="url(#ar)"></path>
+        <path d="M580,51 C602,51 600,80 621,80" marker-end="url(#ar)"></path>
+        <path d="M580,139 C602,139 600,110 621,110" marker-end="url(#ar)"></path>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Estados de um ônibus no mapa</div>
+      <div class="legend">
+        <div class="state"><i class="dot" style="background:var(--s-normal)"></i><div><code>normal</code><br><span>circulando sem ocorrências</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--s-alert)"></i><div><code>alert</code><br><span>perto de um alerta ou alagamento</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--s-jam)"></i><div><code>jammed</code><br><span>em trecho congestionado</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--s-both)"></i><div><code>alert_jammed</code><br><span>alerta e congestionamento juntos</span></div></div>
+      </div>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>150 m</b><span>raio de influência de um alerta</span></div>
+      <div class="th"><b>12 m</b><span>distância que põe o ônibus no congestionamento</span></div>
+      <div class="th"><b>6,2 mm</b><span>chuva em 15 min que dispara alerta</span></div>
+      <div class="th"><b>5 km/h</b><span>velocidade que define trecho lento</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Interface em React e TypeScript com ArcGIS Maps SDK: cena 3D, camadas, pop-ups próprios, símbolos, rótulos e filtros por período.</li>
+        <li>Integração com o BFF em Node.js/Express, que entrega o estado em tempo real por Server-Sent Events, com cache em Redis.</li>
+        <li>Execução com Docker Compose e publicação com Nginx como proxy reverso, incluindo os ajustes para o SSE funcionar através do proxy.</li>
+        <li>Fluxos de coleta de dados em Python com Prefect, e documentação técnica da arquitetura e da configuração.</li>
+      </ul>
+    </div>
+    <ul class="tags">
+      <li>React</li><li>TypeScript</li><li>ArcGIS Maps SDK</li><li>Zustand</li><li>Node.js</li><li>Express</li><li>Zod</li><li>SSE</li><li>Redis</li><li>Docker</li><li>Nginx</li><li>Prefect</li>
+    </ul>
+  </section>
+
+  <section class="stack" aria-labelledby="outros">
+    <h2 id="outros">Outros projetos</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="meta">Projeto pessoal · web</div>
+        <h3>Site Carol Rios Curly Studio</h3>
+        <p>Site institucional para um salão especializado em cabelos cacheados, construído a partir do brandbook e da identidade visual da marca.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Extensão UFF · out/2024 – out/2025</div>
+        <h3>Inspira Design</h3>
+        <p>Telas do Figma transformadas em páginas React + TypeScript, com componentes reutilizáveis e rotas, em parceria direta com a equipe de design.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Engenharia de Software · UFF · 2026</div>
+        <h3>UFForáculo</h3>
+        <p>Sistema de empréstimo, devolução, renovação e reserva da Biblioteca da UFF. Requisitos levantados em entrevista com o chefe da biblioteca central, com casos de uso e diagramas de classes.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Engenharia de Software · UFF · 2026</div>
+        <h3>Sorveteria Bom Demais</h3>
+        <p>PDV, delivery, pagamentos e estoque: 67 requisitos funcionais, 17 não funcionais, 9 casos de uso e diagramas UML de classes, estados, atividades e sequência.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Engenharia de Software · UFF · 2025</div>
+        <h3>Curly Care</h3>
+        <p>Sistema de agendamento, estoque e financeiro para o mesmo salão, com perfis de gerente, funcionário e cliente.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Automação · Prefeitura de Niterói</div>
+        <h3>Ingestão por webhook</h3>
+        <p>Prova de conceito que recebe ocorrências em JSON por webhook (FastAPI), valida os campos e grava no Microsoft Fabric/OneLake organizado por data. Também configurei workflows no n8n.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="exp">
+    <h2 id="exp">Experiência</h2>
+    <div class="timeline">
+      <div class="job">
+        <div class="when">jul/2025 – atual</div>
+        <div><h3>Estagiário de desenvolvimento front-end</h3><span class="org">Escritório de Dados da Prefeitura de Niterói (SIGeo)</span></div>
+      </div>
+      <div class="job">
+        <div class="when">out/2024 – out/2025</div>
+        <div><h3>Desenvolvedor front-end</h3><span class="org">Projeto de Extensão Inspira Design, UFF</span></div>
+      </div>
+      <div class="job">
+        <div class="when">2022 – atual</div>
+        <div><h3>Bacharelado em Ciência da Computação</h3><span class="org">Universidade Federal Fluminense</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="hab">
+    <h2 id="hab">Habilidades</h2>
+    <div class="skills">
+      <div><div class="label">Front-end</div><ul class="tags"><li>React</li><li>TypeScript</li><li>JavaScript</li><li>HTML/CSS</li><li>Tailwind</li><li>styled-components</li><li>Zustand</li><li>ArcGIS</li></ul></div>
+      <div><div class="label">Back-end</div><ul class="tags"><li>Node.js</li><li>Express</li><li>APIs REST</li><li>Zod</li><li>Python</li><li>FastAPI</li></ul></div>
+      <div><div class="label">Dados e automação</div><ul class="tags"><li>Prefect</li><li>n8n</li><li>Fabric/OneLake</li><li>PostgreSQL</li><li>Redis</li><li>SQL</li></ul></div>
+      <div><div class="label">Infra e qualidade</div><ul class="tags"><li>Docker</li><li>Linux</li><li>Nginx</li><li>Git</li><li>Jest</li><li>Supertest</li></ul></div>
+      <div><div class="label">Engenharia de software</div><ul class="tags"><li>Requisitos</li><li>Casos de uso</li><li>UML</li><li>Documentação</li></ul></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="label">Contato</div>
+    <p>danilorios67@gmail.com · <a href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener">linkedin.com/in/danilo-rios-cerqueira</a></p>
+  </footer>
+</main>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  btn.addEventListener('click', () => {
+    const email = btn.dataset.email;
+    const done = (msg) => { btn.textContent = msg; setTimeout(() => { btn.textContent = email + ' · copiar'; }, 1800); };
+    try {
+      navigator.clipboard.writeText(email).then(() => done('Email copiado'), () => done(email));
+    } catch (e) { done(email); }
+  });
+</script>
+</body>
+</html>
