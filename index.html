@@ -100,6 +100,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .thresholds { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; border-top: 1px solid var(--line); padding-top: 20px; }
 .th b { display: block; font-family: var(--display); font-size: 1.7rem; font-variant-numeric: tabular-nums; }
 .th span { color: var(--muted); font-size: 0.88rem; }
+.feature > a { justify-self: start; }
 .contrib { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 70ch; }
 
 /* Outros projetos */
@@ -225,18 +226,99 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
     </ul>
   </section>
 
+  <section class="feature" aria-labelledby="curly">
+    <div class="feature-head">
+      <div class="label">Projeto full stack · Carol Rios Curly Studio · desde set/2026 · em testes com a cliente</div>
+      <h2 id="curly">Carol Rios Curly Studio</h2>
+      <p>No salão, um horário só fica garantido depois que a cliente paga o sinal. O sistema leva essa regra para o site: a cliente escolhe o serviço, o tamanho do cabelo e o horário, que fica reservado por 30 minutos enquanto o Pix não é confirmado. Quando a equipe confirma o sinal, o atendimento entra na agenda, e ao concluir o estoque dá baixa sozinho nos produtos que aquele serviço consome naquele tamanho de cabelo.</p>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Fluxo do agendamento: a cliente escolhe serviço e horário no site, o banco reserva o horário por 30 minutos, a cliente paga o sinal por Pix, a equipe confirma o comprovante e, ao concluir o atendimento, o estoque dá baixa automática. Sem sinal em 30 minutos, o horário volta a ficar livre.">
+      <svg class="cycle" viewBox="0 0 760 215">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <rect class="node" x="10" y="20" width="120" height="130" rx="10"></rect>
+        <text x="24" y="48">Site</text>
+        <text class="sub" x="24" y="74">Next.js + TS</text>
+        <text class="sub" x="24" y="94">serviço e</text>
+        <text class="sub" x="24" y="114">tamanho P–GG</text>
+        <text class="sub" x="24" y="134">horário livre</text>
+
+        <rect class="core" x="165" y="20" width="120" height="130" rx="10"></rect>
+        <text x="179" y="48">Reserva</text>
+        <text class="sub" x="179" y="74">função no</text>
+        <text class="sub" x="179" y="94">PostgreSQL</text>
+        <text class="sub" x="179" y="114">trava 30 min</text>
+        <text class="sub" x="179" y="134">RLS por perfil</text>
+
+        <rect class="node" x="320" y="20" width="120" height="130" rx="10"></rect>
+        <text x="334" y="48">Sinal Pix</text>
+        <text class="sub" x="334" y="74">QR estático</text>
+        <text class="sub" x="334" y="94">copia e cola</text>
+        <text class="sub" x="334" y="114">Asaas opcional</text>
+
+        <rect class="node" x="475" y="20" width="120" height="130" rx="10"></rect>
+        <text x="489" y="48">Equipe</text>
+        <text class="sub" x="489" y="74">comprovante</text>
+        <text class="sub" x="489" y="94">no WhatsApp</text>
+        <text class="sub" x="489" y="114">confirma sinal</text>
+
+        <rect class="node" x="630" y="20" width="120" height="130" rx="10"></rect>
+        <text x="644" y="48">Estoque</text>
+        <text class="sub" x="644" y="74">gatilho ao</text>
+        <text class="sub" x="644" y="94">concluir</text>
+        <text class="sub" x="644" y="114">baixa conforme</text>
+        <text class="sub" x="644" y="134">o tamanho</text>
+
+        <path d="M130,85 L161,85" marker-end="url(#ar2)"></path>
+        <path d="M285,85 L316,85" marker-end="url(#ar2)"></path>
+        <path d="M440,85 L471,85" marker-end="url(#ar2)"></path>
+        <path d="M595,85 L626,85" marker-end="url(#ar2)"></path>
+        <path d="M225,150 C225,185 70,185 70,154" stroke-dasharray="4 4" marker-end="url(#ar2)"></path>
+        <text class="sub" x="244" y="182">sem sinal em 30 min, o horário volta a ficar livre</text>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Estados de um agendamento</div>
+      <div class="legend">
+        <div class="state"><i class="dot" style="background:var(--s-alert)"></i><div><code>aguardando_sinal</code><br><span>horário reservado, Pix pendente</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--s-normal)"></i><div><code>agendado</code><br><span>sinal confirmado pela equipe</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--accent)"></i><div><code>concluido</code><br><span>atendido, estoque baixado</span></div></div>
+        <div class="state"><i class="dot" style="background:var(--s-jam)"></i><div><code>expirado</code><br><span>sem sinal a tempo, horário liberado</span></div></div>
+      </div>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>30 min</b><span>reserva do horário enquanto o Pix não chega</span></div>
+      <div class="th"><b>4 tamanhos</b><span>P, M, G e GG definem preço e consumo de produto</span></div>
+      <div class="th"><b>3 perfis</b><span>cliente, funcionária e gerente, com regras no banco</span></div>
+      <div class="th"><b>2×/semana</b><span>backup criptografado do banco, guardado por 90 dias</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Site público em Next.js e TypeScript a partir do brandbook da marca, com tabela de valores por tamanho de cabelo e agendamento online.</li>
+        <li>Cadastro de clientes com email e senha ou conta Google, endereço preenchido pelo CEP via ViaCEP e exportação dos contatos para o WhatsApp.</li>
+        <li>Sinal por Pix com QR Code estático e copia e cola, confirmado pela equipe a partir do comprovante, com o Asaas pronto como modo automático opcional.</li>
+        <li>Banco no Supabase (PostgreSQL, Auth, Storage) com regras de acesso por perfil (RLS), reservas com expiração e baixa automática de estoque por gatilho.</li>
+        <li>Painel da equipe com agenda, clientes, serviços, estoque e fornecedores, e uma galeria interativa de antes e depois em revisão com a cliente.</li>
+        <li>Deploy automático da branch main no Netlify e backup com pg_dump criptografado via GitHub Actions. Desenvolvido com apoio do Claude Code.</li>
+      </ul>
+    </div>
+    <ul class="tags">
+      <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>RLS</li><li>Google OAuth</li><li>ViaCEP</li><li>Pix · Asaas</li><li>Netlify</li><li>GitHub Actions</li><li>Claude Code</li>
+    </ul>
+    <a href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes</a>
+  </section>
+
   <section class="stack" aria-labelledby="outros">
     <h2 id="outros">Outros projetos</h2>
     <div class="grid">
-      <article class="card card-wide">
-        <div class="meta">Projeto full stack · set/2026 · em testes com a cliente</div>
-        <h3>Carol Rios Curly Studio</h3>
-        <p>Site e sistema para um salão especializado em cabelos cacheados, feito sobre o brandbook da marca. Clientes entram com email e senha ou com a conta Google, o endereço é preenchido pelo CEP, o pagamento sai por Pix com QR Code ou copia e cola, e as fotos de antes e depois ficam guardadas no Supabase. Cada envio para a branch main publica o site no Netlify, e o banco tem backup criptografado duas vezes por semana via GitHub Actions. A dona está testando antes do lançamento oficial, e algumas funcionalidades ainda estão sendo finalizadas.</p>
-        <ul class="tags">
-          <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>Google OAuth</li><li>Netlify</li><li>GitHub Actions</li><li>ViaCEP</li><li>Pix · Asaas</li><li>WhatsApp</li>
-        </ul>
-        <a href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes</a>
-      </article>
       <article class="card">
         <div class="meta">Extensão UFF · out/2024 – out/2025</div>
         <h3>Inspira Design</h3>
