@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js).">
+<title>Danilo Rios · Projetos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">Danilo Rios</a>
+    <nav class="site-nav" aria-label="Seções do portfólio"><ul><li><a href="index.html">Início</a></li><li><a href="habilidades.html">Habilidades</a></li><li><a href="projetos.html" aria-current="page">Projetos</a></li><li><a href="contato.html">Contato</a></li></ul></nav>
+    <a class="btn btn-primary btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+
+<main class="wrap" id="conteudo" tabindex="-1">
+  <section class="page-head">
+    <div class="label">Projetos</div>
+    <h1>Projetos</h1>
+    <p>Três projetos em destaque, com links, imagens e demonstrações interativas, seguidos de outros trabalhos da faculdade e da Prefeitura.</p>
+  </section>
+
+  <section class="feature" aria-labelledby="gdn">
+    <div class="feature-head">
+      <div class="label">Desenvolvedor principal · Escritório de Dados de Niterói · desde jul/2025</div>
+      <div class="title-row">
+        <h2 id="gdn">Gêmeo Digital de Niterói</h2>
+        <a class="project-link" href="https://gemeo.niteroi.rj.gov.br" target="_blank" rel="noopener">Abrir o Gêmeo ↗</a>
+      </div>
+      <p>O alerta do Waze e a posição do ônibus já existiam, cada um no seu sistema. O Gêmeo cruza essas fontes no servidor a cada 30 segundos e entrega ao navegador um estado pronto: cada ônibus aparece no mapa 3D com a cor que diz se ele está numa área de alerta, num trecho congestionado ou nos dois.</p>
+    </div>
+
+    <div class="shots" data-project="gemeo">
+      <button class="shot" type="button"><img src="img/gemeo-1.png" alt="Cena 3D de Niterói com os ônibus coloridos pelo estado" loading="lazy"></button>
+      <button class="shot" type="button"><img src="img/gemeo-2.png" alt="Pop-up de um ônibus com linha, velocidade e ocorrências próximas" loading="lazy"></button>
+      <button class="shot" type="button"><img src="img/gemeo-3.png" alt="Camadas de alertas, trânsito e chuva sobre o mapa" loading="lazy"></button>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Ciclo de 30 segundos: fontes de dados entram no BFF, que cruza os dados, grava no Redis e envia por SSE para a cena 3D no navegador">
+      <svg class="cycle" viewBox="0 0 760 190">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <rect class="node" x="10" y="20" width="150" height="150" rx="10"></rect>
+        <text x="26" y="48">Fontes</text>
+        <text class="sub" x="26" y="74">ônibus · MobNit</text>
+        <text class="sub" x="26" y="94">alertas · Waze</text>
+        <text class="sub" x="26" y="114">lentidão · Waze</text>
+        <text class="sub" x="26" y="134">chuva · Defesa Civil</text>
+        <text class="sub" x="26" y="154">via Prefect + ArcGIS</text>
+
+        <rect class="core" x="215" y="45" width="180" height="100" rx="10"></rect>
+        <text x="231" y="74">BFF · Node.js</text>
+        <text class="sub" x="231" y="98">valida com Zod</text>
+        <text class="sub" x="231" y="116">cruza camadas</text>
+        <text class="sub" x="231" y="134">ciclo de 30 s</text>
+
+        <rect class="node" x="450" y="20" width="130" height="62" rx="10"></rect>
+        <text x="466" y="46">Redis</text>
+        <text class="sub" x="466" y="66">TTL 60 s</text>
+
+        <rect class="node" x="450" y="108" width="130" height="62" rx="10"></rect>
+        <text x="466" y="134">SSE</text>
+        <text class="sub" x="466" y="154">1 evento/ciclo</text>
+
+        <rect class="node" x="625" y="45" width="125" height="100" rx="10"></rect>
+        <text x="641" y="74">Navegador</text>
+        <text class="sub" x="641" y="98">React + TS</text>
+        <text class="sub" x="641" y="116">ArcGIS 3D</text>
+
+        <path d="M160,95 L211,95" marker-end="url(#ar)"></path>
+        <path d="M395,80 C420,80 425,51 446,51" marker-end="url(#ar)"></path>
+        <path d="M395,110 C420,110 425,139 446,139" marker-end="url(#ar)"></path>
+        <path d="M580,51 C602,51 600,80 621,80" marker-end="url(#ar)"></path>
+        <path d="M580,139 C602,139 600,110 621,110" marker-end="url(#ar)"></path>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Estados de um ônibus no mapa · teste a regra</div>
+      <div class="demo" id="bus-demo">
+        <div class="demo-controls">
+          <button class="toggle" type="button" aria-pressed="false" data-flag="alert">Alerta ou alagamento a até 150 m</button>
+          <button class="toggle" type="button" aria-pressed="false" data-flag="jam">Trecho lento (menos de 5 km/h) a até 12 m</button>
+        </div>
+        <div class="demo-result" aria-live="polite"><i class="dot" id="bus-dot" style="background:var(--s-normal)"></i><code id="bus-code">normal</code><span id="bus-text">circulando sem ocorrências</span></div>
+      </div>
+      <div class="legend" id="bus-legend">
+        <div class="state is-active" data-state="normal"><i class="dot" style="background:var(--s-normal)"></i><div><code>normal</code><br><span>circulando sem ocorrências</span></div></div>
+        <div class="state" data-state="alert"><i class="dot" style="background:var(--s-alert)"></i><div><code>alert</code><br><span>perto de um alerta ou alagamento</span></div></div>
+        <div class="state" data-state="jammed"><i class="dot" style="background:var(--s-jam)"></i><div><code>jammed</code><br><span>em trecho congestionado</span></div></div>
+        <div class="state" data-state="alert_jammed"><i class="dot" style="background:var(--s-both)"></i><div><code>alert_jammed</code><br><span>alerta e congestionamento juntos</span></div></div>
+      </div>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>150 m</b><span>raio de influência de um alerta</span></div>
+      <div class="th"><b>12 m</b><span>distância que põe o ônibus no congestionamento</span></div>
+      <div class="th"><b>6,2 mm</b><span>chuva em 15 min que dispara alerta</span></div>
+      <div class="th"><b>5 km/h</b><span>velocidade que define trecho lento</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Interface em React e TypeScript com ArcGIS Maps SDK: cena 3D, camadas, pop-ups próprios, símbolos, rótulos e filtros por período.</li>
+        <li>Integração com o BFF em Node.js/Express, que entrega o estado em tempo real por Server-Sent Events, com cache em Redis.</li>
+        <li>Execução com Docker Compose e publicação com Nginx como proxy reverso, incluindo os ajustes para o SSE funcionar através do proxy.</li>
+        <li>Fluxos de coleta de dados em Python com Prefect, e documentação técnica da arquitetura e da configuração.</li>
+      </ul>
+    </div>
+    <ul class="tags">
+      <li>React</li><li>TypeScript</li><li>ArcGIS Maps SDK</li><li>Zustand</li><li>Node.js</li><li>Express</li><li>Zod</li><li>SSE</li><li>Redis</li><li>Docker</li><li>Nginx</li><li>Prefect</li>
+    </ul>
+  </section>
+  <section class="feature" aria-labelledby="curly">
+    <div class="feature-head">
+      <div class="label">Projeto full stack · Carol Rios Curly Studio · desde set/2026 · em testes com a cliente</div>
+      <div class="title-row">
+        <h2 id="curly">Carol Rios Curly Studio</h2>
+        <a class="project-link" href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes ↗</a>
+      </div>
+      <p>No salão, um horário só fica garantido depois que a cliente paga o sinal. O sistema leva essa regra para o site: a cliente escolhe o serviço, o tamanho do cabelo e o horário, que fica reservado por 30 minutos enquanto o Pix não é confirmado. Quando a equipe confirma o sinal, o atendimento entra na agenda, e ao concluir o estoque dá baixa sozinho nos produtos que aquele serviço consome naquele tamanho de cabelo.</p>
+    </div>
+
+    <div class="shots" data-project="curly">
+      <button class="shot" type="button"><img src="img/curly-1.png" alt="Página inicial do site do salão" loading="lazy"></button>
+      <button class="shot" type="button"><img src="img/curly-2.png" alt="Agendamento com escolha de serviço, tamanho e horário" loading="lazy"></button>
+      <button class="shot" type="button"><img src="img/curly-3.png" alt="Painel da equipe com a agenda" loading="lazy"></button>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Fluxo do agendamento: a cliente escolhe serviço e horário no site, o banco reserva o horário por 30 minutos, a cliente paga o sinal por Pix, a equipe confirma o comprovante e, ao concluir o atendimento, o estoque dá baixa automática. Sem sinal em 30 minutos, o horário volta a ficar livre.">
+      <svg class="cycle" viewBox="0 0 760 215">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <g data-node="site">
+        <rect class="node" x="10" y="20" width="120" height="130" rx="10"></rect>
+        <text x="24" y="48">Site</text>
+        <text class="sub" x="24" y="74">Next.js + TS</text>
+        <text class="sub" x="24" y="94">serviço e</text>
+        <text class="sub" x="24" y="114">tamanho P–GG</text>
+        <text class="sub" x="24" y="134">horário livre</text>
+        </g>
+
+        <g data-node="reserva">
+        <rect class="core" x="165" y="20" width="120" height="130" rx="10"></rect>
+        <text x="179" y="48">Reserva</text>
+        <text class="sub" x="179" y="74">função no</text>
+        <text class="sub" x="179" y="94">PostgreSQL</text>
+        <text class="sub" x="179" y="114">trava 30 min</text>
+        <text class="sub" x="179" y="134">RLS por perfil</text>
+        </g>
+
+        <g data-node="pix">
+        <rect class="node" x="320" y="20" width="120" height="130" rx="10"></rect>
+        <text x="334" y="48">Sinal Pix</text>
+        <text class="sub" x="334" y="74">QR estático</text>
+        <text class="sub" x="334" y="94">copia e cola</text>
+        <text class="sub" x="334" y="114">Asaas opcional</text>
+        </g>
+
+        <g data-node="equipe">
+        <rect class="node" x="475" y="20" width="120" height="130" rx="10"></rect>
+        <text x="489" y="48">Equipe</text>
+        <text class="sub" x="489" y="74">comprovante</text>
+        <text class="sub" x="489" y="94">no WhatsApp</text>
+        <text class="sub" x="489" y="114">confirma sinal</text>
+        </g>
+
+        <g data-node="estoque">
+        <rect class="node" x="630" y="20" width="120" height="130" rx="10"></rect>
+        <text x="644" y="48">Estoque</text>
+        <text class="sub" x="644" y="74">gatilho ao</text>
+        <text class="sub" x="644" y="94">concluir</text>
+        <text class="sub" x="644" y="114">baixa conforme</text>
+        <text class="sub" x="644" y="134">o tamanho</text>
+        </g>
+
+        <path d="M130,85 L161,85" marker-end="url(#ar2)"></path>
+        <path d="M285,85 L316,85" marker-end="url(#ar2)"></path>
+        <path d="M440,85 L471,85" marker-end="url(#ar2)"></path>
+        <path d="M595,85 L626,85" marker-end="url(#ar2)"></path>
+        <path data-node="retorno" d="M225,150 C225,185 70,185 70,154" stroke-dasharray="4 4" marker-end="url(#ar2)"></path>
+        <text class="sub" x="244" y="182">sem sinal em 30 min, o horário volta a ficar livre</text>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Estados de um agendamento · clique para ver no fluxo</div>
+      <div class="legend" id="curly-legend">
+        <button class="state" type="button" data-nodes="site reserva pix" aria-pressed="false"><i class="dot" style="background:var(--s-alert)"></i><div><code>aguardando_sinal</code><br><span>horário reservado, Pix pendente</span></div></button>
+        <button class="state" type="button" data-nodes="equipe" aria-pressed="false"><i class="dot" style="background:var(--s-normal)"></i><div><code>agendado</code><br><span>sinal confirmado pela equipe</span></div></button>
+        <button class="state" type="button" data-nodes="estoque" aria-pressed="false"><i class="dot" style="background:var(--accent)"></i><div><code>concluido</code><br><span>atendido, estoque baixado</span></div></button>
+        <button class="state" type="button" data-nodes="reserva retorno" aria-pressed="false"><i class="dot" style="background:var(--s-jam)"></i><div><code>expirado</code><br><span>sem sinal a tempo, horário liberado</span></div></button>
+      </div>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>30 min</b><span>reserva do horário enquanto o Pix não chega</span></div>
+      <div class="th"><b>4 tamanhos</b><span>P, M, G e GG definem preço e consumo de produto</span></div>
+      <div class="th"><b>3 perfis</b><span>cliente, funcionária e gerente, com regras no banco</span></div>
+      <div class="th"><b>2×/semana</b><span>backup criptografado do banco, guardado por 90 dias</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Site público em Next.js e TypeScript a partir do brandbook da marca, com tabela de valores por tamanho de cabelo e agendamento online.</li>
+        <li>Cadastro de clientes com email e senha ou conta Google, endereço preenchido pelo CEP via ViaCEP e exportação dos contatos para o WhatsApp.</li>
+        <li>Sinal por Pix com QR Code estático e copia e cola, confirmado pela equipe a partir do comprovante, com o Asaas pronto como modo automático opcional.</li>
+        <li>Banco no Supabase (PostgreSQL, Auth, Storage) com regras de acesso por perfil (RLS), reservas com expiração e baixa automática de estoque por gatilho.</li>
+        <li>Painel da equipe com agenda, clientes, serviços, estoque e fornecedores, e uma galeria interativa de antes e depois em revisão com a cliente.</li>
+        <li>Deploy automático da branch main no Netlify e backup com pg_dump criptografado via GitHub Actions. Desenvolvido com apoio do Claude Code.</li>
+      </ul>
+    </div>
+    <ul class="tags">
+      <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>RLS</li><li>Google OAuth</li><li>ViaCEP</li><li>Pix · Asaas</li><li>Netlify</li><li>GitHub Actions</li><li>Claude Code</li>
+    </ul>
+  </section>
+  <section class="feature" aria-labelledby="n8n">
+    <div class="feature-head">
+      <div class="label">Automação e integração · Prefeitura de Niterói · ferramenta interna em uso</div>
+      <div class="title-row">
+        <h2 id="n8n">Plataforma de automação com n8n</h2>
+        <span class="project-chip">Uso interno · sem acesso público</span>
+      </div>
+      <p>Uma instância própria do n8n, montada por mim para que o Escritório de Dados crie e rode integrações entre sistemas sem depender de um serviço externo. Comecei na VM de homologação, preparando a infraestrutura em contêineres e um primeiro fluxo que recebe eventos de outro sistema, confere os dados e grava o que é válido no banco. Hoje o n8n é uma ferramenta interna usada pela equipe do escritório.</p>
+    </div>
+
+    <div class="shots" data-project="n8n">
+      <button class="shot" type="button"><img src="img/n8n-1.png" alt="Workflow no editor do n8n, do webhook ao PostgreSQL" loading="lazy"></button>
+      <button class="shot" type="button"><img src="img/n8n-2.png" alt="Execução de teste com um evento válido" loading="lazy"></button>
+    </div>
+
+    <div class="cycle-wrap" role="img" aria-label="Fluxo do workflow: um webhook recebe o evento em JSON, um nó Code valida os campos, um nó IF separa os caminhos, os eventos válidos são gravados no PostgreSQL e o fluxo responde HTTP 200. Eventos inválidos seguem pelo caminho de erro e não são gravados.">
+      <svg class="cycle" viewBox="0 0 760 215">
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
+          </marker>
+        </defs>
+        <g data-node="webhook">
+        <rect class="node" x="10" y="20" width="120" height="120" rx="10"></rect>
+        <text x="24" y="48">Webhook</text>
+        <text class="sub" x="24" y="74">evento HTTP</text>
+        <text class="sub" x="24" y="94">em JSON</text>
+        <text class="sub" x="24" y="114">Bearer token</text>
+        </g>
+
+        <g data-node="code">
+        <rect class="node" x="165" y="20" width="120" height="120" rx="10"></rect>
+        <text x="179" y="48">Code</text>
+        <text class="sub" x="179" y="74">valida os</text>
+        <text class="sub" x="179" y="94">4 campos</text>
+        <text class="sub" x="179" y="114">JavaScript</text>
+        </g>
+
+        <g data-node="if">
+        <rect class="core" x="320" y="20" width="120" height="120" rx="10"></rect>
+        <text x="334" y="48">IF</text>
+        <text class="sub" x="334" y="74">válido ou</text>
+        <text class="sub" x="334" y="94">inválido</text>
+        </g>
+
+        <g data-node="pg">
+        <rect class="node" x="475" y="20" width="120" height="120" rx="10"></rect>
+        <text x="489" y="48">PostgreSQL</text>
+        <text class="sub" x="489" y="74">tabela</text>
+        <text class="sub" x="489" y="94">webhook_events</text>
+        </g>
+
+        <g data-node="resp">
+        <rect class="node" x="630" y="20" width="120" height="120" rx="10"></rect>
+        <text x="644" y="48">Resposta</text>
+        <text class="sub" x="644" y="74">HTTP 200</text>
+        <text class="sub" x="644" y="94">no sucesso</text>
+        </g>
+
+        <path data-node="p1" d="M130,80 L161,80" marker-end="url(#ar3)"></path>
+        <path data-node="p2" d="M285,80 L316,80" marker-end="url(#ar3)"></path>
+        <path data-node="p3" d="M440,80 L471,80" marker-end="url(#ar3)"></path>
+        <path data-node="p4" d="M595,80 L626,80" marker-end="url(#ar3)"></path>
+        <path data-node="perr" d="M380,140 L380,176" stroke-dasharray="4 4" marker-end="url(#ar3)"></path>
+        <text class="sub" x="300" y="198">inválido: caminho de erro, nada é gravado</text>
+      </svg>
+    </div>
+
+    <div class="stack">
+      <div class="label">Contrato do evento no primeiro fluxo · simule um envio (exemplo fictício)</div>
+      <div class="demo" id="n8n-demo">
+        <div class="demo-controls">
+          <button class="toggle" type="button" aria-pressed="true" data-case="ok">Evento válido</button>
+          <button class="toggle" type="button" aria-pressed="false" data-case="bad">Evento sem timestamp</button>
+        </div>
+        <pre class="payload"><code id="n8n-payload">{
+  "event_id": "evt-0001",
+  "source": "sistema-exemplo",
+  "timestamp": "2026-03-10T14:32:00-03:00",
+  "data": { "tipo": "teste", "descricao": "payload de exemplo" }
+}</code></pre>
+        <div class="demo-result" aria-live="polite"><i class="dot" id="n8n-dot" style="background:var(--s-normal)"></i><code id="n8n-code">HTTP 200</code><span id="n8n-text">campos conferidos, evento gravado em webhook_events</span></div>
+      </div>
+    </div>
+
+    <div class="thresholds">
+      <div class="th"><b>3 serviços</b><span>n8n, PostgreSQL e Redis no mesmo Docker Compose</span></div>
+      <div class="th"><b>5 etapas</b><span>do webhook à resposta HTTP no primeiro fluxo</span></div>
+      <div class="th"><b>4 campos</b><span>event_id, source, timestamp e data no contrato</span></div>
+      <div class="th"><b>1.x → 2.x</b><span>atualização da versão do n8n feita na instância</span></div>
+    </div>
+
+    <div class="stack">
+      <div class="label">O que eu fiz</div>
+      <ul class="contrib">
+        <li>Stack com Docker Compose reunindo n8n, PostgreSQL e Redis, com rede dedicada, volumes persistentes, healthchecks, reinício automático e rotação de logs.</li>
+        <li>Configuração por variáveis de ambiente, com credenciais e segredos fora dos arquivos do projeto.</li>
+        <li>Primeiro workflow da plataforma: webhook com autenticação Bearer, validação dos campos em um Code Node, lógica condicional e gravação dos eventos válidos no PostgreSQL.</li>
+        <li>Testes com payloads válidos e inválidos, incluindo os casos em que o JSON chega como objeto ou como lista.</li>
+        <li>Diagnóstico pelos logs, testes de Code Nodes em JavaScript e Python e atualização da instância da versão 1.108 para a 2.32.</li>
+      </ul>
+    </div>
+    <ul class="tags">
+      <li>n8n</li><li>Docker Compose</li><li>PostgreSQL</li><li>Redis</li><li>Webhooks</li><li>JSON</li><li>JavaScript</li><li>Python</li><li>Linux</li>
+    </ul>
+  </section>
+
+  <section class="stack" aria-labelledby="outros">
+    <h2 id="outros">Outros projetos</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="meta">Extensão UFF · out/2024 – out/2025</div>
+        <h3>Inspira Design</h3>
+        <p>Telas do Figma transformadas em páginas React + TypeScript, com componentes reutilizáveis e rotas, em parceria direta com a equipe de design.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Ciência da Computação · UFF · 2026</div>
+        <h3>UFForáculo</h3>
+        <p>Sistema de empréstimo, devolução, renovação e reserva da Biblioteca da UFF. Requisitos levantados em entrevista com o chefe da biblioteca central, com casos de uso e diagramas de classes.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Ciência da Computação · UFF · 2026</div>
+        <h3>Sorveteria Bom Demais</h3>
+        <p>PDV, delivery, pagamentos e estoque: 67 requisitos funcionais, 17 não funcionais, 9 casos de uso e diagramas UML de classes, estados, atividades e sequência.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Ciência da Computação · UFF · 2025</div>
+        <h3>Curly Care</h3>
+        <p>Sistema de agendamento, estoque e financeiro para o mesmo salão, com perfis de gerente, funcionário e cliente.</p>
+      </article>
+      <article class="card">
+        <div class="meta">Automação · Prefeitura de Niterói</div>
+        <h3>Ingestão por webhook</h3>
+        <p>Prova de conceito que recebe ocorrências em JSON por webhook (FastAPI), valida os campos e grava no Microsoft Fabric/OneLake, com os arquivos organizados por ano, mês e dia.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<dialog class="viewer" id="viewer" aria-label="Imagem ampliada">
+  <figure>
+    <img id="viewer-img" src="" alt="">
+    <figcaption>
+      <span id="viewer-cap"></span>
+      <span class="viewer-nav">
+        <button type="button" id="viewer-prev">Anterior</button>
+        <button type="button" id="viewer-next">Próxima</button>
+        <button type="button" id="viewer-close">Fechar</button>
+      </span>
+    </figcaption>
+  </figure>
+</dialog>
+
+<script src="js/main.js"></script>
+</body>
+</html>

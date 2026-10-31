@@ -1,11 +1,21 @@
-# Portfólio – Danilo Rios
+# Portfólio – Danilo Rios (versão com páginas separadas)
 
-Página estática publicada com GitHub Pages. Todo o conteúdo está em `index.html`.
+Site estático para GitHub Pages: HTML, CSS e JavaScript puros, sem build e sem backend.
+
+## Estrutura
+| Arquivo | Página |
+| --- | --- |
+| `index.html` | Início: apresentação, links de destaque e experiência |
+| `habilidades.html` | Habilidades por área, de Front-end a GIS |
+| `projetos.html` | Projetos em destaque e outros projetos |
+| `contato.html` | GitHub, portfólio, email e LinkedIn |
+| `css/style.css` | Visual de todas as páginas |
+| `js/main.js` | Botões de copiar, imagens ampliadas e demonstrações dos projetos |
+
+O menu do topo é o mesmo em todas as páginas; o link da página atual leva `aria-current="page"`.
 
 ## Como editar
-1. No GitHub, abra `index.html` e clique no ícone de lápis (Edit).
-2. Altere o texto entre as tags (por exemplo, dentro de `<p>...</p>` ou `<h3>...</h3>`).
-3. Clique em **Commit changes**. O site atualiza sozinho em cerca de 1 minuto.
+No GitHub, abra o arquivo da página, clique no lápis (Edit), altere o texto e clique em **Commit changes**.
 
 ## Como colocar as imagens dos projetos
 Coloque os prints na pasta `img/`, em PNG, com estes nomes exatos:
