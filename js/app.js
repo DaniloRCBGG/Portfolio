@@ -2,6 +2,11 @@
 (() => {
   const root = document.documentElement;
   root.classList.add('js');
+
+  // Transição entre páginas: o Chrome cancela a animação quando a navegação muda no meio; não é erro
+  const quiet = (vt) => { if (!vt) return; ['ready', 'finished', 'updateCallbackDone'].forEach((k) => vt[k]?.catch(() => {})); };
+  window.addEventListener('pageswap', (e) => quiet(e.viewTransition));
+  window.addEventListener('pagereveal', (e) => quiet(e.viewTransition));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   window.PORTFOLIO.reduceMotion = reduceMotion;
 
@@ -75,6 +80,14 @@
     });
   }, { threshold: 0.15 }) : null;
   window.PORTFOLIO.observeReveal = (el) => {
+    // Com GSAP carregado, a entrada em sequência fica com o motion.js
+    if (window.PORTFOLIO.revealWith && !reduceMotion) {
+      window.PORTFOLIO.revealWith(el, () => {
+        el.querySelectorAll('[data-count]').forEach(runCounter);
+        document.dispatchEvent(new CustomEvent('revealed', { detail: el }));
+      });
+      return;
+    }
     if (!io || reduceMotion) { el.querySelectorAll('[data-count]').forEach(runCounter); document.dispatchEvent(new CustomEvent('revealed', { detail: el })); return; }
     if (el.getBoundingClientRect().top > window.innerHeight) el.classList.add('is-pending');
     io.observe(el);

@@ -10,7 +10,7 @@ Site estático para GitHub Pages: HTML, CSS e JavaScript puros, sem build e sem 
 ## Estrutura
 | Arquivo | O que tem |
 | --- | --- |
-| `index.html` | Início: apresentação com fundo animado, números e trajetória |
+| `index.html` | Início: apresentação com fundo animado, números e a trajetória em mapa de jogo |
 | `habilidades.html` | Blocos por área com filtro e matriz habilidades × projetos |
 | `projetos.html` | Gêmeo Digital, Curly Studio, plataforma n8n e outros projetos, com demonstrações |
 | `contato.html` | GitHub, portfólio, email e LinkedIn |
@@ -18,8 +18,14 @@ Site estático para GitHub Pages: HTML, CSS e JavaScript puros, sem build e sem 
 | `js/data.js` | Rotas, capítulos, habilidades e em quais projetos cada uma aparece |
 | `js/app.js` | Tema, botões de copiar, avisos, animações ao rolar e imagens |
 | `js/timeline.js` | Linha do tempo e tour |
+| `js/motion.js` | Rolagem suave (Lenis) e entrada das seções com GSAP ScrollTrigger |
+| `js/journey.js` | Trajetória em mapa de jogo: fases, projetos, nível e conquistas |
+| `js/niteroi-geo.js` | Limites do IBGE de Niterói e vizinhos, fundo do mapa quando os mapas online não carregam |
 | `js/home.js`, `js/skills.js`, `js/projects.js` | Interações de cada página |
-| `vendor/` | Bootstrap 5.3.3, Bootstrap Icons 1.11.3 e Leaflet 1.9.4, com as licenças |
+| `vendor/` | Bootstrap 5.3.3, Bootstrap Icons 1.11.3, Leaflet 1.9.4, GSAP 3.12.5 (com ScrollTrigger) e Lenis 1.1.13, com as licenças |
+
+## Trajetória em mapa de jogo
+As fases, os textos, as habilidades desbloqueadas e os projetos que saem de cada fase ficam no início de `js/journey.js` (listas `STAGES` e `BRANCHES`). No computador, a seção fica fixa e a rolagem leva o marcador de fase em fase; o cursor perto de um ponto também leva até ele. No celular, o mapa fica vertical e o card aparece no rodapé.
 
 ## Como editar
 No GitHub, abra o arquivo, clique no lápis (Edit), altere o texto e clique em **Commit changes**.

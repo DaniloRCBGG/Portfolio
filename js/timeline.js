@@ -70,7 +70,12 @@
   const measure = () => {
     if (!local.length) return { g: 0, f: 0 };
     const y = window.scrollY + window.innerHeight * 0.35;
-    const tops = localEls.map((el) => (el ? el.getBoundingClientRect().top + window.scrollY : 0));
+    // Seções fixadas pelo ScrollTrigger ficam dentro de um .pin-spacer: mede por ele
+    const tops = localEls.map((el) => {
+      if (!el) return 0;
+      const box = el.parentElement && el.parentElement.classList.contains('pin-spacer') ? el.parentElement : el;
+      return box.getBoundingClientRect().top + window.scrollY;
+    });
     const end = document.documentElement.scrollHeight;
     let i = 0;
     for (let k = 0; k < tops.length; k++) if (y >= tops[k]) i = k;
@@ -114,7 +119,7 @@
     if (c.route.id === routeId) {
       const el = document.getElementById(c.id);
       if (!el) return;
-      el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      if (P.scrollTo) P.scrollTo(el); else el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
       history.replaceState(null, '', `#${c.id}`);
       current = g;
       if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
