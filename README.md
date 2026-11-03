@@ -5,8 +5,13 @@ Site estático para GitHub Pages: HTML, CSS e JavaScript puros, sem build e sem 
 ## Leitura contínua
 Tudo fica em `index.html`, numa página só: Início → Projetos → Habilidades → Contato. A rolagem leva de uma parte para a outra; o menu e a linha do tempo só indicam onde a pessoa está (e servem de atalho, se ela quiser). `projetos.html`, `habilidades.html` e `contato.html` redirecionam para a parte certa, para links antigos não quebrarem.
 
-## Linha do tempo (estilo GitLens)
-Cada parte é um ramo colorido (`main`, `feat/projetos`, `feat/habilidades`, `release/contato`) que sai da linha principal e volta a ela; cada seção é um commit com um hash curto. O HEAD acompanha a rolagem. As partes e as seções ficam em `js/data.js` (`routes`); para criar um commit, adicione uma seção com `id` na página e o mesmo `id` em `chapters`.
+## Linha do tempo (árvore de commits, estilo GitLens)
+A `main` segue reta; cada parte é um ramo colorido que sai para cima ou para baixo e volta num símbolo de merge: `feat/projetos` (com o sub-ramo `feat/automacao` para n8n e Prefect), `feat/habilidades` e `release/contato`. Cada seção é um commit com hash curto, e um símbolo de ramo em preto e branco marca o commit onde a pessoa está; a cor do progresso corre pelo próprio ramo. No celular a linha começa recolhida (botão de ramo no topo) e, aberta, tem botões para escolher qual ramo ver. Partes e seções ficam em `js/data.js` (`routes`; um capítulo pode ter `branch` próprio), e a forma da árvore em `branches` (`lane` negativa = acima da main, positiva = abaixo; `parent` = de onde o ramo sai).
+
+## Projetos ↔ habilidades
+- O Gêmeo e o n8n têm cards de etapa com minifluxos animados; o Gêmeo tem também um mapa em camadas (uma camada por órgão) que acende conforme a etapa que está no meio da tela.
+- Cada etapa e cada projeto listam as habilidades usadas (derivadas de `examples` em `js/data.js`). Clicar numa abre o laboratório de Habilidades já nela; os exemplos do laboratório e as células da matriz levam à etapa do projeto que usou a habilidade. Depois do salto aparece um botão para voltar.
+- Link direto para uma habilidade: `index.html#habilidade-<nome>` (ex.: `#habilidade-react`, `#habilidade-node-js`).
 
 ## Estrutura
 | Arquivo | O que tem |
@@ -22,6 +27,8 @@ Cada parte é um ramo colorido (`main`, `feat/projetos`, `feat/habilidades`, `re
 | `js/n8n.js` | Fluxo do n8n como camada de transporte |
 | `js/skills.js` | Habilidades na prática e matriz habilidades × projetos |
 | `js/projects.js` | Partes técnicas ("Por dentro") e janelas de detalhe |
+| `js/steps.js` | Cards de etapa: mapa em camadas do Gêmeo, nós do n8n e minifluxos |
+| `js/links.js` | Ligações projeto ↔ habilidade, rolagem suave dos links internos e botão de volta |
 | `js/niteroi-geo.js` | Limites do IBGE de Niterói e vizinhos, fundo do mapa quando a malha não carrega |
 | `img/brand/` | Logo do Carol Rios Curly Studio |
 | `tools/malha-niteroi.mjs` | Baixa a malha viária de Niterói do OpenStreetMap |
@@ -50,4 +57,4 @@ No GitHub, abra o arquivo, clique no lápis (Edit), altere e clique em **Commit 
 | Prints do Gêmeo | `img/gemeo-1.png`, `img/gemeo-2.png`, `img/gemeo-3.png` |
 | Antes e depois do salão | `img/curly/antes-1.jpg` e `img/curly/depois-1.jpg` (e `-2`, `-3` para os outros resultados) |
 
-Enquanto um arquivo não existe, os prints do Gêmeo não aparecem e o antes e depois usa uma ilustração. Antes de subir prints, confira se não aparecem IPs, tokens ou endereços internos; e use fotos de clientes só com autorização.
+Enquanto um arquivo não existe, os prints do Gêmeo não aparecem e o antes e depois mostra bonecas de pano desenhadas no navegador (pele negra e parda, cabelo de lã cacheado), uma para cada resultado. Antes de subir prints, confira se não aparecem IPs, tokens ou endereços internos; e use fotos de clientes só com autorização.

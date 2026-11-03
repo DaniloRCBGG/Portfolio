@@ -22,8 +22,8 @@ window.PORTFOLIO = {
       id: 'projetos', label: 'Projetos', branch: 'feat/projetos', color: '#e8955a', page: 'index.html', chapters: [
         { id: 'gemeo', label: 'Gêmeo Digital' },
         { id: 'curly', label: 'Curly Studio' },
-        { id: 'n8n', label: 'Plataforma n8n' },
-        { id: 'prefect', label: 'Prefect' },
+        { id: 'n8n', label: 'Plataforma n8n', branch: 'feat/automacao' },
+        { id: 'prefect', label: 'Prefect', branch: 'feat/automacao' },
         { id: 'outros', label: 'Outros projetos' },
       ],
     },
@@ -40,13 +40,22 @@ window.PORTFOLIO = {
     },
   ],
 
+  // Árvore da linha do tempo: a main segue reta; os ramos saem para cima (lane negativa) ou para baixo
+  branches: {
+    'main': { color: '#00a6a6', lane: 0 },
+    'feat/projetos': { color: '#e8955a', lane: -1, parent: 'main' },
+    'feat/automacao': { color: '#e3c26b', lane: -2, parent: 'feat/projetos' },
+    'feat/habilidades': { color: '#8e6bd8', lane: 1, parent: 'main' },
+    'release/contato': { color: '#5b8fd6', lane: -1, parent: 'main' },
+  },
+
   projects: [
     { id: 'gemeo', label: 'Gêmeo Digital', href: '#gemeo' },
     { id: 'curly', label: 'Curly Studio', href: '#curly' },
     { id: 'n8n', label: 'Plataforma n8n', href: '#n8n' },
     { id: 'prefect', label: 'Prefect', href: '#prefect' },
-    { id: 'inspira', label: 'Inspira Design', href: '#outros' },
-    { id: 'webhook', label: 'Ingestão por webhook', href: '#outros' },
+    { id: 'inspira', label: 'Inspira Design', href: '#outro-inspira' },
+    { id: 'webhook', label: 'Ingestão por webhook', href: '#outro-webhook' },
     { id: 'academicos', label: 'Projetos acadêmicos', href: '#outros' },
   ],
 
@@ -119,7 +128,7 @@ window.PORTFOLIO = {
     'Documentação': [['gemeo', 'Documentação técnica da arquitetura, dos fluxos e da configuração.'], ['academicos', 'Documentos de escopo e requisitos.']],
     'Node.js': [['gemeo', 'BFF que roda o ciclo de 30 segundos e cruza as fontes no servidor.']],
     'Express': [['gemeo', 'Rotas do BFF, incluindo o endpoint de streaming.']],
-    'Python': [['prefect', 'Fluxos de coleta e normalização rodando no Prefect.'], ['webhook', 'Webhook em FastAPI que grava no OneLake.'], ['n8n', 'Testes de Code Nodes em Python.']],
+    'Python': [['prefect', 'Fluxos de coleta e normalização rodando no Prefect.'], ['gemeo', 'Fluxos de coleta das camadas de Waze, pluviômetros e NitBike, que rodam no Prefect.'], ['webhook', 'Webhook em FastAPI que grava no OneLake.'], ['n8n', 'Testes de Code Nodes em Python.']],
     'FastAPI': [['webhook', 'Webhook que valida as ocorrências e grava os dados brutos no OneLake.']],
     'Zod': [['gemeo', 'Valida ônibus, alertas, tráfego e chuva antes de entrar no ciclo.']],
     'Webhooks': [['n8n', 'Webhook com autenticação Bearer no primeiro fluxo da plataforma.'], ['webhook', 'Entrada das ocorrências da prova de conceito.']],
@@ -138,5 +147,7 @@ window.PORTFOLIO = {
   },
 };
 
+// Mesmo slug do gerador das páginas: sem acentos, minúsculo, hífens (ex.: Node.js → node-js)
+window.PORTFOLIO.slug = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 // Em quais projetos cada habilidade aparece, derivado dos exemplos
 window.PORTFOLIO.usage = Object.fromEntries(Object.entries(window.PORTFOLIO.examples).map(([k, v]) => [k, [...new Set(v.map((e) => e[0]))]]));

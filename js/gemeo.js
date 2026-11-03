@@ -292,7 +292,8 @@
     bctx.setTransform(1, 0, 0, 1, 0, 0);
     bctx.clearRect(0, 0, base.width, base.height);
     setWorld(bctx);
-    if (land) {
+    // Os limites do IBGE são simplificados: só aparecem quando a malha real não carrega
+    if (land && !mesh) {
       bctx.fillStyle = 'rgba(22, 39, 58, 0.55)'; bctx.fill(land.others);
       bctx.fillStyle = 'rgba(26, 46, 66, 0.9)'; bctx.fill(land.city);
       bctx.lineWidth = 1.2 * view.mpp; bctx.strokeStyle = 'rgba(0, 166, 166, 0.35)'; bctx.stroke(land.city);
@@ -314,12 +315,25 @@
     fctx.lineWidth = 3 * view.mpp; fctx.strokeStyle = 'rgba(0, 166, 166, 0.22)';
     routes.forEach((r) => { fctx.beginPath(); r.pts.forEach((p, i) => (i ? fctx.lineTo(p[0], p[1]) : fctx.moveTo(p[0], p[1]))); fctx.stroke(); });
     // Pluviômetro e área (hospedada)
+    // Pluviômetro: um brilho suave sobre a malha, que só ganha força e contorno acima do limiar
     if (cell) {
-      const over = parseFloat(ui.rain.value) >= RAIN_T;
-      fctx.beginPath(); cell.poly.forEach((p, i) => (i ? fctx.lineTo(p[0], p[1]) : fctx.moveTo(p[0], p[1]))); fctx.closePath();
-      fctx.fillStyle = over ? 'rgba(91, 143, 214, 0.28)' : 'rgba(91, 143, 214, 0.08)'; fctx.fill();
-      fctx.lineWidth = 1.5 * view.mpp; fctx.strokeStyle = over ? 'rgba(232, 149, 90, 0.8)' : 'rgba(91, 143, 214, 0.6)'; fctx.stroke();
-      fctx.fillStyle = '#5b8fd6'; fctx.beginPath(); fctx.arc(cell.center[0], cell.center[1], 5 * view.mpp, 0, Math.PI * 2); fctx.fill();
+      const mm = parseFloat(ui.rain.value);
+      const over = mm >= RAIN_T;
+      const [cx, cy] = cell.center;
+      const pulse = over && !reduce ? 0.85 + 0.15 * Math.sin(t / 380) : 1;
+      const g = fctx.createRadialGradient(cx, cy, 0, cx, cy, 650);
+      g.addColorStop(0, `rgba(91, 143, 214, ${(over ? 0.32 : 0.12) * pulse})`);
+      g.addColorStop(0.7, `rgba(91, 143, 214, ${(over ? 0.12 : 0.04) * pulse})`);
+      g.addColorStop(1, 'rgba(91, 143, 214, 0)');
+      fctx.fillStyle = g; fctx.beginPath(); fctx.arc(cx, cy, 650, 0, Math.PI * 2); fctx.fill();
+      if (over) {
+        fctx.setLineDash([6 * view.mpp, 6 * view.mpp]);
+        fctx.lineWidth = 1.2 * view.mpp; fctx.strokeStyle = 'rgba(232, 149, 90, 0.55)';
+        fctx.beginPath(); cell.poly.forEach((p, i) => (i ? fctx.lineTo(p[0], p[1]) : fctx.moveTo(p[0], p[1]))); fctx.closePath(); fctx.stroke();
+        fctx.setLineDash([]);
+      }
+      fctx.fillStyle = '#5b8fd6'; fctx.beginPath(); fctx.arc(cx, cy, 5 * view.mpp, 0, Math.PI * 2); fctx.fill();
+      fctx.lineWidth = 2 * view.mpp; fctx.strokeStyle = 'rgba(247, 247, 242, 0.9)'; fctx.stroke();
     }
     if (!failed) {
       // Lentidão

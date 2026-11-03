@@ -12,6 +12,14 @@
   const detail = lab.querySelector('.lab-detail');
   const areaDesc = lab.querySelector('.lab-area-desc');
   let area = P.areas[0], skill = null;
+  // Onde o exemplo leva: a etapa do projeto que usa a habilidade (cards com data-skills) ou o próprio projeto
+  const target = (pid, s) => {
+    const base = proj[pid].href;
+    const sec = document.querySelector(base);
+    const step = sec && (sec.closest('.project') || sec).querySelector(`.step-card[data-skills~="${P.slug(s)}"]`);
+    if (!step) return { href: base, where: '' };
+    return { href: `#${step.id}`, where: `etapa ${step.querySelector('.step-no').textContent} · ${step.querySelector('.eyebrow').textContent}` };
+  };
 
   tabs.innerHTML = P.areas.map((a, i) => `<button type="button" class="lab-tab" role="tab" id="lab-tab-${a.id}" aria-controls="lab-panel" aria-selected="${i === 0}" data-area="${a.id}"><i class="bi ${a.icon}" aria-hidden="true"></i><span>${a.label}</span><small>${a.groups.reduce((n, g) => n + g.skills.length, 0)}</small></button>`).join('');
 
@@ -35,21 +43,31 @@
     const ex = P.examples[s] || [];
     detail.innerHTML = `
       <div class="lab-detail-head"><span class="eyebrow">${area.label}</span><h3>${esc(s)}</h3></div>
-      ${ex.length ? `<ol class="lab-examples">${ex.map(([pid, text]) => `
-        <li><a class="lab-ex" href="${proj[pid].href}">
-          <span class="lab-ex-proj">${proj[pid].label}</span>
+      ${ex.length ? `<ol class="lab-examples">${ex.map(([pid, text]) => { const t = target(pid, s); return `
+        <li><a class="lab-ex" href="${t.href}" data-from-skill="${esc(s)}">
+          <span class="lab-ex-proj">${proj[pid].label}${t.where ? `<small> · ${t.where}</small>` : ''}</span>
           <span class="lab-ex-text">${text}</span>
-          <span class="lab-ex-go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-        </a></li>`).join('')}</ol>` : '<p class="text-muted-2 mb-0">Uso em estudos e interfaces React; ainda sem um projeto do portfólio para mostrar aqui.</p>'}`;
+          <span class="lab-ex-go" aria-hidden="true"><i class="bi bi-arrow-down-right"></i></span>
+        </a></li>`; }).join('')}</ol>` : '<p class="text-muted-2 mb-0">Uso em estudos e interfaces React; ainda sem um projeto do portfólio para mostrar aqui.</p>'}`;
     if (!reduce && window.gsap) gsap.fromTo(detail.querySelectorAll('.lab-ex, h3'), { autoAlpha: 0, x: 14 }, { autoAlpha: 1, x: 0, duration: 0.35, stagger: 0.06 });
   };
 
+  const setArea = (a) => {
+    area = a;
+    tabs.querySelectorAll('.lab-tab').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.area === a.id)));
+    renderArea();
+  };
+  // Usado pelos links dos projetos: abre a área certa já com a habilidade escolhida
+  P.openSkill = (name) => {
+    const a = P.areas.find((x) => x.groups.some((g) => g.skills.includes(name)));
+    if (!a) return false;
+    if (a !== area) setArea(a);
+    select(name);
+    return true;
+  };
+  P.hasSkill = (name) => P.areas.some((x) => x.groups.some((g) => g.skills.includes(name)));
   tabs.querySelectorAll('.lab-tab').forEach((t, i, all) => {
-    t.addEventListener('click', () => {
-      area = P.areas.find((a) => a.id === t.dataset.area);
-      all.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
-      renderArea();
-    });
+    t.addEventListener('click', () => setArea(P.areas.find((a) => a.id === t.dataset.area)));
     t.addEventListener('keydown', (e) => {
       const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
       if (!k) return;
@@ -71,7 +89,7 @@
     body += `<tr class="area-row"><th colspan="${cols.length + 1}" scope="colgroup">${a.label}</th></tr>`;
     body += skills.map((s) => {
       const used = P.usage[s] || [];
-      return `<tr data-projects="${used.join(' ')}"><th scope="row">${esc(s)}</th>${cols.map((c) => `<td data-col="${c.id}">${used.includes(c.id) ? `<span class="cell" role="img" aria-label="usado em ${c.label}"></span>` : '<span class="visually-hidden">não</span>'}</td>`).join('')}</tr>`;
+      return `<tr data-projects="${used.join(' ')}"><th scope="row"><a class="skill-link is-plain" href="#habilidade-${P.slug(s)}" data-skill="${esc(s)}">${esc(s)}</a></th>${cols.map((c) => `<td data-col="${c.id}">${used.includes(c.id) ? `<a class="cell" href="${target(c.id, s).href}" data-from-skill="${esc(s)}" aria-label="${esc(s)} em ${c.label}" title="${esc(s)} em ${c.label}"></a>` : '<span class="visually-hidden">não</span>'}</td>`).join('')}</tr>`;
     }).join('');
   });
   table.innerHTML = `
