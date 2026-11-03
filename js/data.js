@@ -98,6 +98,8 @@ window.PORTFOLIO = {
     'HTML': [['inspira', 'Páginas montadas a partir das telas do Figma.'], ['curly', 'Site público do salão.']],
     'CSS': [['inspira', 'Consistência visual entre as páginas, junto com a equipe de design.'], ['curly', 'Visual a partir do brandbook da marca.']],
     'Zustand': [['gemeo', 'Estado da interface do mapa no React, em stores: camadas ligadas, filtros e dados recebidos por SSE.']],
+    'Tailwind CSS': [['inspira', 'Estilo das páginas do site do projeto, montadas a partir das telas do Figma.']],
+    'styled-components': [['gemeo', 'Todo o estilo da interface do Gêmeo: painéis, controles e pop-ups como componentes estilizados.']],
     'Supabase': [['curly', 'PostgreSQL, login com email e senha ou Google, e Storage para as fotos de antes e depois.']],
     'APIs REST': [['gemeo', 'O BFF consome as camadas do Portal ArcGIS e a MobNit, e entrega o estado para o front.'], ['webhook', 'Serviço em FastAPI que recebe ocorrências em JSON.']],
     'Server-Sent Events': [['gemeo', 'Um evento por ciclo para todos os navegadores conectados, com o Nginx ajustado para não segurar o stream.']],

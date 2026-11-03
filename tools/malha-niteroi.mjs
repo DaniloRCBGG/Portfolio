@@ -4,21 +4,36 @@
 import { writeFile, mkdir } from 'node:fs/promises';
 
 const AREA = 3602220789;
-const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+];
 const query = `[out:json][timeout:180];area(${AREA})->.a;way["highway"](area.a);out geom qt;`;
+// A Overpass recusa (406) pedidos sem identificação; a política de uso pede um User-Agent próprio
+const HEADERS = {
+  'Content-Type': 'application/x-www-form-urlencoded',
+  Accept: 'application/json',
+  'User-Agent': 'portfolio-danilorcbgg-malha/1.0 (+https://github.com/DaniloRCBGG/portfolio)',
+};
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const classOf = (hw) => (/^(motorway|trunk|primary|secondary|tertiary)(_link)?$/.test(hw) ? 'major'
   : /^(residential|unclassified|living_street|service|road)$/.test(hw) ? 'minor' : 'path');
 
 async function fetchOverpass() {
-  for (const url of ENDPOINTS) {
-    try {
-      const res = await fetch(url, { method: 'POST', body: `data=${encodeURIComponent(query)}`, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-      if (res.ok) return await res.json();
-      console.error(`${url} respondeu ${res.status}`);
-    } catch (err) {
-      console.error(`${url} falhou: ${err.message}`);
+  for (let round = 1; round <= 3; round++) {
+    for (const url of ENDPOINTS) {
+      try {
+        const res = await fetch(url, { method: 'POST', body: `data=${encodeURIComponent(query)}`, headers: HEADERS });
+        if (res.ok) return await res.json();
+        console.error(`${url} respondeu ${res.status} (tentativa ${round})`);
+      } catch (err) {
+        console.error(`${url} falhou: ${err.message} (tentativa ${round})`);
+      }
     }
+    // Limite de pedidos (429) ou servidor ocupado (504): espera e tenta de novo
+    if (round < 3) await sleep(30000 * round);
   }
   throw new Error('Nenhum servidor Overpass respondeu');
 }
