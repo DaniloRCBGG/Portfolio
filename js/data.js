@@ -1,5 +1,5 @@
 // Fonte única do conteúdo compartilhado entre as páginas: rotas da linha do tempo,
-// habilidades e em quais projetos cada uma aparece.
+// projetos, habilidades e exemplos reais de uso de cada habilidade.
 window.PORTFOLIO = {
   links: {
     github: 'https://github.com/DaniloRCBGG',
@@ -8,43 +8,46 @@ window.PORTFOLIO = {
     email: 'danilorios67@gmail.com',
   },
 
-  // Cada rota é um trecho da linha do tempo; cada capítulo é uma seção com esse id na página.
+  // Cada rota é um ramo da linha do tempo; cada capítulo é um commit (uma seção com esse id na página).
+  // A ordem conta a história: primeiro os projetos, depois as habilidades que eles exigiram.
   routes: [
     {
-      id: 'inicio', label: 'Início', page: 'index.html', chapters: [
+      id: 'inicio', label: 'Início', branch: 'main', color: '#00a6a6', page: 'index.html', chapters: [
         { id: 'apresentacao', label: 'Apresentação' },
         { id: 'numeros', label: 'Em números' },
         { id: 'trajetoria', label: 'Trajetória' },
       ],
     },
     {
-      id: 'habilidades', label: 'Habilidades', page: 'habilidades.html', chapters: [
-        { id: 'areas', label: 'Áreas' },
-        { id: 'mapa', label: 'Habilidades × projetos' },
-      ],
-    },
-    {
-      id: 'projetos', label: 'Projetos', page: 'projetos.html', chapters: [
+      id: 'projetos', label: 'Projetos', branch: 'feat/projetos', color: '#e8955a', page: 'index.html', chapters: [
         { id: 'gemeo', label: 'Gêmeo Digital' },
         { id: 'curly', label: 'Curly Studio' },
         { id: 'n8n', label: 'Plataforma n8n' },
+        { id: 'prefect', label: 'Prefect' },
         { id: 'outros', label: 'Outros projetos' },
       ],
     },
     {
-      id: 'contato', label: 'Contato', page: 'contato.html', chapters: [
+      id: 'habilidades', label: 'Habilidades', branch: 'feat/habilidades', color: '#8e6bd8', page: 'index.html', chapters: [
+        { id: 'areas', label: 'Habilidades na prática' },
+        { id: 'mapa', label: 'Habilidades × projetos' },
+      ],
+    },
+    {
+      id: 'contato', label: 'Contato', branch: 'release/contato', color: '#5b8fd6', page: 'index.html', chapters: [
         { id: 'contato', label: 'Fale comigo' },
       ],
     },
   ],
 
   projects: [
-    { id: 'gemeo', label: 'Gêmeo Digital' },
-    { id: 'curly', label: 'Curly Studio' },
-    { id: 'n8n', label: 'Plataforma n8n' },
-    { id: 'inspira', label: 'Inspira Design' },
-    { id: 'webhook', label: 'Ingestão por webhook' },
-    { id: 'academicos', label: 'Projetos acadêmicos' },
+    { id: 'gemeo', label: 'Gêmeo Digital', href: '#gemeo' },
+    { id: 'curly', label: 'Curly Studio', href: '#curly' },
+    { id: 'n8n', label: 'Plataforma n8n', href: '#n8n' },
+    { id: 'prefect', label: 'Prefect', href: '#prefect' },
+    { id: 'inspira', label: 'Inspira Design', href: '#outros' },
+    { id: 'webhook', label: 'Ingestão por webhook', href: '#outros' },
+    { id: 'academicos', label: 'Projetos acadêmicos', href: '#outros' },
   ],
 
   // Ordem de prioridade: Front-end e Full Stack, Back-end e Banco de Dados, Engenharia de Dados, GIS.
@@ -86,49 +89,52 @@ window.PORTFOLIO = {
     },
   ],
 
-  // Em quais projetos do portfólio cada habilidade aparece.
-  usage: {
-    'React': ['gemeo', 'curly', 'inspira'],
-    'Next.js': ['curly'],
-    'TypeScript': ['gemeo', 'curly', 'inspira'],
-    'JavaScript': ['gemeo', 'n8n'],
-    'HTML': ['gemeo', 'curly', 'inspira'],
-    'CSS': ['gemeo', 'curly', 'inspira'],
-    'Zustand': ['gemeo'],
-    'Supabase': ['curly'],
-    'APIs REST': ['gemeo', 'webhook'],
-    'Server-Sent Events': ['gemeo'],
-    'Google OAuth': ['curly'],
-    'Docker': ['gemeo', 'n8n'],
-    'Docker Compose': ['gemeo', 'n8n'],
-    'Linux': ['gemeo', 'n8n'],
-    'Nginx': ['gemeo'],
-    'Netlify': ['curly'],
-    'GitHub Actions': ['curly'],
-    'Git': ['gemeo', 'curly', 'n8n'],
-    'Jest': ['gemeo'],
-    'Supertest': ['gemeo'],
-    'Requisitos': ['academicos'],
-    'Casos de uso': ['academicos'],
-    'UML': ['academicos'],
-    'Documentação': ['gemeo', 'academicos'],
-    'Node.js': ['gemeo'],
-    'Express': ['gemeo'],
-    'Python': ['gemeo', 'n8n', 'webhook'],
-    'FastAPI': ['webhook'],
-    'Zod': ['gemeo'],
-    'Webhooks': ['n8n', 'webhook'],
-    'PostgreSQL': ['curly', 'n8n'],
-    'SQL': ['curly', 'n8n'],
-    'RLS': ['curly'],
-    'Redis': ['gemeo', 'n8n'],
-    'Prefect': ['gemeo'],
-    'n8n': ['n8n'],
-    'ETL': ['gemeo', 'webhook'],
-    'Microsoft Fabric': ['webhook'],
-    'OneLake': ['webhook'],
-    'ArcGIS Maps SDK for JavaScript': ['gemeo'],
-    'Dados geoespaciais': ['gemeo'],
-    'Cena 3D': ['gemeo'],
+  // Exemplos reais: em que projeto a habilidade apareceu e o que eu fiz com ela.
+  examples: {
+    'React': [['gemeo', 'Interface do mapa 3D: camadas, pop-ups próprios, símbolos, rótulos e filtros por período.'], ['inspira', 'Telas do Figma transformadas em componentes reutilizáveis e rotas.'], ['curly', 'Site público e painel da equipe do salão.']],
+    'Next.js': [['curly', 'Site e sistema do salão no mesmo projeto, publicado no Netlify a cada envio para a main.']],
+    'TypeScript': [['gemeo', 'Contrato de dados compartilhado entre o BFF e o front: a regra de estado do ônibus mora num pacote só.'], ['curly', 'Todo o código do site e do painel.'], ['inspira', 'Componentes e rotas do site do projeto.']],
+    'JavaScript': [['n8n', 'Code Node que confere os quatro campos do evento antes do IF.'], ['gemeo', 'Integração com o ArcGIS Maps SDK no navegador.']],
+    'HTML': [['inspira', 'Páginas montadas a partir das telas do Figma.'], ['curly', 'Site público do salão.']],
+    'CSS': [['inspira', 'Consistência visual entre as páginas, junto com a equipe de design.'], ['curly', 'Visual a partir do brandbook da marca.']],
+    'Zustand': [['gemeo', 'Estado da interface do mapa no React, em stores: camadas ligadas, filtros e dados recebidos por SSE.']],
+    'Supabase': [['curly', 'PostgreSQL, login com email e senha ou Google, e Storage para as fotos de antes e depois.']],
+    'APIs REST': [['gemeo', 'O BFF consome as camadas do Portal ArcGIS e a MobNit, e entrega o estado para o front.'], ['webhook', 'Serviço em FastAPI que recebe ocorrências em JSON.']],
+    'Server-Sent Events': [['gemeo', 'Um evento por ciclo para todos os navegadores conectados, com o Nginx ajustado para não segurar o stream.']],
+    'Google OAuth': [['curly', 'Clientes entram com a conta Google, sem criar senha.']],
+    'Docker': [['gemeo', 'Front, BFF e Nginx em contêineres, iguais em desenvolvimento e produção.'], ['n8n', 'n8n, PostgreSQL e Redis com healthchecks e reinício automático.']],
+    'Docker Compose': [['gemeo', 'A stack inteira do Gêmeo sobe com um comando.'], ['n8n', 'Rede dedicada, volumes persistentes e rotação de logs.']],
+    'Linux': [['prefect', 'Máquina dedicada ao Prefect, preparada do zero.'], ['n8n', 'VM de homologação onde a plataforma nasceu.'], ['gemeo', 'Servidores onde o Gêmeo roda para uso interno e público.']],
+    'Nginx': [['gemeo', 'Proxy reverso entre os front-ends e a API, publicado por DNS, com o SSE funcionando através dele.']],
+    'Netlify': [['curly', 'Deploy automático da branch main.']],
+    'GitHub Actions': [['curly', 'Backup com pg_dump criptografado duas vezes por semana, guardado por 90 dias.']],
+    'Git': [['gemeo', 'Monorepo com front, BFF e pacote compartilhado.'], ['curly', 'Fluxo de branches com deploy pela main.']],
+    'Jest': [['gemeo', 'Testes das rotas HTTP do BFF.']],
+    'Supertest': [['gemeo', 'Chamadas de teste às rotas do BFF, sem subir o servidor de verdade.']],
+    'Requisitos': [['academicos', 'Requisitos da biblioteca da UFF levantados em entrevista com o chefe da biblioteca central.']],
+    'Casos de uso': [['academicos', 'Casos de uso detalhados para a biblioteca, a sorveteria e o salão.']],
+    'UML': [['academicos', 'Diagramas de classes, estados, atividades e sequência.']],
+    'Documentação': [['gemeo', 'Documentação técnica da arquitetura, dos fluxos e da configuração.'], ['academicos', 'Documentos de escopo e requisitos.']],
+    'Node.js': [['gemeo', 'BFF que roda o ciclo de 30 segundos e cruza as fontes no servidor.']],
+    'Express': [['gemeo', 'Rotas do BFF, incluindo o endpoint de streaming.']],
+    'Python': [['prefect', 'Fluxos de coleta e normalização rodando no Prefect.'], ['webhook', 'Webhook em FastAPI que grava no OneLake.'], ['n8n', 'Testes de Code Nodes em Python.']],
+    'FastAPI': [['webhook', 'Webhook que valida as ocorrências e grava os dados brutos no OneLake.']],
+    'Zod': [['gemeo', 'Valida ônibus, alertas, tráfego e chuva antes de entrar no ciclo.']],
+    'Webhooks': [['n8n', 'Webhook com autenticação Bearer no primeiro fluxo da plataforma.'], ['webhook', 'Entrada das ocorrências da prova de conceito.']],
+    'PostgreSQL': [['curly', 'Funções de reserva com expiração e gatilho que dá baixa no estoque.'], ['n8n', 'Tabela webhook_events com os eventos válidos.']],
+    'SQL': [['curly', 'Regras de negócio no banco: reservas, estoque e acesso por perfil.']],
+    'RLS': [['curly', 'Cada perfil (cliente, funcionária, gerente) só vê e altera o que pode.']],
+    'Redis': [['gemeo', 'Estado corrente em cache com TTL de 60 s e lock distribuído do ciclo.'], ['n8n', 'Serviço de apoio na stack da plataforma.']],
+    'Prefect': [['prefect', 'Arquitetei o uso do Prefect na Prefeitura: subi na máquina os fluxos que já tínhamos e criei uma máquina dedicada para ele.'], ['gemeo', 'Ciclo de ETL que mantém vivas as camadas de Waze, pluviômetros e NitBike.']],
+    'n8n': [['n8n', 'Instância própria montada por mim, hoje ferramenta interna do Escritório de Dados.']],
+    'ETL': [['gemeo', 'Coleta, normalização e diferencial de três vias dos alertas, com histórico arquivado por tema.'], ['webhook', 'Ingestão de ocorrências organizadas por ano, mês e dia.']],
+    'Microsoft Fabric': [['webhook', 'Destino dos dados da prova de conceito de ingestão.']],
+    'OneLake': [['webhook', 'Arquivos brutos organizados por ano, mês e dia.']],
+    'ArcGIS Maps SDK for JavaScript': [['gemeo', 'SceneView 3D com camadas hospedadas e em memória, e renderer por estado do ônibus.']],
+    'Dados geoespaciais': [['gemeo', 'Buffer, spatial join e áreas de pluviômetros (Voronoi) no cruzamento.']],
+    'Cena 3D': [['gemeo', 'Edificações 3D a partir do LiDAR do Urbanismo.']],
   },
 };
+
+// Em quais projetos cada habilidade aparece, derivado dos exemplos
+window.PORTFOLIO.usage = Object.fromEntries(Object.entries(window.PORTFOLIO.examples).map(([k, v]) => [k, [...new Set(v.map((e) => e[0]))]]));
