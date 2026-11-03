@@ -1,52 +1,86 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js).">
 <title>Danilo Rios · Contato</title>
+<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js), com o Gêmeo Digital de Niterói.">
+<meta name="theme-color" content="#0e1b2a">
+<script>(function () { var t = null; try { t = localStorage.getItem('tema'); } catch (e) {} document.documentElement.setAttribute('data-bs-theme', t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap">
+<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
+<body data-route="contato">
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">Danilo Rios</a>
-    <nav class="site-nav" aria-label="Seções do portfólio"><ul><li><a href="index.html">Início</a></li><li><a href="habilidades.html">Habilidades</a></li><li><a href="projetos.html">Projetos</a></li><li><a href="contato.html" aria-current="page">Contato</a></li></ul></nav>
-    <a class="btn btn-primary btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">GitHub ↗</a>
+<header class="site-top">
+  <nav class="navbar navbar-expand-md site-nav" data-bs-theme="dark" aria-label="Rotas do portfólio">
+    <div class="container container-x">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">DR</span>Danilo Rios</a>
+      <div class="d-flex align-items-center gap-2 order-md-3">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Alternar tema"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+        <a class="btn btn-gh btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i><span class="d-none d-sm-inline ms-1">GitHub</span><span class="visually-hidden d-sm-none">GitHub</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#rotas" aria-controls="rotas" aria-expanded="false" aria-label="Abrir as rotas"><span class="navbar-toggler-icon"></span></button>
+      </div>
+      <div class="collapse navbar-collapse justify-content-center" id="rotas">
+        <ul class="navbar-nav gap-1 py-2 py-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html"><span class="num">01</span>Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="habilidades.html"><span class="num">02</span>Habilidades</a></li>
+        <li class="nav-item"><a class="nav-link" href="projetos.html"><span class="num">03</span>Projetos</a></li>
+        <li class="nav-item"><a class="nav-link" href="contato.html" aria-current="page"><span class="num">04</span>Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="timeline" role="region" aria-label="Linha do tempo do portfólio">
+    <div class="container container-x">
+      <div class="tl-row">
+        <div class="tl-controls">
+          <button class="tl-btn prev" id="tl-prev" type="button" aria-label="Capítulo anterior" title="Capítulo anterior"><i class="bi bi-skip-start-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn play" id="tl-play" type="button" aria-label="Iniciar o tour pelas rotas" title="Tour automático"><i class="bi bi-play-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn next" id="tl-next" type="button" aria-label="Próximo capítulo" title="Próximo capítulo"><i class="bi bi-skip-end-fill" aria-hidden="true"></i></button>
+        </div>
+        <div class="tl-track-wrap"><div class="tl-track" id="tl-track"></div></div>
+        <div class="tl-status"><span id="tl-num"></span><b id="tl-name"></b><div class="tl-dwell" aria-hidden="true"><i></i></div></div>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap" id="conteudo" tabindex="-1">
-  <section class="page-head">
-    <div class="label">Contato</div>
-    <h1>Vamos conversar</h1>
-    <p>Busco vagas júnior de Front-end, Full Stack e Análise e Desenvolvimento de Sistemas. O jeito mais rápido de falar comigo é pelo email ou pelo LinkedIn.</p>
-  </section>
-
-  <section aria-label="Formas de contato">
-    <div class="contact-grid">
-      <a class="contact-card featured" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">
-        <span class="label">GitHub</span><b>DaniloRCBGG ↗</b><span>Código e repositórios</span>
-      </a>
-      <div class="contact-card featured">
-        <span class="label">Portfólio</span>
-        <b><a href="https://danilorcbgg.github.io/Portfolio/" target="_blank" rel="noopener">danilorcbgg.github.io/Portfolio ↗</a></b>
-        <button class="btn btn-sm" type="button" data-copy="https://danilorcbgg.github.io/Portfolio/">Copiar link</button>
+<main id="conteudo" tabindex="-1">
+  <section class="section contact-hero" id="contato" aria-labelledby="t-contato">
+    <div class="container container-x">
+      <div class="section-head mb-4">
+        <div class="eyebrow">Rota 04 · Contato</div>
+        <h1 id="t-contato">Vamos conversar</h1>
+        <p>Busco vagas júnior de Front-end, Full Stack e Análise e Desenvolvimento de Sistemas. O jeito mais rápido de falar comigo é pelo email ou pelo LinkedIn.</p>
       </div>
-      <div class="contact-card">
-        <span class="label">Email</span><b>danilorios67@gmail.com</b>
-        <button class="btn btn-sm" type="button" data-copy="danilorios67@gmail.com">Copiar email</button>
+      <div class="row g-3">
+        <div class="col-md-6"><a class="contact-card featured" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i><span class="eyebrow">GitHub</span><b>DaniloRCBGG ↗</b><span>Código e repositórios</span></a></div>
+        <div class="col-md-6"><div class="contact-card featured"><i class="bi bi-link-45deg" aria-hidden="true"></i><span class="eyebrow">Portfólio</span><b><a href="https://danilorcbgg.github.io/Portfolio/" target="_blank" rel="noopener">danilorcbgg.github.io/Portfolio ↗</a></b><button class="btn btn-line btn-sm" style="justify-self: start" type="button" data-copy="https://danilorcbgg.github.io/Portfolio/">Copiar link</button></div></div>
+        <div class="col-md-6"><div class="contact-card"><i class="bi bi-envelope" aria-hidden="true"></i><span class="eyebrow">Email</span><b>danilorios67@gmail.com</b><button class="btn btn-line btn-sm" style="justify-self: start" type="button" data-copy="danilorios67@gmail.com">Copiar email</button></div></div>
+        <div class="col-md-6"><a class="contact-card" href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener"><i class="bi bi-linkedin" aria-hidden="true"></i><span class="eyebrow">LinkedIn</span><b>danilo-rios-cerqueira ↗</b><span>Rio de Janeiro – RJ</span></a></div>
       </div>
-      <a class="contact-card" href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener">
-        <span class="label">LinkedIn</span><b>danilo-rios-cerqueira ↗</b><span>Rio de Janeiro – RJ</span>
-      </a>
+      <div class="mt-4"><a class="btn btn-accent" href="projetos.html#gemeo"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar aos projetos</a></div>
     </div>
   </section>
 </main>
 
-<script src="js/main.js"></script>
+<footer class="site-foot">
+  <div class="container container-x d-flex flex-wrap gap-2 justify-content-between">
+    <span>© 2026 Danilo Rios · Rio de Janeiro</span>
+    <span>HTML, CSS e JavaScript puros, com Bootstrap e Leaflet · <a href="https://github.com/DaniloRCBGG/portfolio" target="_blank" rel="noopener">código no GitHub</a></span>
+  </div>
+</footer>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important">
+  <div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"><div class="toast-body"></div></div>
+</div>
+<script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/timeline.js"></script>
 </body>
 </html>

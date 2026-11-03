@@ -1,62 +1,136 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js).">
 <title>Danilo Rios · Portfólio</title>
+<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js), com o Gêmeo Digital de Niterói.">
+<meta name="theme-color" content="#0e1b2a">
+<script>(function () { var t = null; try { t = localStorage.getItem('tema'); } catch (e) {} document.documentElement.setAttribute('data-bs-theme', t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap">
+<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
+<body data-route="inicio">
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">Danilo Rios</a>
-    <nav class="site-nav" aria-label="Seções do portfólio"><ul><li><a href="index.html" aria-current="page">Início</a></li><li><a href="habilidades.html">Habilidades</a></li><li><a href="projetos.html">Projetos</a></li><li><a href="contato.html">Contato</a></li></ul></nav>
-    <a class="btn btn-primary btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">GitHub ↗</a>
+<header class="site-top">
+  <nav class="navbar navbar-expand-md site-nav" data-bs-theme="dark" aria-label="Rotas do portfólio">
+    <div class="container container-x">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">DR</span>Danilo Rios</a>
+      <div class="d-flex align-items-center gap-2 order-md-3">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Alternar tema"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+        <a class="btn btn-gh btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i><span class="d-none d-sm-inline ms-1">GitHub</span><span class="visually-hidden d-sm-none">GitHub</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#rotas" aria-controls="rotas" aria-expanded="false" aria-label="Abrir as rotas"><span class="navbar-toggler-icon"></span></button>
+      </div>
+      <div class="collapse navbar-collapse justify-content-center" id="rotas">
+        <ul class="navbar-nav gap-1 py-2 py-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html" aria-current="page"><span class="num">01</span>Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="habilidades.html"><span class="num">02</span>Habilidades</a></li>
+        <li class="nav-item"><a class="nav-link" href="projetos.html"><span class="num">03</span>Projetos</a></li>
+        <li class="nav-item"><a class="nav-link" href="contato.html"><span class="num">04</span>Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="timeline" role="region" aria-label="Linha do tempo do portfólio">
+    <div class="container container-x">
+      <div class="tl-row">
+        <div class="tl-controls">
+          <button class="tl-btn prev" id="tl-prev" type="button" aria-label="Capítulo anterior" title="Capítulo anterior"><i class="bi bi-skip-start-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn play" id="tl-play" type="button" aria-label="Iniciar o tour pelas rotas" title="Tour automático"><i class="bi bi-play-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn next" id="tl-next" type="button" aria-label="Próximo capítulo" title="Próximo capítulo"><i class="bi bi-skip-end-fill" aria-hidden="true"></i></button>
+        </div>
+        <div class="tl-track-wrap"><div class="tl-track" id="tl-track"></div></div>
+        <div class="tl-status"><span id="tl-num"></span><b id="tl-name"></b><div class="tl-dwell" aria-hidden="true"><i></i></div></div>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap" id="conteudo" tabindex="-1">
-  <section class="hero">
-    <div class="label">Desenvolvedor Front-end e Full Stack · Rio de Janeiro</div>
-    <h1>Danilo Rios</h1>
-    <p class="role">Desenvolvo interfaces em <strong>React e TypeScript</strong> para o setor público. Hoje trabalho no Gêmeo Digital de Niterói, um mapa 3D da cidade que mostra ônibus, trânsito e chuva em tempo real. Cuido também da integração com o back-end, da automação de dados e da publicação dos sistemas.</p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">GitHub <small>DaniloRCBGG ↗</small></a>
-      <a class="btn" href="https://danilorcbgg.github.io/Portfolio/" target="_blank" rel="noopener">Portfólio <small>danilorcbgg.github.io/Portfolio ↗</small></a>
-      <a class="btn" href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <button class="btn" type="button" data-copy="danilorios67@gmail.com">danilorios67@gmail.com <small>copiar</small></button>
+<main id="conteudo" tabindex="-1">
+  <section class="hero" id="apresentacao" aria-labelledby="t-hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="container container-x hero-inner">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Desenvolvedor Front-end e Full Stack · Rio de Janeiro</div>
+      <h1 id="t-hero">Danilo Rios</h1>
+      <p class="hero-lead">Construo <span class="rotator" aria-hidden="true"><span id="rotator-text" data-phrases='["interfaces em React e TypeScript", "mapas que cruzam dados em tempo real", "sistemas full stack, do formulário ao banco", "automações e fluxos de dados"]'>interfaces em React e TypeScript</span><span class="caret"></span></span><span class="visually-hidden">interfaces em React e TypeScript, mapas que cruzam dados em tempo real, sistemas full stack e automações de dados.</span></p>
+      <p class="summary">Desenvolvedor web com cerca de dois anos de experiência, a maior parte no setor público. No Escritório de Dados da Prefeitura de Niterói, sou o desenvolvedor principal do Gêmeo Digital de Niterói, um mapa 3D da cidade que cruza ônibus, trânsito e chuva em tempo real. Cuido também da integração com o back-end, da automação de dados e da publicação dos sistemas.</p>
+      <div class="d-flex flex-wrap gap-2 mt-4">
+        <a class="btn btn-accent btn-lg" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i> GitHub <small>DaniloRCBGG</small></a>
+        <a class="btn btn-line btn-lg" href="https://danilorcbgg.github.io/Portfolio/" target="_blank" rel="noopener"><i class="bi bi-link-45deg" aria-hidden="true"></i> Portfólio <small>danilorcbgg.github.io/Portfolio</small></a>
+        <a class="btn btn-line btn-lg" href="https://www.linkedin.com/in/danilo-rios-cerqueira" target="_blank" rel="noopener"><i class="bi bi-linkedin" aria-hidden="true"></i> LinkedIn</a>
+        <button class="btn btn-line btn-lg" type="button" data-copy="danilorios67@gmail.com"><i class="bi bi-envelope" aria-hidden="true"></i> danilorios67@gmail.com <small>copiar</small></button>
+      </div>
+      <div class="mt-3"><button class="btn btn-link px-0 text-decoration-none" id="start-tour" type="button" style="color: var(--teal-200)"><i class="bi bi-play-circle" aria-hidden="true"></i> Fazer o tour pelas rotas, como no Google Earth</button></div>
+      <div class="hero-legend" aria-hidden="true"><span><i style="background:#00a6a6"></i>ônibus</span><span><i style="background:#e8955a"></i>em área de alerta</span><span id="hero-live"></span><span>animação ilustrativa</span></div>
     </div>
   </section>
 
-  <section class="stack" aria-labelledby="exp">
-    <h2 id="exp">Experiência e formação</h2>
-      <div class="timeline">
-        <div class="job">
-          <div class="when">jul/2025 – atual</div>
-          <div><h3>Desenvolvedor front-end (estágio)</h3><span class="org">Escritório de Dados da Prefeitura de Niterói (SIGeo)</span></div>
-        </div>
-        <div class="job">
-          <div class="when">out/2024 – out/2025</div>
-          <div><h3>Desenvolvedor front-end</h3><span class="org">Projeto de Extensão Inspira Design, UFF</span></div>
-        </div>
-        <div class="job">
-          <div class="when">2022 – atual</div>
-          <div><h3>Bacharelado em Ciência da Computação</h3><span class="org">Universidade Federal Fluminense</span></div>
-        </div>
+  <section class="section" id="numeros" aria-labelledby="t-num">
+    <div class="container container-x">
+      <div class="section-head reveal">
+        <div class="eyebrow">Em números</div>
+        <h2 id="t-num">O que já está no ar</h2>
+        <p>Alguns números dos projetos. Cada um aparece de novo, com mais detalhe, na rota Projetos.</p>
       </div>
+      <div class="row g-3">
+        <div class="col-6 col-lg-3"><div class="panel stat reveal"><b><span data-count="2">2</span><small>anos</small></b><span>desenvolvendo para a web, desde out/2024</span></div></div>
+        <div class="col-6 col-lg-3"><div class="panel stat reveal"><b><span data-count="30">30</span><small>s</small></b><span>ciclo em que o Gêmeo recalcula o estado de cada ônibus</span></div></div>
+        <div class="col-6 col-lg-3"><div class="panel stat reveal"><b><span data-count="8">8</span><small>camadas</small></b><span>de dados no Gêmeo, 4 delas cruzadas em tempo real</span></div></div>
+        <div class="col-6 col-lg-3"><div class="panel stat reveal"><b><span data-count="6">6</span><small>áreas</small></b><span>de habilidades, de Front-end a GIS</span></div></div>
+      </div>
+    </div>
   </section>
 
-  <nav class="next-grid" aria-label="Continue navegando">
-    <a class="next-card" href="habilidades.html"><span>01</span><b>Habilidades →</b><span>Front-end e Full Stack primeiro, depois back-end, banco de dados, dados e GIS.</span></a>
-    <a class="next-card" href="projetos.html"><span>02</span><b>Projetos →</b><span>Gêmeo Digital de Niterói, Curly Studio, plataforma n8n e outros.</span></a>
-    <a class="next-card" href="contato.html"><span>03</span><b>Contato →</b><span>GitHub, portfólio, email e LinkedIn.</span></a>
-  </nav>
+  <section class="section" id="trajetoria" aria-labelledby="t-traj">
+    <div class="container container-x">
+      <div class="section-head reveal">
+        <div class="eyebrow">Trajetória</div>
+        <h2 id="t-traj">Do cálculo ao mapa da cidade</h2>
+        <p>Clique em um marco ou use as setas do teclado para ver cada etapa.</p>
+      </div>
+      <div class="career panel panel-pad reveal">
+        <div class="career-line" id="career-line" role="tablist" aria-label="Marcos da trajetória">
+          <button class="milestone" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-2016"><span class="when">2016</span><span class="pin" aria-hidden="true"></span><b>Física na UFF</b></button>
+          <button class="milestone" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-2022"><span class="when">2022</span><span class="pin" aria-hidden="true"></span><b>Ciência da Computação na UFF</b></button>
+          <button class="milestone" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-2024"><span class="when">out/2024</span><span class="pin" aria-hidden="true"></span><b>Inspira Design · UFF</b></button>
+          <button class="milestone" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-2025"><span class="when">jul/2025</span><span class="pin" aria-hidden="true"></span><b>Escritório de Dados de Niterói</b></button>
+          <button class="milestone" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-2026"><span class="when">set/2026</span><span class="pin" aria-hidden="true"></span><b>Carol Rios Curly Studio</b></button>
+          <button class="milestone is-now" type="button" role="tab" aria-selected="false" aria-controls="career-detail" data-tpl="m-hoje"><span class="when">hoje</span><span class="pin" aria-hidden="true"></span><b>Próximo passo</b></button>
+        </div>
+        <div class="career-detail" id="career-detail" role="tabpanel" aria-live="polite"></div>
+      </div>
+      <div class="row g-3 mt-4">
+        <div class="col-md-4"><a class="route-card reveal" href="habilidades.html"><span class="num">02 · rota</span><b>Habilidades →</b><span>Front-end e Full Stack primeiro, depois back-end, banco de dados, dados e GIS.</span></a></div>
+        <div class="col-md-4"><a class="route-card reveal" href="projetos.html"><span class="num">03 · rota</span><b>Projetos →</b><span>Gêmeo Digital com mapa ao vivo, Curly Studio, plataforma n8n e outros.</span></a></div>
+        <div class="col-md-4"><a class="route-card reveal" href="contato.html"><span class="num">04 · rota</span><b>Contato →</b><span>GitHub, portfólio, email e LinkedIn.</span></a></div>
+      </div>
+    </div>
+  </section>
+<template id="m-2016"><h3 class="h4">Bacharelado em Física · UFF</h3><p class="text-muted-2">2016 a 2021, não concluído. Deu a base em matemática, lógica e métodos quantitativos que eu uso até hoje para pensar em dados e regras.</p></template>
+<template id="m-2022"><h3 class="h4">Bacharelado em Ciência da Computação · UFF</h3><p class="text-muted-2">Em andamento. Na graduação modelei sistemas em equipe, com levantamento de requisitos, casos de uso e UML: UFForáculo, Sorveteria Bom Demais e Curly Care.</p><a class="btn btn-line btn-sm" href="projetos.html#outros">Ver os projetos acadêmicos</a></template>
+<template id="m-2024"><h3 class="h4">Desenvolvedor front-end · Projeto de Extensão Inspira Design</h3><p class="text-muted-2">Out/2024 a out/2025. Transformei telas do Figma em páginas React + TypeScript, com componentes reutilizáveis e rotas, junto com a equipe de design.</p></template>
+<template id="m-2025"><h3 class="h4">Desenvolvedor front-end (estágio) · Escritório de Dados da Prefeitura de Niterói</h3><p class="text-muted-2">Desde jul/2025. Sou o desenvolvedor principal do Gêmeo Digital de Niterói e montei a plataforma de automação com n8n, hoje ferramenta interna do escritório. Também cuido de Docker, Nginx, automação em Python com Prefect e documentação.</p><a class="btn btn-line btn-sm" href="projetos.html#gemeo">Ver o Gêmeo Digital</a></template>
+<template id="m-2026"><h3 class="h4">Projeto full stack · Carol Rios Curly Studio</h3><p class="text-muted-2">Site e sistema do salão em Next.js e Supabase, com agendamento, sinal por Pix e baixa automática de estoque. Está em testes com a dona antes do lançamento oficial.</p><a class="btn btn-line btn-sm" href="projetos.html#curly">Ver o Curly Studio</a></template>
+<template id="m-hoje"><h3 class="h4">Buscando a próxima vaga</h3><p class="text-muted-2">Vagas júnior de Front-end, Full Stack e Análise e Desenvolvimento de Sistemas. Gosto de interface, mas também de entender o dado e colocar o sistema no ar.</p><a class="btn btn-accent btn-sm" href="contato.html">Falar comigo</a></template>
 </main>
 
-<script src="js/main.js"></script>
+<footer class="site-foot">
+  <div class="container container-x d-flex flex-wrap gap-2 justify-content-between">
+    <span>© 2026 Danilo Rios · Rio de Janeiro</span>
+    <span>HTML, CSS e JavaScript puros, com Bootstrap e Leaflet · <a href="https://github.com/DaniloRCBGG/portfolio" target="_blank" rel="noopener">código no GitHub</a></span>
+  </div>
+</footer>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important">
+  <div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"><div class="toast-body"></div></div>
+</div>
+<script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/timeline.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

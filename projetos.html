@@ -1,386 +1,570 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js).">
 <title>Danilo Rios · Projetos</title>
+<meta name="description" content="Portfólio de Danilo Rios, desenvolvedor Front-end e Full Stack (React, TypeScript, Node.js), com o Gêmeo Digital de Niterói.">
+<meta name="theme-color" content="#0e1b2a">
+<script>(function () { var t = null; try { t = localStorage.getItem('tema'); } catch (e) {} document.documentElement.setAttribute('data-bs-theme', t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap">
+<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
+<body data-route="projetos">
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">Danilo Rios</a>
-    <nav class="site-nav" aria-label="Seções do portfólio"><ul><li><a href="index.html">Início</a></li><li><a href="habilidades.html">Habilidades</a></li><li><a href="projetos.html" aria-current="page">Projetos</a></li><li><a href="contato.html">Contato</a></li></ul></nav>
-    <a class="btn btn-primary btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener">GitHub ↗</a>
+<header class="site-top">
+  <nav class="navbar navbar-expand-md site-nav" data-bs-theme="dark" aria-label="Rotas do portfólio">
+    <div class="container container-x">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">DR</span>Danilo Rios</a>
+      <div class="d-flex align-items-center gap-2 order-md-3">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Alternar tema"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+        <a class="btn btn-gh btn-sm" href="https://github.com/DaniloRCBGG" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i><span class="d-none d-sm-inline ms-1">GitHub</span><span class="visually-hidden d-sm-none">GitHub</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#rotas" aria-controls="rotas" aria-expanded="false" aria-label="Abrir as rotas"><span class="navbar-toggler-icon"></span></button>
+      </div>
+      <div class="collapse navbar-collapse justify-content-center" id="rotas">
+        <ul class="navbar-nav gap-1 py-2 py-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html"><span class="num">01</span>Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="habilidades.html"><span class="num">02</span>Habilidades</a></li>
+        <li class="nav-item"><a class="nav-link" href="projetos.html" aria-current="page"><span class="num">03</span>Projetos</a></li>
+        <li class="nav-item"><a class="nav-link" href="contato.html"><span class="num">04</span>Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="timeline" role="region" aria-label="Linha do tempo do portfólio">
+    <div class="container container-x">
+      <div class="tl-row">
+        <div class="tl-controls">
+          <button class="tl-btn prev" id="tl-prev" type="button" aria-label="Capítulo anterior" title="Capítulo anterior"><i class="bi bi-skip-start-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn play" id="tl-play" type="button" aria-label="Iniciar o tour pelas rotas" title="Tour automático"><i class="bi bi-play-fill" aria-hidden="true"></i></button>
+          <button class="tl-btn next" id="tl-next" type="button" aria-label="Próximo capítulo" title="Próximo capítulo"><i class="bi bi-skip-end-fill" aria-hidden="true"></i></button>
+        </div>
+        <div class="tl-track-wrap"><div class="tl-track" id="tl-track"></div></div>
+        <div class="tl-status"><span id="tl-num"></span><b id="tl-name"></b><div class="tl-dwell" aria-hidden="true"><i></i></div></div>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap" id="conteudo" tabindex="-1">
-  <section class="page-head">
-    <div class="label">Projetos</div>
-    <h1>Projetos</h1>
-    <p>Três projetos em destaque, com links, imagens e demonstrações interativas, seguidos de outros trabalhos da faculdade e da Prefeitura.</p>
-  </section>
-
-  <section class="feature" aria-labelledby="gdn">
-    <div class="feature-head">
-      <div class="label">Desenvolvedor principal · Escritório de Dados de Niterói · desde jul/2025</div>
-      <div class="title-row">
-        <h2 id="gdn">Gêmeo Digital de Niterói</h2>
-        <a class="project-link" href="https://gemeo.niteroi.rj.gov.br" target="_blank" rel="noopener">Abrir o Gêmeo ↗</a>
+<main id="conteudo" tabindex="-1">
+  <section class="section pb-0" aria-labelledby="t-proj">
+    <div class="container container-x">
+      <div class="section-head mb-0">
+        <div class="eyebrow">Rota 03 · Projetos</div>
+        <h1 id="t-proj">Projetos</h1>
+        <p>Três projetos em destaque, cada um com uma demonstração que você pode mexer, e depois os trabalhos da faculdade e da Prefeitura. A linha do tempo no topo leva de um para o outro.</p>
       </div>
-      <p>O alerta do Waze e a posição do ônibus já existiam, cada um no seu sistema. O Gêmeo cruza essas fontes no servidor a cada 30 segundos e entrega ao navegador um estado pronto: cada ônibus aparece no mapa 3D com a cor que diz se ele está numa área de alerta, num trecho congestionado ou nos dois.</p>
     </div>
-
-    <div class="shots" data-project="gemeo">
-      <button class="shot" type="button"><img src="img/gemeo-1.png" alt="Cena 3D de Niterói com os ônibus coloridos pelo estado" loading="lazy"></button>
-      <button class="shot" type="button"><img src="img/gemeo-2.png" alt="Pop-up de um ônibus com linha, velocidade e ocorrências próximas" loading="lazy"></button>
-      <button class="shot" type="button"><img src="img/gemeo-3.png" alt="Camadas de alertas, trânsito e chuva sobre o mapa" loading="lazy"></button>
-    </div>
-
-    <div class="cycle-wrap" role="img" aria-label="Ciclo de 30 segundos: fontes de dados entram no BFF, que cruza os dados, grava no Redis e envia por SSE para a cena 3D no navegador">
-      <svg class="cycle" viewBox="0 0 760 190">
-        <defs>
-          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
-          </marker>
-        </defs>
-        <rect class="node" x="10" y="20" width="150" height="150" rx="10"></rect>
-        <text x="26" y="48">Fontes</text>
-        <text class="sub" x="26" y="74">ônibus · MobNit</text>
-        <text class="sub" x="26" y="94">alertas · Waze</text>
-        <text class="sub" x="26" y="114">lentidão · Waze</text>
-        <text class="sub" x="26" y="134">chuva · Defesa Civil</text>
-        <text class="sub" x="26" y="154">via Prefect + ArcGIS</text>
-
-        <rect class="core" x="215" y="45" width="180" height="100" rx="10"></rect>
-        <text x="231" y="74">BFF · Node.js</text>
-        <text class="sub" x="231" y="98">valida com Zod</text>
-        <text class="sub" x="231" y="116">cruza camadas</text>
-        <text class="sub" x="231" y="134">ciclo de 30 s</text>
-
-        <rect class="node" x="450" y="20" width="130" height="62" rx="10"></rect>
-        <text x="466" y="46">Redis</text>
-        <text class="sub" x="466" y="66">TTL 60 s</text>
-
-        <rect class="node" x="450" y="108" width="130" height="62" rx="10"></rect>
-        <text x="466" y="134">SSE</text>
-        <text class="sub" x="466" y="154">1 evento/ciclo</text>
-
-        <rect class="node" x="625" y="45" width="125" height="100" rx="10"></rect>
-        <text x="641" y="74">Navegador</text>
-        <text class="sub" x="641" y="98">React + TS</text>
-        <text class="sub" x="641" y="116">ArcGIS 3D</text>
-
-        <path d="M160,95 L211,95" marker-end="url(#ar)"></path>
-        <path d="M395,80 C420,80 425,51 446,51" marker-end="url(#ar)"></path>
-        <path d="M395,110 C420,110 425,139 446,139" marker-end="url(#ar)"></path>
-        <path d="M580,51 C602,51 600,80 621,80" marker-end="url(#ar)"></path>
-        <path d="M580,139 C602,139 600,110 621,110" marker-end="url(#ar)"></path>
-      </svg>
-    </div>
-
-    <div class="stack">
-      <div class="label">Estados de um ônibus no mapa · teste a regra</div>
-      <div class="demo" id="bus-demo">
-        <div class="demo-controls">
-          <button class="toggle" type="button" aria-pressed="false" data-flag="alert">Alerta ou alagamento a até 150 m</button>
-          <button class="toggle" type="button" aria-pressed="false" data-flag="jam">Trecho lento (menos de 5 km/h) a até 12 m</button>
+  </section>
+  <section class="project" id="gemeo" aria-labelledby="t-gemeo">
+    <div class="container container-x">
+      <div class="project-head">
+        <div class="d-flex flex-wrap gap-2"><span class="badge-soft">Desenvolvedor principal</span><span class="badge-soft badge-line">Escritório de Dados de Niterói · desde jul/2025</span><span class="badge-soft">Em produção</span></div>
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+          <h2 id="t-gemeo">Gêmeo Digital de Niterói</h2>
+          <a class="btn btn-accent" href="https://gemeo.niteroi.rj.gov.br" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Abrir o Gêmeo</a>
         </div>
-        <div class="demo-result" aria-live="polite"><i class="dot" id="bus-dot" style="background:var(--s-normal)"></i><code id="bus-code">normal</code><span id="bus-text">circulando sem ocorrências</span></div>
+        <p class="project-quote">Toda cidade já tem dados. O que falta quase nunca é dado: é o encontro entre eles.</p>
+        <p class="text-muted-2 mb-0">O alerta do Waze e a posição do ônibus já existiam, cada um no seu sistema. O Gêmeo cruza essas fontes no servidor a cada 30 segundos e entrega ao navegador um estado pronto: cada ônibus aparece no mapa 3D com a cor que diz se ele está numa área de alerta, num trecho congestionado ou nos dois.</p>
       </div>
-      <div class="legend" id="bus-legend">
-        <div class="state is-active" data-state="normal"><i class="dot" style="background:var(--s-normal)"></i><div><code>normal</code><br><span>circulando sem ocorrências</span></div></div>
-        <div class="state" data-state="alert"><i class="dot" style="background:var(--s-alert)"></i><div><code>alert</code><br><span>perto de um alerta ou alagamento</span></div></div>
-        <div class="state" data-state="jammed"><i class="dot" style="background:var(--s-jam)"></i><div><code>jammed</code><br><span>em trecho congestionado</span></div></div>
-        <div class="state" data-state="alert_jammed"><i class="dot" style="background:var(--s-both)"></i><div><code>alert_jammed</code><br><span>alerta e congestionamento juntos</span></div></div>
+      <div class="shots" data-project="gemeo">
+        <button class="shot" type="button"><img src="img/gemeo-1.png" alt="Cena 3D de Niterói com os ônibus coloridos pelo estado" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/gemeo-2.png" alt="Pop-up de um ônibus com linha, velocidade e ocorrências próximas" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/gemeo-3.png" alt="Camadas de alertas, trânsito e chuva sobre o mapa" loading="lazy"></button>
       </div>
-    </div>
-
-    <div class="thresholds">
-      <div class="th"><b>150 m</b><span>raio de influência de um alerta</span></div>
-      <div class="th"><b>12 m</b><span>distância que põe o ônibus no congestionamento</span></div>
-      <div class="th"><b>6,2 mm</b><span>chuva em 15 min que dispara alerta</span></div>
-      <div class="th"><b>5 km/h</b><span>velocidade que define trecho lento</span></div>
-    </div>
-
-    <div class="stack">
-      <div class="label">O que eu fiz</div>
-      <ul class="contrib">
-        <li>Interface em React e TypeScript com ArcGIS Maps SDK: cena 3D, camadas, pop-ups próprios, símbolos, rótulos e filtros por período.</li>
-        <li>Integração com o BFF em Node.js/Express, que entrega o estado em tempo real por Server-Sent Events, com cache em Redis.</li>
-        <li>Execução com Docker Compose e publicação com Nginx como proxy reverso, incluindo os ajustes para o SSE funcionar através do proxy.</li>
-        <li>Fluxos de coleta de dados em Python com Prefect, e documentação técnica da arquitetura e da configuração.</li>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>30 s</b><span>ciclo do BFF que cruza as fontes</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>8</b><span>camadas, 4 cruzadas em tempo real</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>60 s</b><span>vida do estado no cache Redis</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>5</b><span>níveis de maturidade; Niterói está no 2</span></div></div>
+      </div>
+      <ul class="nav p-tabs" role="tablist" aria-label="Detalhes do projeto">
+        <li class="nav-item" role="presentation"><button class="nav-link active" id="gdn-mapa-tab" data-bs-toggle="tab" data-bs-target="#gdn-mapa" type="button" role="tab" aria-controls="gdn-mapa" aria-selected="true"><i class="bi bi-geo-alt" aria-hidden="true"></i>Mapa ao vivo</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="gdn-ciclo-tab" data-bs-toggle="tab" data-bs-target="#gdn-ciclo" type="button" role="tab" aria-controls="gdn-ciclo" aria-selected="false"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Ciclo de 30 s</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="gdn-camadas-tab" data-bs-toggle="tab" data-bs-target="#gdn-camadas" type="button" role="tab" aria-controls="gdn-camadas" aria-selected="false"><i class="bi bi-layers" aria-hidden="true"></i>Camadas</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="gdn-regras-tab" data-bs-toggle="tab" data-bs-target="#gdn-regras" type="button" role="tab" aria-controls="gdn-regras" aria-selected="false"><i class="bi bi-sliders" aria-hidden="true"></i>Regras e limiares</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="gdn-maturidade-tab" data-bs-toggle="tab" data-bs-target="#gdn-maturidade" type="button" role="tab" aria-controls="gdn-maturidade" aria-selected="false"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i>Maturidade</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="gdn-fiz-tab" data-bs-toggle="tab" data-bs-target="#gdn-fiz" type="button" role="tab" aria-controls="gdn-fiz" aria-selected="false"><i class="bi bi-person-workspace" aria-hidden="true"></i>O que eu fiz</button></li>
       </ul>
-    </div>
-    <ul class="tags">
-      <li>React</li><li>TypeScript</li><li>ArcGIS Maps SDK</li><li>Zustand</li><li>Node.js</li><li>Express</li><li>Zod</li><li>SSE</li><li>Redis</li><li>Docker</li><li>Nginx</li><li>Prefect</li>
-    </ul>
-  </section>
-  <section class="feature" aria-labelledby="curly">
-    <div class="feature-head">
-      <div class="label">Projeto full stack · Carol Rios Curly Studio · desde set/2026 · em testes com a cliente</div>
-      <div class="title-row">
-        <h2 id="curly">Carol Rios Curly Studio</h2>
-        <a class="project-link" href="https://curlystudio.netlify.app/" target="_blank" rel="noopener">Ver versão de testes ↗</a>
-      </div>
-      <p>No salão, um horário só fica garantido depois que a cliente paga o sinal. O sistema leva essa regra para o site: a cliente escolhe o serviço, o tamanho do cabelo e o horário, que fica reservado por 30 minutos enquanto o Pix não é confirmado. Quando a equipe confirma o sinal, o atendimento entra na agenda, e ao concluir o estoque dá baixa sozinho nos produtos que aquele serviço consome naquele tamanho de cabelo.</p>
-    </div>
-
-    <div class="shots" data-project="curly">
-      <button class="shot" type="button"><img src="img/curly-1.png" alt="Página inicial do site do salão" loading="lazy"></button>
-      <button class="shot" type="button"><img src="img/curly-2.png" alt="Agendamento com escolha de serviço, tamanho e horário" loading="lazy"></button>
-      <button class="shot" type="button"><img src="img/curly-3.png" alt="Painel da equipe com a agenda" loading="lazy"></button>
-    </div>
-
-    <div class="cycle-wrap" role="img" aria-label="Fluxo do agendamento: a cliente escolhe serviço e horário no site, o banco reserva o horário por 30 minutos, a cliente paga o sinal por Pix, a equipe confirma o comprovante e, ao concluir o atendimento, o estoque dá baixa automática. Sem sinal em 30 minutos, o horário volta a ficar livre.">
-      <svg class="cycle" viewBox="0 0 760 215">
-        <defs>
-          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
-          </marker>
-        </defs>
-        <g data-node="site">
-        <rect class="node" x="10" y="20" width="120" height="130" rx="10"></rect>
-        <text x="24" y="48">Site</text>
-        <text class="sub" x="24" y="74">Next.js + TS</text>
-        <text class="sub" x="24" y="94">serviço e</text>
-        <text class="sub" x="24" y="114">tamanho P–GG</text>
-        <text class="sub" x="24" y="134">horário livre</text>
-        </g>
-
-        <g data-node="reserva">
-        <rect class="core" x="165" y="20" width="120" height="130" rx="10"></rect>
-        <text x="179" y="48">Reserva</text>
-        <text class="sub" x="179" y="74">função no</text>
-        <text class="sub" x="179" y="94">PostgreSQL</text>
-        <text class="sub" x="179" y="114">trava 30 min</text>
-        <text class="sub" x="179" y="134">RLS por perfil</text>
-        </g>
-
-        <g data-node="pix">
-        <rect class="node" x="320" y="20" width="120" height="130" rx="10"></rect>
-        <text x="334" y="48">Sinal Pix</text>
-        <text class="sub" x="334" y="74">QR estático</text>
-        <text class="sub" x="334" y="94">copia e cola</text>
-        <text class="sub" x="334" y="114">Asaas opcional</text>
-        </g>
-
-        <g data-node="equipe">
-        <rect class="node" x="475" y="20" width="120" height="130" rx="10"></rect>
-        <text x="489" y="48">Equipe</text>
-        <text class="sub" x="489" y="74">comprovante</text>
-        <text class="sub" x="489" y="94">no WhatsApp</text>
-        <text class="sub" x="489" y="114">confirma sinal</text>
-        </g>
-
-        <g data-node="estoque">
-        <rect class="node" x="630" y="20" width="120" height="130" rx="10"></rect>
-        <text x="644" y="48">Estoque</text>
-        <text class="sub" x="644" y="74">gatilho ao</text>
-        <text class="sub" x="644" y="94">concluir</text>
-        <text class="sub" x="644" y="114">baixa conforme</text>
-        <text class="sub" x="644" y="134">o tamanho</text>
-        </g>
-
-        <path d="M130,85 L161,85" marker-end="url(#ar2)"></path>
-        <path d="M285,85 L316,85" marker-end="url(#ar2)"></path>
-        <path d="M440,85 L471,85" marker-end="url(#ar2)"></path>
-        <path d="M595,85 L626,85" marker-end="url(#ar2)"></path>
-        <path data-node="retorno" d="M225,150 C225,185 70,185 70,154" stroke-dasharray="4 4" marker-end="url(#ar2)"></path>
-        <text class="sub" x="244" y="182">sem sinal em 30 min, o horário volta a ficar livre</text>
-      </svg>
-    </div>
-
-    <div class="stack">
-      <div class="label">Estados de um agendamento · clique para ver no fluxo</div>
-      <div class="legend" id="curly-legend">
-        <button class="state" type="button" data-nodes="site reserva pix" aria-pressed="false"><i class="dot" style="background:var(--s-alert)"></i><div><code>aguardando_sinal</code><br><span>horário reservado, Pix pendente</span></div></button>
-        <button class="state" type="button" data-nodes="equipe" aria-pressed="false"><i class="dot" style="background:var(--s-normal)"></i><div><code>agendado</code><br><span>sinal confirmado pela equipe</span></div></button>
-        <button class="state" type="button" data-nodes="estoque" aria-pressed="false"><i class="dot" style="background:var(--accent)"></i><div><code>concluido</code><br><span>atendido, estoque baixado</span></div></button>
-        <button class="state" type="button" data-nodes="reserva retorno" aria-pressed="false"><i class="dot" style="background:var(--s-jam)"></i><div><code>expirado</code><br><span>sem sinal a tempo, horário liberado</span></div></button>
-      </div>
-    </div>
-
-    <div class="thresholds">
-      <div class="th"><b>30 min</b><span>reserva do horário enquanto o Pix não chega</span></div>
-      <div class="th"><b>4 tamanhos</b><span>P, M, G e GG definem preço e consumo de produto</span></div>
-      <div class="th"><b>3 perfis</b><span>cliente, funcionária e gerente, com regras no banco</span></div>
-      <div class="th"><b>2×/semana</b><span>backup criptografado do banco, guardado por 90 dias</span></div>
-    </div>
-
-    <div class="stack">
-      <div class="label">O que eu fiz</div>
-      <ul class="contrib">
-        <li>Site público em Next.js e TypeScript a partir do brandbook da marca, com tabela de valores por tamanho de cabelo e agendamento online.</li>
-        <li>Cadastro de clientes com email e senha ou conta Google, endereço preenchido pelo CEP via ViaCEP e exportação dos contatos para o WhatsApp.</li>
-        <li>Sinal por Pix com QR Code estático e copia e cola, confirmado pela equipe a partir do comprovante, com o Asaas pronto como modo automático opcional.</li>
-        <li>Banco no Supabase (PostgreSQL, Auth, Storage) com regras de acesso por perfil (RLS), reservas com expiração e baixa automática de estoque por gatilho.</li>
-        <li>Painel da equipe com agenda, clientes, serviços, estoque e fornecedores, e uma galeria interativa de antes e depois em revisão com a cliente.</li>
-        <li>Deploy automático da branch main no Netlify e backup com pg_dump criptografado via GitHub Actions. Desenvolvido com apoio do Claude Code.</li>
-      </ul>
-    </div>
-    <ul class="tags">
-      <li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li><li>RLS</li><li>Google OAuth</li><li>ViaCEP</li><li>Pix · Asaas</li><li>Netlify</li><li>GitHub Actions</li><li>Claude Code</li>
-    </ul>
-  </section>
-  <section class="feature" aria-labelledby="n8n">
-    <div class="feature-head">
-      <div class="label">Automação e integração · Prefeitura de Niterói · ferramenta interna em uso</div>
-      <div class="title-row">
-        <h2 id="n8n">Plataforma de automação com n8n</h2>
-        <span class="project-chip">Uso interno · sem acesso público</span>
-      </div>
-      <p>Uma instância própria do n8n, montada por mim para que o Escritório de Dados crie e rode integrações entre sistemas sem depender de um serviço externo. Comecei na VM de homologação, preparando a infraestrutura em contêineres e um primeiro fluxo que recebe eventos de outro sistema, confere os dados e grava o que é válido no banco. Hoje o n8n é uma ferramenta interna usada pela equipe do escritório.</p>
-    </div>
-
-    <div class="shots" data-project="n8n">
-      <button class="shot" type="button"><img src="img/n8n-1.png" alt="Workflow no editor do n8n, do webhook ao PostgreSQL" loading="lazy"></button>
-      <button class="shot" type="button"><img src="img/n8n-2.png" alt="Execução de teste com um evento válido" loading="lazy"></button>
-    </div>
-
-    <div class="cycle-wrap" role="img" aria-label="Fluxo do workflow: um webhook recebe o evento em JSON, um nó Code valida os campos, um nó IF separa os caminhos, os eventos válidos são gravados no PostgreSQL e o fluxo responde HTTP 200. Eventos inválidos seguem pelo caminho de erro e não são gravados.">
-      <svg class="cycle" viewBox="0 0 760 215">
-        <defs>
-          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path class="arrow" d="M0,0 L10,5 L0,10 z"></path>
-          </marker>
-        </defs>
-        <g data-node="webhook">
-        <rect class="node" x="10" y="20" width="120" height="120" rx="10"></rect>
-        <text x="24" y="48">Webhook</text>
-        <text class="sub" x="24" y="74">evento HTTP</text>
-        <text class="sub" x="24" y="94">em JSON</text>
-        <text class="sub" x="24" y="114">Bearer token</text>
-        </g>
-
-        <g data-node="code">
-        <rect class="node" x="165" y="20" width="120" height="120" rx="10"></rect>
-        <text x="179" y="48">Code</text>
-        <text class="sub" x="179" y="74">valida os</text>
-        <text class="sub" x="179" y="94">4 campos</text>
-        <text class="sub" x="179" y="114">JavaScript</text>
-        </g>
-
-        <g data-node="if">
-        <rect class="core" x="320" y="20" width="120" height="120" rx="10"></rect>
-        <text x="334" y="48">IF</text>
-        <text class="sub" x="334" y="74">válido ou</text>
-        <text class="sub" x="334" y="94">inválido</text>
-        </g>
-
-        <g data-node="pg">
-        <rect class="node" x="475" y="20" width="120" height="120" rx="10"></rect>
-        <text x="489" y="48">PostgreSQL</text>
-        <text class="sub" x="489" y="74">tabela</text>
-        <text class="sub" x="489" y="94">webhook_events</text>
-        </g>
-
-        <g data-node="resp">
-        <rect class="node" x="630" y="20" width="120" height="120" rx="10"></rect>
-        <text x="644" y="48">Resposta</text>
-        <text class="sub" x="644" y="74">HTTP 200</text>
-        <text class="sub" x="644" y="94">no sucesso</text>
-        </g>
-
-        <path data-node="p1" d="M130,80 L161,80" marker-end="url(#ar3)"></path>
-        <path data-node="p2" d="M285,80 L316,80" marker-end="url(#ar3)"></path>
-        <path data-node="p3" d="M440,80 L471,80" marker-end="url(#ar3)"></path>
-        <path data-node="p4" d="M595,80 L626,80" marker-end="url(#ar3)"></path>
-        <path data-node="perr" d="M380,140 L380,176" stroke-dasharray="4 4" marker-end="url(#ar3)"></path>
-        <text class="sub" x="300" y="198">inválido: caminho de erro, nada é gravado</text>
-      </svg>
-    </div>
-
-    <div class="stack">
-      <div class="label">Contrato do evento no primeiro fluxo · simule um envio (exemplo fictício)</div>
-      <div class="demo" id="n8n-demo">
-        <div class="demo-controls">
-          <button class="toggle" type="button" aria-pressed="true" data-case="ok">Evento válido</button>
-          <button class="toggle" type="button" aria-pressed="false" data-case="bad">Evento sem timestamp</button>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="gdn-mapa" role="tabpanel" aria-labelledby="gdn-mapa-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-lg-8">
+              <div class="map-shell">
+                <div id="gdn-map" aria-label="Mapa de Niterói com ônibus fictícios andando e mudando de cor conforme as ocorrências"></div>
+                <div class="map-hud">
+                  <div class="hud-card">
+                    <div class="eyebrow">Estado no último ciclo · <span id="sim-last"></span></div>
+                    <div class="hud-counts" id="sim-counts"></div>
+                    <div class="cycle-bar" id="sim-cycle" aria-hidden="true"><i></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="panel panel-pad map-controls h-100">
+                <h3 class="h5 mb-0">Mexa nas ocorrências</h3>
+                <p class="note mb-0">Trajeto, ônibus e ocorrências são fictícios. As regras e os limiares são os do Gêmeo.</p>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sim-alert" checked><label class="form-check-label" for="sim-alert">Alerta de acidente (raio de 150 m)</label></div>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sim-jam" checked><label class="form-check-label" for="sim-jam">Trecho lento: abaixo de 5 km/h, ônibus a até 12 m</label></div>
+                <div>
+                  <label class="form-label mb-1" for="sim-rain">Chuva no pluviômetro da área azul</label>
+                  <input type="range" class="form-range" id="sim-rain" min="0" max="15" step="0.2" value="4">
+                  <div class="rain-read" id="sim-rain-out" aria-live="polite"></div>
+                  <div class="note">Acima de 6,2 mm em 15 min, quem está na área entra em alerta.</div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-line btn-sm" id="sim-play" type="button"></button>
+                  <button class="btn btn-line btn-sm" id="sim-cycle-now" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Rodar um ciclo agora</button>
+                </div>
+                <p class="note mb-0">O ciclo real é de 30 s; aqui ele roda a cada 3 s. Entre um ciclo e outro os ônibus andam, mas a cor só muda quando o ciclo recalcula o estado, como no BFF.</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <pre class="payload"><code id="n8n-payload">{
-  "event_id": "evt-0001",
-  "source": "sistema-exemplo",
-  "timestamp": "2026-03-10T14:32:00-03:00",
-  "data": { "tipo": "teste", "descricao": "payload de exemplo" }
-}</code></pre>
-        <div class="demo-result" aria-live="polite"><i class="dot" id="n8n-dot" style="background:var(--s-normal)"></i><code id="n8n-code">HTTP 200</code><span id="n8n-text">campos conferidos, evento gravado em webhook_events</span></div>
+        <div class="tab-pane fade" id="gdn-ciclo" role="tabpanel" aria-labelledby="gdn-ciclo-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="panel panel-pad h-100 d-grid gap-2 align-content-start">
+                <div class="eyebrow">Ciclo 1 · Prefect (ETL)</div>
+                <h3 class="h5 mb-0">Quem mantém as camadas vivas</h3>
+                <p class="mb-0 text-muted-2">Waze, pluviômetros e NitBike passam pelo Prefect, que coleta, normaliza e trata falhas, e viram camadas no Portal ArcGIS. O tráfego é substituído a cada leitura; os alertas passam por um diferencial de três vias. Teste:</p>
+                <div class="d-flex flex-wrap gap-2" id="diff-buttons">
+                  <button class="btn btn-line btn-sm" type="button" aria-pressed="false" data-result="&lt;b&gt;Alerta novo.&lt;/b&gt; Entra na camada ao vivo com a data de entrada gravada.">Só na API do Waze</button>
+                  <button class="btn btn-line btn-sm" type="button" aria-pressed="false" data-result="&lt;b&gt;Continua ativo.&lt;/b&gt; O registro é atualizado na camada.">Na API e na camada</button>
+                  <button class="btn btn-line btn-sm" type="button" aria-pressed="false" data-result="&lt;b&gt;Acabou.&lt;/b&gt; Grava a data de saída e arquiva o alerta em uma das 10 camadas de histórico, separadas por tema: acidentes, buracos, alagamentos, obras, falha de semáforo, via fechada, polícia…">Só na camada</button>
+                </div>
+                <div class="note" id="diff-out" aria-live="polite">Escolha um caso acima.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="panel panel-pad h-100 d-grid gap-2 align-content-start">
+                <div class="eyebrow">Ciclo 2 · BFF a cada 30 s</div>
+                <h3 class="h5 mb-0">O coração do sistema</h3>
+                <p class="mb-0 text-muted-2">O BFF nunca fala com o Waze: ele consulta as camadas que o Prefect mantém atualizadas. Essa separação deixa os dois ciclos evoluírem em ritmos próprios.</p>
+                <p class="mb-0 text-muted-2">Por que 30 s? Porque o ônibus, que é o que se move na tela, atualiza a cada 30 s. O Waze, a cada 2 min, devolve o mesmo dado por quatro ciclos.</p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 mb-2">
+            <h3 class="h5 mb-0">O ciclo de 30 segundos, passo a passo</h3>
+            <button class="btn btn-accent btn-sm" id="cycle-run" type="button"><i class="bi bi-play-fill" aria-hidden="true"></i> Executar um ciclo</button>
+          </div>
+          <div class="pipeline" id="cycle-steps">
+            <button class="step" type="button" aria-pressed="false" data-detail="Um agendador dispara o ciclo a cada 30 s. Um lock distribuído no Redis garante que várias instâncias rodem sem duplicar o trabalho."><span class="n">passo 1</span><b>cron 30 s + lock</b><span>trava no Redis</span></button>
+            <button class="step" type="button" aria-pressed="false" data-detail="Ônibus, alertas, tráfego e chuva entram no BFF e são validados com Zod antes de seguir. Dado que não passa no contrato não chega ao mapa."><span class="n">passo 2</span><b>Ingestão</b><span>validada com Zod</span></button>
+            <button class="step" type="button" aria-pressed="false" data-detail="Buffer e spatial join em arcpy cruzam as camadas, com acompanhamento do job e timeout de 90 s."><span class="n">passo 3</span><b>Geoprocessamento</b><span>buffer + spatial join</span></button>
+            <button class="step" type="button" aria-pressed="false" data-detail="O cruzamento vira uma palavra acionável por ônibus: normal, alert, jammed ou alert_jammed. A regra fica num lugar só, no domínio compartilhado."><span class="n">passo 4</span><b>Estado derivado</b><span>4 camadas → 1 palavra</span></button>
+            <button class="step" type="button" aria-pressed="false" data-detail="O resultado vai para o Redis (TTL de 60 s) e é empurrado por Server-Sent Events. Quem abre agora lê o cache; quem já está aberto recebe o evento."><span class="n">passo 5</span><b>Cache + broadcast</b><span>Redis 60 s · SSE</span></button>
+          </div>
+          <div class="panel panel-pad step-detail" id="cycle-detail" aria-live="polite"></div>
+          <h3 class="h5 mt-4">As três decisões que definem o resto</h3>
+          <div class="row g-3">
+            <div class="col-md-4"><div class="panel panel-pad decision"><span class="n">01</span><b>O cruzamento acontece no servidor</b><span class="text-muted-2">O cliente recebe estado pronto. A regra fica num lugar só e o custo é pago uma vez por ciclo, não uma vez por usuário.</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad decision"><span class="n">02</span><b>Estado corrente vive em cache</b><span class="text-muted-2">TTL de 60 s: o dado nasce, é consumido e morre. Histórico é outro produto, com outro dono.</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad decision"><span class="n">03</span><b>O servidor empurra</b><span class="text-muted-2">SSE, um evento por ciclo. O custo por usuário cai para uma conexão aberta e a latência deixa de depender de polling.</span></div></div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="gdn-camadas" role="tabpanel" aria-labelledby="gdn-camadas-tab" tabindex="0">
+          <div class="d-flex flex-wrap gap-3 mb-3">
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="layer-only-cross"><label class="form-check-label" for="layer-only-cross">Mostrar só as que passam pelo cruzamento</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="layer-fail"><label class="form-check-label" for="layer-fail">Simular o BFF mandando um payload vazio</label></div>
+          </div>
+          <div class="panel panel-pad">
+            <div class="table-responsive">
+              <table class="table layer-table mb-0" id="layer-table">
+                <caption class="visually-hidden">Camadas do Gêmeo, fonte e tipo</caption>
+                <thead><tr><th scope="col">Camada</th><th scope="col">Fonte</th><th scope="col">Cruza?</th><th scope="col">Tipo</th><th scope="col">Situação</th></tr></thead>
+                <tbody>
+                <tr data-cross="sim" data-kind="memoria"><td><span class="layer-swatch" style="background:#00a6a6" aria-hidden="true"></span>Ônibus · Transoceânica e TransNit</td><td class="text-muted-2">MobNit · SEMOBI</td><td><span class='badge-soft'>sim</span></td><td class="mono small">em memória</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="sim" data-kind="memoria"><td><span class="layer-swatch" style="background:#e8955a" aria-hidden="true"></span>Alertas de trânsito</td><td class="text-muted-2">Waze</td><td><span class='badge-soft'>sim</span></td><td class="mono small">em memória</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="sim" data-kind="memoria"><td><span class="layer-swatch" style="background:#d64545" aria-hidden="true"></span>Lentidão nas vias</td><td class="text-muted-2">Waze</td><td><span class='badge-soft'>sim</span></td><td class="mono small">em memória</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="sim" data-kind="hospedada"><td><span class="layer-swatch" style="background:#5b8fd6" aria-hidden="true"></span>Chuva e pluviômetros</td><td class="text-muted-2">Defesa Civil · SMCDCR</td><td><span class='badge-soft'>sim</span></td><td class="mono small">hospedada no Portal</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="nao" data-kind="hospedada"><td><span class="layer-swatch" style="background:#6e8598" aria-hidden="true"></span>Bicicletas compartilhadas</td><td class="text-muted-2">NitBike</td><td><span class='badge-soft badge-line'>não</span></td><td class="mono small">hospedada no Portal</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="nao" data-kind="hospedada"><td><span class="layer-swatch" style="background:#6e8598" aria-hidden="true"></span>Câmeras urbanas</td><td class="text-muted-2">NITTRANS</td><td><span class='badge-soft badge-line'>não</span></td><td class="mono small">hospedada no Portal</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="nao" data-kind="hospedada"><td><span class="layer-swatch" style="background:#6e8598" aria-hidden="true"></span>Rotas e pontos de ônibus</td><td class="text-muted-2">SEMOBI</td><td><span class='badge-soft badge-line'>não</span></td><td class="mono small">hospedada no Portal</td><td class="layer-state mono small">na tela</td></tr>
+                <tr data-cross="nao" data-kind="hospedada"><td><span class="layer-swatch" style="background:#6e8598" aria-hidden="true"></span>Edificações 3D · LiDAR</td><td class="text-muted-2">Urbanismo · SMU</td><td><span class='badge-soft badge-line'>não</span></td><td class="mono small">hospedada no Portal</td><td class="layer-state mono small">na tela</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="alert mt-3 mb-0" id="layer-fail-note" hidden style="background: var(--accent-soft); color: var(--ink); border-color: var(--line)"><b>O mapa apaga pela metade, de propósito.</b> Somem só ônibus, alertas e lentidão, as camadas em memória que saem do cruzamento. Ver as câmeras sem nenhum ônibus localiza a falha num lado só (BFF, ciclo ou Redis) e economiza a primeira meia hora de investigação. Se tudo passasse pelo backend, uma falha apagaria a cidade inteira.</div>
+          <p class="note mt-3 mb-0">Construção intersetorial desde 2022: coordenação do Escritório de Dados e do LabNit, com Governo Digital, SECONSER, SMU, NITTRANS, Defesa Civil, SEMOBI, SEXEC e SMF na definição de escopo, dados e validação técnica.</p>
+        </div>
+        <div class="tab-pane fade" id="gdn-regras" role="tabpanel" aria-labelledby="gdn-regras-tab" tabindex="0">
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>150 m</b><span>raio de influência de um alerta</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>12 m</b><span>distância que põe o ônibus no congestionamento</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>6,2 mm</b><span>chuva em 15 min que dispara alerta</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>5 km/h</b><span>velocidade que define trecho congestionado</span></div></div>
+      </div>
+          <p class="text-muted-2">Os limiares não são constantes escondidas no código: vivem em variáveis de ambiente e estão publicados na metodologia. Mudar um critério não exige deploy.</p>
+          <div class="row g-3 align-items-stretch">
+            <div class="col-lg-5">
+              <div class="panel panel-pad h-100 d-grid gap-3 align-content-start">
+                <h3 class="h5 mb-0">Teste a regra que decide a cor</h3>
+                <div class="d-grid gap-2" id="rule-toggles">
+                  <button class="btn btn-line text-start" type="button" aria-pressed="false" data-flag="isAlert"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Alerta a até 150 m</button>
+                  <button class="btn btn-line text-start" type="button" aria-pressed="false" data-flag="isFlooded"><i class="bi bi-cloud-rain-heavy" aria-hidden="true"></i> Chuva acima de 6,2 mm na área</button>
+                  <button class="btn btn-line text-start" type="button" aria-pressed="false" data-flag="isJammed"><i class="bi bi-speedometer" aria-hidden="true"></i> Trecho lento a até 12 m</button>
+                </div>
+                <div class="flow-status" aria-live="polite"><span class="flow-dot" id="rule-dot"></span><code id="rule-code-out" class="fs-6">normal</code><span id="rule-text" class="text-muted-2"></span></div>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <pre class="code-block h-100" id="rule-code" aria-label="Código da regra getStatus"><span class="c">// packages/shared/src/domain/Bus.ts</span>
+<span>getStatus(): "normal" | "alert" | "jammed" | "alert_jammed" {</span>
+<span data-line="alert_jammed">  if (isAlert &amp;&amp; isJammed) return "alert_jammed";</span>
+<span data-line="alert">  if (isAlert || isFlooded) return "alert";</span>
+<span data-line="jammed">  if (isJammed) return "jammed";</span>
+<span data-line="normal">  return "normal";</span>
+<span>}</span></pre>
+            </div>
+          </div>
+          <p class="note mt-2">Não existe um único if no React decidindo a cor de um ônibus. Mudar a regra é mexer em um arquivo, e mapa, painel e pop-up mudam juntos.</p>
+          <h3 class="h5 mt-4">O contrato invisível: uma string, três repositórios</h3>
+          <div class="chain mb-3">
+            <span class="link">HAZARD_WEATHER_FLOOD<small>Waze devolve</small></span><span class="arrow">→</span>
+            <span class="link" id="chain-prefect">"Alagamento"<small>Prefect traduz</small></span><span class="arrow">→</span>
+            <span class="link">tx_subtipo_alerta<small>camada armazena</small></span><span class="arrow">→</span>
+            <span class="link" id="chain-bff">subtipo_alerta: "alagamento"<small>BFF normaliza</small></span><span class="arrow">→</span>
+            <span class="link" id="chain-render">value: "alagamento" → <i class="bi bi-water"></i><small>renderer mostra o ícone</small></span>
+          </div>
+          <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="chain-break"><label class="form-check-label" for="chain-break">Trocar "Alagamento" por "Inundação" no Python</label></div>
+          <p class="note mt-2 mb-0" id="chain-msg" aria-live="polite">Tudo certo: a mesma string atravessa os três repositórios até virar ícone.</p>
+        </div>
+        <div class="tab-pane fade" id="gdn-maturidade" role="tabpanel" aria-labelledby="gdn-maturidade-tab" tabindex="0">
+          <div class="maturity" id="maturity">
+            <button class="level" type="button" aria-pressed="false" data-detail="Representação virtual: modelo estático e visualizações 2D e 3D."><span class="n">nível 1</span><b>Descritivo</b></button>
+            <button class="level here" type="button" aria-pressed="true" data-detail="Tempo real, conectado a sensores: modelagem virtual dinâmica. É onde o Gêmeo de Niterói está hoje."><span class="n">nível 2</span><b>Informativo</b><span class="flag">estamos aqui</span></button>
+            <button class="level next" type="button" aria-pressed="false" data-detail="Prediz cenários e resultados com IA, previsões e simulações. Não há atalho: sem o histórico do nível informativo, não se treina previsão nenhuma."><span class="n">nível 3</span><b>Preditivo</b><span class="flag">próximo alvo</span></button>
+            <button class="level" type="button" aria-pressed="false" data-detail="Simulação de cenários e sugestão de ações."><span class="n">nível 4</span><b>Abrangente</b></button>
+            <button class="level" type="button" aria-pressed="false" data-detail="Autoaprendizado e decisão sem intervenção humana."><span class="n">nível 5</span><b>Autônomo</b></button>
+          </div>
+          <div class="panel panel-pad mt-3" id="maturity-detail" aria-live="polite">Tempo real, conectado a sensores: modelagem virtual dinâmica. É onde o Gêmeo de Niterói está hoje.</div>
+          <p class="note mt-3 mb-0">Em desenvolvimento agora: a camada de Grandes Eventos, que mostra onde estão os eventos e o impacto deles na cidade.</p>
+        </div>
+        <div class="tab-pane fade" id="gdn-fiz" role="tabpanel" aria-labelledby="gdn-fiz-tab" tabindex="0">
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <h3 class="h5">O que eu fiz</h3>
+              <ul class="contrib">
+                <li>Interface em React e TypeScript com ArcGIS Maps SDK: cena 3D, camadas, pop-ups próprios, símbolos, rótulos e filtros por período.</li>
+                <li>Integração com o BFF em Node.js/Express, que entrega o estado em tempo real por Server-Sent Events, com cache em Redis.</li>
+                <li>Execução com Docker Compose e publicação com Nginx como proxy reverso, incluindo os ajustes para o SSE funcionar através do proxy.</li>
+                <li>Fluxos de coleta de dados em Python com Prefect, e documentação técnica da arquitetura e da configuração.</li>
+                <li>Apresentação do projeto para outras equipes, com a arquitetura e um passo a passo para construir o próprio gêmeo.</li>
+              </ul>
+              <h3 class="h5 mt-4">Aprendido na prática</h3>
+              <div class="accordion" id="gdn-learn">
+                <div class="accordion-item"><h4 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#learn-1" aria-expanded="false" aria-controls="learn-1">Estados visuais demais</button></h4><div id="learn-1" class="accordion-collapse collapse" data-bs-parent="#gdn-learn"><div class="accordion-body">Um quinto estado para ônibus em rota especial entrou e foi revertido poucos dias depois. Se um estado não muda a decisão de ninguém, não merece uma cor.</div></div></div>
+                <div class="accordion-item"><h4 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#learn-2" aria-expanded="false" aria-controls="learn-2">A sujeira da fonte</button></h4><div id="learn-2" class="accordion-collapse collapse" data-bs-parent="#gdn-learn"><div class="accordion-body">Uma tabela de-para de 273 linhas, mantida à mão, recupera a linha e o consórcio de veículos que chegam sem identificação. Ninguém planeja isso; vale orçar mesmo assim.</div></div></div>
+                <div class="accordion-item"><h4 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#learn-3" aria-expanded="false" aria-controls="learn-3">Duas fontes de verdade</button></h4><div id="learn-3" class="accordion-collapse collapse" data-bs-parent="#gdn-learn"><div class="accordion-body">Uma camada declarada invisível no código, mas ligada pelo menu na montagem. O resultado era o desejado, mas a declaração ficou enganosa: estado de interface tem um dono só.</div></div></div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <h3 class="h5">Contexto</h3>
+              <div class="row g-3">
+                <div class="col-6"><div class="kpi"><b>2022</b><span>início do programa intersetorial</span></div></div>
+                <div class="col-6"><div class="kpi"><b>~6 meses</b><span>de desenvolvimento ativo da aplicação</span></div></div>
+                <div class="col-6"><div class="kpi"><b>1 + 1</b><span>desenvolvedor principal e um colaborador pontual</span></div></div>
+                <div class="col-6"><div class="kpi"><b>8</b><span>órgãos parceiros, além do Escritório de Dados e do LabNit</span></div></div>
+              </div>
+              <div class="mt-4"><ul class="tag-list"><li class="tag">React</li><li class="tag">TypeScript</li><li class="tag">ArcGIS Maps SDK</li><li class="tag">Zustand</li><li class="tag">Node.js</li><li class="tag">Express</li><li class="tag">Zod</li><li class="tag">SSE</li><li class="tag">Redis</li><li class="tag">Docker</li><li class="tag">Nginx</li><li class="tag">Prefect</li></ul></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="thresholds">
-      <div class="th"><b>3 serviços</b><span>n8n, PostgreSQL e Redis no mesmo Docker Compose</span></div>
-      <div class="th"><b>5 etapas</b><span>do webhook à resposta HTTP no primeiro fluxo</span></div>
-      <div class="th"><b>4 campos</b><span>event_id, source, timestamp e data no contrato</span></div>
-      <div class="th"><b>1.x → 2.x</b><span>atualização da versão do n8n feita na instância</span></div>
-    </div>
-
-    <div class="stack">
-      <div class="label">O que eu fiz</div>
-      <ul class="contrib">
-        <li>Stack com Docker Compose reunindo n8n, PostgreSQL e Redis, com rede dedicada, volumes persistentes, healthchecks, reinício automático e rotação de logs.</li>
-        <li>Configuração por variáveis de ambiente, com credenciais e segredos fora dos arquivos do projeto.</li>
-        <li>Primeiro workflow da plataforma: webhook com autenticação Bearer, validação dos campos em um Code Node, lógica condicional e gravação dos eventos válidos no PostgreSQL.</li>
-        <li>Testes com payloads válidos e inválidos, incluindo os casos em que o JSON chega como objeto ou como lista.</li>
-        <li>Diagnóstico pelos logs, testes de Code Nodes em JavaScript e Python e atualização da instância da versão 1.108 para a 2.32.</li>
+  </section>
+  <section class="project" id="curly" aria-labelledby="t-curly">
+    <div class="container container-x">
+      <div class="project-head">
+        <div class="d-flex flex-wrap gap-2"><span class="badge-soft">Projeto full stack</span><span class="badge-soft badge-line">Carol Rios Curly Studio · desde set/2026</span><span class="badge-soft badge-warn">Em testes com a cliente</span></div>
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+          <h2 id="t-curly">Carol Rios Curly Studio</h2>
+          <a class="btn btn-accent" href="https://curlystudio.netlify.app/" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Ver versão de testes</a>
+        </div>
+        <p class="project-quote">Um horário só fica garantido depois que a cliente paga o sinal.</p>
+        <p class="text-muted-2 mb-0">O sistema leva essa regra do salão para o site: a cliente escolhe o serviço, o tamanho do cabelo e o horário, que fica reservado por 30 minutos enquanto o Pix não é confirmado. Quando a equipe confirma o sinal, o atendimento entra na agenda; ao concluir, o estoque dá baixa sozinho nos produtos que aquele serviço consome naquele tamanho de cabelo. Algumas funcionalidades ainda estão sendo finalizadas.</p>
+      </div>
+      <div class="shots" data-project="curly">
+        <button class="shot" type="button"><img src="img/curly-1.png" alt="Página inicial do site do salão" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/curly-2.png" alt="Agendamento com escolha de serviço, tamanho e horário" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/curly-3.png" alt="Painel da equipe com a agenda" loading="lazy"></button>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>30 min</b><span>reserva do horário enquanto o Pix não chega</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>4</b><span>tamanhos de cabelo (P a GG) definem preço e consumo</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>3</b><span>perfis com regras no banco</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>2×/semana</b><span>backup criptografado, guardado por 90 dias</span></div></div>
+      </div>
+      <ul class="nav p-tabs" role="tablist" aria-label="Detalhes do projeto">
+        <li class="nav-item" role="presentation"><button class="nav-link active" id="crl-sim-tab" data-bs-toggle="tab" data-bs-target="#crl-sim" type="button" role="tab" aria-controls="crl-sim" aria-selected="true"><i class="bi bi-calendar2-week" aria-hidden="true"></i>Simular agendamento</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="crl-cep-tab" data-bs-toggle="tab" data-bs-target="#crl-cep" type="button" role="tab" aria-controls="crl-cep" aria-selected="false"><i class="bi bi-geo" aria-hidden="true"></i>Busca de CEP ao vivo</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="crl-arq-tab" data-bs-toggle="tab" data-bs-target="#crl-arq" type="button" role="tab" aria-controls="crl-arq" aria-selected="false"><i class="bi bi-diagram-2" aria-hidden="true"></i>Arquitetura</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="crl-fiz-tab" data-bs-toggle="tab" data-bs-target="#crl-fiz" type="button" role="tab" aria-controls="crl-fiz" aria-selected="false"><i class="bi bi-person-workspace" aria-hidden="true"></i>O que eu fiz</button></li>
       </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="crl-sim" role="tabpanel" aria-labelledby="crl-sim-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-lg-5">
+              <div class="panel panel-pad h-100 d-grid gap-3 align-content-start">
+                <div>
+                  <h3 class="h6">1. Tamanho do cabelo</h3>
+                  <div class="btn-group" role="group" aria-label="Tamanho do cabelo" id="bk-sizes">
+                    <input type="radio" class="btn-check" name="bk-size" id="bk-p" value="P" autocomplete="off"><label class="btn btn-line" for="bk-p">P</label>
+                    <input type="radio" class="btn-check" name="bk-size" id="bk-m" value="M" autocomplete="off"><label class="btn btn-line" for="bk-m">M</label>
+                    <input type="radio" class="btn-check" name="bk-size" id="bk-g" value="G" autocomplete="off"><label class="btn btn-line" for="bk-g">G</label>
+                    <input type="radio" class="btn-check" name="bk-size" id="bk-gg" value="GG" autocomplete="off"><label class="btn btn-line" for="bk-gg">GG</label>
+                  </div>
+                </div>
+                <div>
+                  <h3 class="h6">2. Horário</h3>
+                  <div class="d-flex flex-wrap gap-2" id="bk-slots">
+                    <button class="btn btn-line btn-sm" type="button" data-slot="09:00">09:00</button>
+                    <button class="btn btn-line btn-sm" type="button" data-slot="10:30">10:30</button>
+                    <button class="btn btn-line btn-sm" type="button" data-slot="14:00">14:00</button>
+                    <button class="btn btn-line btn-sm" type="button" data-slot="16:30">16:30</button>
+                  </div>
+                </div>
+                <button class="btn btn-accent" id="bk-reserve" type="button"><i class="bi bi-calendar-check" aria-hidden="true"></i> Reservar horário</button>
+                <p class="note mb-0">Horários fictícios. O relógio está acelerado: 1 segundo aqui vale 1 minuto.</p>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <div class="panel panel-pad h-100 d-grid gap-3 align-content-start">
+                <div class="flow-status"><span class="flow-dot" id="bk-dot"></span><code id="bk-status" class="fs-6">livre</code><span class="ms-auto text-end"><span class="countdown" id="bk-clock">--:--</span><br><span class="note">para pagar o sinal</span></span></div>
+                <div class="pipeline" id="bk-flow">
+                  <div class="step" data-node="site"><span class="n">1</span><b>Site</b><span>serviço, tamanho e horário</span></div>
+                  <div class="step" data-node="reserva"><span class="n">2</span><b>Reserva</b><span>trava de 30 min no banco</span></div>
+                  <div class="step" data-node="pix"><span class="n">3</span><b>Sinal Pix</b><span>QR estático ou copia e cola</span></div>
+                  <div class="step" data-node="equipe"><span class="n">4</span><b>Equipe</b><span>confere o comprovante</span></div>
+                  <div class="step" data-node="estoque"><span class="n">5</span><b>Estoque</b><span>baixa por gatilho ao concluir</span></div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-line btn-sm" id="bk-confirm" type="button"><i class="bi bi-whatsapp" aria-hidden="true"></i> Equipe confirma o sinal</button>
+                  <button class="btn btn-line btn-sm" id="bk-done" type="button"><i class="bi bi-check2-circle" aria-hidden="true"></i> Concluir atendimento</button>
+                  <button class="btn btn-line btn-sm" id="bk-reset" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Recomeçar</button>
+                </div>
+                <div><div class="eyebrow mb-2">Registro</div><ul class="event-log" id="bk-log" aria-live="polite"></ul></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="crl-cep" role="tabpanel" aria-labelledby="crl-cep-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <form class="panel panel-pad d-grid gap-3" id="cep-form" novalidate>
+                <h3 class="h5 mb-0">Preencha o endereço pelo CEP</h3>
+                <p class="note mb-0">Consulta real à API pública do ViaCEP, a mesma integração que preenche o endereço no cadastro de clientes do salão.</p>
+                <div>
+                  <label class="form-label" for="cep-input">CEP</label>
+                  <div class="input-group">
+                    <input class="form-control" id="cep-input" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9">
+                    <button class="btn btn-accent" type="submit"><i class="bi bi-search" aria-hidden="true"></i> Buscar</button>
+                  </div>
+                </div>
+                <div id="cep-out" aria-live="polite" class="text-muted-2">O endereço aparece aqui.</div>
+              </form>
+            </div>
+            <div class="col-lg-6">
+              <div class="panel panel-pad h-100 d-grid gap-2 align-content-start">
+                <h3 class="h5 mb-0">Outras integrações do sistema</h3>
+                <ul class="contrib">
+                  <li>Pix com QR Code estático e copia e cola para o sinal, e o Asaas pronto como modo automático opcional.</li>
+                  <li>WhatsApp para receber comprovantes e falar com as clientes, com exportação dos contatos.</li>
+                  <li>Login com email e senha ou com a conta Google.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="crl-arq" role="tabpanel" aria-labelledby="crl-arq-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-window-stack fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Next.js + TypeScript</b><span class="text-muted-2">Front-end e back-end no mesmo projeto, a partir do brandbook da marca, com tabela de valores por tamanho de cabelo.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-database fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Supabase</b><span class="text-muted-2">PostgreSQL, Auth com email e senha ou Google OAuth, e Storage para as fotos de antes e depois.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-shield-lock fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Regras no banco</b><span class="text-muted-2">RLS para cliente, funcionária e gerente; reservas que expiram; baixa de estoque por gatilho.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-qr-code fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Pagamento do sinal</b><span class="text-muted-2">Pix com QR Code estático e copia e cola, confirmado pela equipe; Asaas como opção automática.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-cloud-upload fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Deploy no Netlify</b><span class="text-muted-2">Cada envio para a branch main publica o site automaticamente.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="panel panel-pad h-100 decision"><i class="bi bi-archive fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Backup</b><span class="text-muted-2">GitHub Actions roda pg_dump criptografado duas vezes por semana e guarda por 90 dias.</span></div></div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="crl-fiz" role="tabpanel" aria-labelledby="crl-fiz-tab" tabindex="0">
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <ul class="contrib">
+                <li>Site público em Next.js e TypeScript a partir do brandbook da marca, com tabela de valores por tamanho de cabelo e agendamento online.</li>
+                <li>Cadastro de clientes com email e senha ou conta Google, endereço preenchido pelo CEP via ViaCEP e exportação dos contatos para o WhatsApp.</li>
+                <li>Sinal por Pix com QR Code estático e copia e cola, confirmado pela equipe a partir do comprovante, com o Asaas pronto como modo automático opcional.</li>
+                <li>Banco no Supabase (PostgreSQL, Auth, Storage) com regras de acesso por perfil (RLS), reservas com expiração e baixa automática de estoque por gatilho.</li>
+                <li>Painel da equipe com agenda, clientes, serviços, estoque e fornecedores, e uma galeria interativa de antes e depois em revisão com a cliente.</li>
+                <li>Deploy automático da branch main no Netlify e backup com pg_dump criptografado via GitHub Actions. Desenvolvido com apoio do Claude Code.</li>
+              </ul>
+            </div>
+            <div class="col-lg-5"><ul class="tag-list"><li class="tag">Next.js</li><li class="tag">TypeScript</li><li class="tag">Supabase</li><li class="tag">PostgreSQL</li><li class="tag">RLS</li><li class="tag">Google OAuth</li><li class="tag">ViaCEP</li><li class="tag">Pix · Asaas</li><li class="tag">Netlify</li><li class="tag">GitHub Actions</li><li class="tag">Claude Code</li></ul></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <ul class="tags">
-      <li>n8n</li><li>Docker Compose</li><li>PostgreSQL</li><li>Redis</li><li>Webhooks</li><li>JSON</li><li>JavaScript</li><li>Python</li><li>Linux</li>
-    </ul>
   </section>
-
-  <section class="stack" aria-labelledby="outros">
-    <h2 id="outros">Outros projetos</h2>
-    <div class="grid">
-      <article class="card">
-        <div class="meta">Extensão UFF · out/2024 – out/2025</div>
-        <h3>Inspira Design</h3>
-        <p>Telas do Figma transformadas em páginas React + TypeScript, com componentes reutilizáveis e rotas, em parceria direta com a equipe de design.</p>
-      </article>
-      <article class="card">
-        <div class="meta">Ciência da Computação · UFF · 2026</div>
-        <h3>UFForáculo</h3>
-        <p>Sistema de empréstimo, devolução, renovação e reserva da Biblioteca da UFF. Requisitos levantados em entrevista com o chefe da biblioteca central, com casos de uso e diagramas de classes.</p>
-      </article>
-      <article class="card">
-        <div class="meta">Ciência da Computação · UFF · 2026</div>
-        <h3>Sorveteria Bom Demais</h3>
-        <p>PDV, delivery, pagamentos e estoque: 67 requisitos funcionais, 17 não funcionais, 9 casos de uso e diagramas UML de classes, estados, atividades e sequência.</p>
-      </article>
-      <article class="card">
-        <div class="meta">Ciência da Computação · UFF · 2025</div>
-        <h3>Curly Care</h3>
-        <p>Sistema de agendamento, estoque e financeiro para o mesmo salão, com perfis de gerente, funcionário e cliente.</p>
-      </article>
-      <article class="card">
-        <div class="meta">Automação · Prefeitura de Niterói</div>
-        <h3>Ingestão por webhook</h3>
-        <p>Prova de conceito que recebe ocorrências em JSON por webhook (FastAPI), valida os campos e grava no Microsoft Fabric/OneLake, com os arquivos organizados por ano, mês e dia.</p>
-      </article>
+  <section class="project" id="n8n" aria-labelledby="t-n8n">
+    <div class="container container-x">
+      <div class="project-head">
+        <div class="d-flex flex-wrap gap-2"><span class="badge-soft">Automação e integração</span><span class="badge-soft badge-line">Prefeitura de Niterói</span><span class="badge-soft">Ferramenta interna em uso</span></div>
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+          <h2 id="t-n8n">Plataforma de automação com n8n</h2>
+          <span class="badge-soft badge-line"><i class="bi bi-lock" aria-hidden="true"></i> Uso interno · sem acesso público</span>
+        </div>
+        <p class="text-muted-2 mb-0">Uma instância própria do n8n, montada por mim para que o Escritório de Dados crie e rode integrações entre sistemas sem depender de um serviço externo. Comecei na VM de homologação, preparando a infraestrutura em contêineres e um primeiro fluxo que recebe eventos de outro sistema, confere os dados e grava o que é válido no banco. Hoje o n8n é uma ferramenta interna usada pela equipe do escritório.</p>
+      </div>
+      <div class="shots" data-project="n8n">
+        <button class="shot" type="button"><img src="img/n8n-1.png" alt="Workflow no editor do n8n, do webhook ao PostgreSQL" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/n8n-2.png" alt="Execução de teste com um evento válido" loading="lazy"></button>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>3</b><span>serviços no mesmo Docker Compose</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>5</b><span>etapas do webhook à resposta</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>4</b><span>campos no contrato do evento</span></div></div>
+        <div class="col-6 col-lg-3"><div class="kpi reveal"><b>1.x → 2.x</b><span>atualização da versão do n8n</span></div></div>
+      </div>
+      <ul class="nav p-tabs" role="tablist" aria-label="Detalhes do projeto">
+        <li class="nav-item" role="presentation"><button class="nav-link active" id="n8n-sim-tab" data-bs-toggle="tab" data-bs-target="#n8n-sim" type="button" role="tab" aria-controls="n8n-sim" aria-selected="true"><i class="bi bi-send" aria-hidden="true"></i>Simular envio</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="n8n-infra-tab" data-bs-toggle="tab" data-bs-target="#n8n-infra" type="button" role="tab" aria-controls="n8n-infra" aria-selected="false"><i class="bi bi-boxes" aria-hidden="true"></i>Infraestrutura</button></li>
+        <li class="nav-item" role="presentation"><button class="nav-link" id="n8n-fiz-tab" data-bs-toggle="tab" data-bs-target="#n8n-fiz" type="button" role="tab" aria-controls="n8n-fiz" aria-selected="false"><i class="bi bi-person-workspace" aria-hidden="true"></i>O que eu fiz</button></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="n8n-sim" role="tabpanel" aria-labelledby="n8n-sim-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="panel panel-pad h-100 d-grid gap-3 align-content-start">
+                <div class="d-flex flex-wrap gap-2" id="n8n-presets" role="group" aria-label="Exemplos de evento">
+                  <button class="btn btn-line btn-sm active" type="button" data-preset="ok">Evento válido</button>
+                  <button class="btn btn-line btn-sm" type="button" data-preset="semTimestamp">Sem timestamp</button>
+                  <button class="btn btn-line btn-sm" type="button" data-preset="dataInvalida">Data fora do padrão</button>
+                  <button class="btn btn-line btn-sm" type="button" data-preset="lista">Lista com um evento</button>
+                </div>
+                <div>
+                  <label class="form-label" for="n8n-json">Corpo da requisição (JSON) · edite à vontade</label>
+                  <textarea class="form-control json-editor" id="n8n-json" spellcheck="false"></textarea>
+                </div>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="n8n-auth" checked><label class="form-check-label" for="n8n-auth">Enviar com token Bearer</label></div>
+                <button class="btn btn-accent" id="n8n-send" type="button"><i class="bi bi-send" aria-hidden="true"></i> Enviar para o webhook</button>
+                <p class="note mb-0">Exemplo fictício. A validação aqui reproduz o Code Node do primeiro fluxo: quatro campos, timestamp em ISO 8601 e data como objeto.</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="panel panel-pad h-100 d-grid gap-3 align-content-start">
+                <div class="pipeline" id="n8n-flow">
+                  <div class="step" data-node="webhook"><span class="n">1</span><b>Webhook</b><span>evento HTTP · Bearer</span></div>
+                  <div class="step" data-node="code"><span class="n">2</span><b>Code</b><span>valida os campos</span></div>
+                  <div class="step" data-node="if"><span class="n">3</span><b>IF</b><span>válido ou inválido</span></div>
+                  <div class="step" data-node="pg"><span class="n">4</span><b>PostgreSQL</b><span>webhook_events</span></div>
+                  <div class="step" data-node="resp"><span class="n">5</span><b>Resposta</b><span>HTTP 200</span></div>
+                </div>
+                <div class="flow-status" aria-live="polite"><span class="flow-dot" id="n8n-dot"></span><span id="n8n-out">Escolha um exemplo e envie.</span></div>
+                <div>
+                  <div class="eyebrow mb-2">webhook_events · nesta simulação</div>
+                  <div class="table-responsive"><table class="table table-sm table-events mb-0"><thead><tr><th>#</th><th>event_id</th><th>source</th><th>timestamp</th></tr></thead><tbody id="n8n-rows"><tr class="empty"><td colspan="4" class="text-muted-2">Nenhum evento gravado ainda.</td></tr></tbody></table></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="n8n-infra" role="tabpanel" aria-labelledby="n8n-infra-tab" tabindex="0">
+          <div class="row g-3">
+            <div class="col-md-4"><div class="panel panel-pad service"><div class="d-flex align-items-center gap-2"><span class="pulse" aria-hidden="true"></span><b>n8n</b></div><span class="text-muted-2">Editor e execução dos workflows, autogerenciado.</span><span class="mono small text-muted-2">healthcheck · reinício automático · volume</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad service"><div class="d-flex align-items-center gap-2"><span class="pulse" aria-hidden="true"></span><b>PostgreSQL</b></div><span class="text-muted-2">Persistência dos eventos, na tabela webhook_events.</span><span class="mono small text-muted-2">healthcheck · reinício automático · volume</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad service"><div class="d-flex align-items-center gap-2"><span class="pulse" aria-hidden="true"></span><b>Redis</b></div><span class="text-muted-2">Serviço de apoio na mesma stack.</span><span class="mono small text-muted-2">healthcheck · reinício automático · volume</span></div></div>
+          </div>
+          <div class="row g-3 mt-1">
+            <div class="col-md-4"><div class="panel panel-pad decision"><i class="bi bi-hdd-network fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Rede Docker dedicada</b><span class="text-muted-2">Os três serviços conversam numa rede própria do Docker Compose.</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad decision"><i class="bi bi-key fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Variáveis de ambiente</b><span class="text-muted-2">Configuração e credenciais fora dos arquivos do projeto.</span></div></div>
+            <div class="col-md-4"><div class="panel panel-pad decision"><i class="bi bi-journal-text fs-4" style="color: var(--accent)" aria-hidden="true"></i><b>Logs e diagnóstico</b><span class="text-muted-2">Rotação de logs, leitura de execuções e verificação da API em /api/v1/docs.</span></div></div>
+          </div>
+          <div class="panel panel-pad mt-3 d-flex flex-wrap align-items-center gap-3">
+            <span class="eyebrow">Atualização da instância</span>
+            <span class="tag">1.108.2</span><i class="bi bi-arrow-right" aria-hidden="true"></i><span class="tag" style="border-color: var(--accent-fill)">2.32.6</span>
+            <span class="note">com testes de Code Nodes em JavaScript e Python antes e depois</span>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="n8n-fiz" role="tabpanel" aria-labelledby="n8n-fiz-tab" tabindex="0">
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <ul class="contrib">
+                <li>Stack com Docker Compose reunindo n8n, PostgreSQL e Redis, com rede dedicada, volumes persistentes, healthchecks, reinício automático e rotação de logs.</li>
+                <li>Configuração por variáveis de ambiente, com credenciais e segredos fora dos arquivos do projeto.</li>
+                <li>Primeiro workflow da plataforma: webhook com autenticação Bearer, validação dos campos em um Code Node, lógica condicional e gravação dos eventos válidos no PostgreSQL.</li>
+                <li>Testes com payloads válidos e inválidos, incluindo os casos em que o JSON chega como objeto ou como lista.</li>
+                <li>Diagnóstico pelos logs, testes de Code Nodes em JavaScript e Python e atualização da instância da versão 1.108 para a 2.32.</li>
+              </ul>
+            </div>
+            <div class="col-lg-5"><ul class="tag-list"><li class="tag">n8n</li><li class="tag">Docker Compose</li><li class="tag">PostgreSQL</li><li class="tag">Redis</li><li class="tag">Webhooks</li><li class="tag">JSON</li><li class="tag">JavaScript</li><li class="tag">Python</li><li class="tag">Linux</li></ul></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+  <section class="section" id="outros" aria-labelledby="t-outros">
+    <div class="container container-x">
+      <div class="section-head reveal"><div class="eyebrow">Outros projetos</div><h2 id="t-outros">Faculdade e Prefeitura</h2><p>Clique em um projeto para ver os detalhes.</p></div>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4"><article class="panel mini-card reveal"><div class="meta">Extensão UFF · out/2024 – out/2025</div><h3>Inspira Design</h3><p>Telas do Figma transformadas em páginas React + TypeScript, com componentes reutilizáveis e rotas.</p><button class="btn btn-line btn-sm justify-self-start" style="justify-self: start" type="button" data-modal="d-inspira" data-title="Inspira Design">Ver detalhes</button></article></div>
+        <div class="col-md-6 col-lg-4"><article class="panel mini-card reveal"><div class="meta">Ciência da Computação · UFF · 2026</div><h3>UFForáculo</h3><p>Sistema de empréstimo, devolução, renovação e reserva da Biblioteca da UFF, com requisitos vindos de entrevista.</p><button class="btn btn-line btn-sm justify-self-start" style="justify-self: start" type="button" data-modal="d-uforaculo" data-title="UFForáculo">Ver detalhes</button></article></div>
+        <div class="col-md-6 col-lg-4"><article class="panel mini-card reveal"><div class="meta">Ciência da Computação · UFF · 2026</div><h3>Sorveteria Bom Demais</h3><p>PDV, delivery, pagamentos e estoque: 67 requisitos funcionais, 17 não funcionais e 9 casos de uso.</p><button class="btn btn-line btn-sm justify-self-start" style="justify-self: start" type="button" data-modal="d-sorveteria" data-title="Sorveteria Bom Demais">Ver detalhes</button></article></div>
+        <div class="col-md-6 col-lg-4"><article class="panel mini-card reveal"><div class="meta">Ciência da Computação · UFF · 2025</div><h3>Curly Care</h3><p>Sistema de agendamento, estoque e financeiro para o mesmo salão, com perfis de gerente, funcionário e cliente.</p><button class="btn btn-line btn-sm justify-self-start" style="justify-self: start" type="button" data-modal="d-curlycare" data-title="Curly Care">Ver detalhes</button></article></div>
+        <div class="col-md-6 col-lg-4"><article class="panel mini-card reveal"><div class="meta">Automação · Prefeitura de Niterói</div><h3>Ingestão por webhook</h3><p>Prova de conceito: ocorrências em JSON por webhook (FastAPI), validadas e gravadas no Microsoft Fabric/OneLake.</p><button class="btn btn-line btn-sm justify-self-start" style="justify-self: start" type="button" data-modal="d-webhook" data-title="Ingestão por webhook">Ver detalhes</button></article></div>
+      </div>
+    </div>
+  </section>
+<template id="d-inspira"><p>Projeto de extensão da UFF. Transformei telas projetadas no Figma em páginas web funcionais com React e TypeScript, criei componentes reutilizáveis, organizei as rotas de navegação e cuidei da consistência visual.</p><p class="mb-0">O trabalho foi em colaboração direta com a equipe de design, com reuniões periódicas de alinhamento técnico e acompanhamento.</p></template>
+<template id="d-uforaculo"><p>Modelagem em equipe de 6 pessoas de um sistema de biblioteca universitária que integra a circulação real do acervo da UFF (empréstimo, devolução, renovação, reserva, penalidades e cadastro de usuários) a recursos sociais inspirados no Skoob e a uma busca por IA em linguagem natural.</p><p class="mb-0">Os requisitos vieram de uma entrevista com o chefe da Biblioteca Central do Gragoatá. Entregamos casos de uso detalhados e diagramas de classes de análise e de projeto.</p></template>
+<template id="d-sorveteria"><p>Especificação de um sistema integrado para uma sorveteria: PDV com montagem de sorvetes, delivery, pagamentos em dinheiro, cartão e Pix, estoque por lote e validade, fidelidade, promoções e atendimento por chatbot.</p><div class="row g-2 mb-3"><div class="col-4"><div class="kpi"><b>67</b><span>requisitos funcionais</span></div></div><div class="col-4"><div class="kpi"><b>17</b><span>não funcionais</span></div></div><div class="col-4"><div class="kpi"><b>9</b><span>casos de uso</span></div></div></div><p class="mb-0">Inclui requisitos de segurança de senhas, logs de auditoria, backup e controle de acesso por cargo, e diagramas UML de casos de uso, classes, estados, atividades e sequência.</p></template>
+<template id="d-curlycare"><p>Modelagem em equipe de 8 pessoas de um aplicativo web para o salão Carol Rios Curly Studio, com cadastro de clientes, agendamento de serviços, controle de estoque e gestão financeira.</p><p class="mb-0">Três perfis com login obrigatório: gerente, funcionário e cliente. Foi o ponto de partida para o sistema real que construí depois.</p></template>
+<template id="d-webhook"><p>Prova de conceito que recebe ocorrências estruturadas em JSON por um webhook em FastAPI, valida os campos e grava os dados brutos no Microsoft Fabric/OneLake, com os arquivos organizados por ano, mês e dia.</p><p class="mb-0">Configuração por variáveis de ambiente, com credenciais fora do código. É uma iniciativa separada da plataforma n8n.</p></template>
+<div class="modal fade" id="shot-modal" tabindex="-1" aria-labelledby="shot-title" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h2 class="modal-title h5" id="shot-title">Imagens do projeto</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body">
+        <div id="shot-carousel" class="carousel slide">
+          <div class="carousel-inner"></div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#shot-carousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span></button>
+          <button class="carousel-control-next" type="button" data-bs-target="#shot-carousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Próxima</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="detail-modal" tabindex="-1" aria-labelledby="detail-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header"><h2 class="modal-title h5" id="detail-title"></h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
 </main>
 
-<dialog class="viewer" id="viewer" aria-label="Imagem ampliada">
-  <figure>
-    <img id="viewer-img" src="" alt="">
-    <figcaption>
-      <span id="viewer-cap"></span>
-      <span class="viewer-nav">
-        <button type="button" id="viewer-prev">Anterior</button>
-        <button type="button" id="viewer-next">Próxima</button>
-        <button type="button" id="viewer-close">Fechar</button>
-      </span>
-    </figcaption>
-  </figure>
-</dialog>
-
-<script src="js/main.js"></script>
+<footer class="site-foot">
+  <div class="container container-x d-flex flex-wrap gap-2 justify-content-between">
+    <span>© 2026 Danilo Rios · Rio de Janeiro</span>
+    <span>HTML, CSS e JavaScript puros, com Bootstrap e Leaflet · <a href="https://github.com/DaniloRCBGG/portfolio" target="_blank" rel="noopener">código no GitHub</a></span>
+  </div>
+</footer>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important">
+  <div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"><div class="toast-body"></div></div>
+</div>
+<script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/timeline.js"></script>
+<script src="js/projects.js"></script>
 </body>
 </html>
