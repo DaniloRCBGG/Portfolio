@@ -27,10 +27,57 @@
     map = L.map(mapEl, { zoomControl: false, scrollWheelZoom: false, attributionControl: true }).setView(center, 14);
     // O canto esquerdo fica com o painel do estado
     L.control.zoom({ position: 'topright', zoomInTitle: 'Aproximar', zoomOutTitle: 'Afastar' }).addTo(map);
-    const tileUrl = (dark) => `https://{s}.basemaps.cartocdn.com/${dark ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`;
+    map.setMinZoom(12);
+    map.setMaxBounds([[-23.02, -43.30], [-22.78, -42.90]]);
     const isDark = () => document.documentElement.getAttribute('data-bs-theme') === 'dark';
-    let tiles = L.tileLayer(tileUrl(isDark()), { maxZoom: 19, subdomains: 'abcd', attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
-    document.addEventListener('themechange', () => { map.removeLayer(tiles); tiles = L.tileLayer(tileUrl(isDark()), { maxZoom: 19, subdomains: 'abcd', attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map); });
+
+    // Fundo de Niterói em três camadas: CARTO (ruas e nomes) → OpenStreetMap → contornos do IBGE,
+    // que ficam por baixo dos mapas online e aparecem sozinhos se nenhum deles carregar.
+    map.createPane('base');
+    map.getPane('base').style.zIndex = 150;
+    const geo = window.NITEROI_GEO;
+    const landStyle = (f) => ({
+      pane: 'base', weight: 1, color: isDark() ? '#2a3f55' : '#c8c8c5',
+      fillColor: f.properties.codigo === '3303302' ? (isDark() ? '#1d3247' : '#eef0e6') : (isDark() ? '#16273a' : '#e4e5dc'), fillOpacity: 1,
+    });
+    let land = null, outline = null;
+    if (geo && window.L.geoJSON) {
+      land = L.geoJSON(geo, { style: landStyle, interactive: false, attribution: 'Limites: IBGE' }).addTo(map);
+      const nit = { ...geo, features: geo.features.filter((f) => f.properties.codigo === '3303302') };
+      // O contorno simplificado só aparece sem os mapas online; sobre o mapa real ele cortaria a orla
+      outline = L.geoJSON(nit, { style: { color: '#00a6a6', weight: 2, dashArray: '6 5', fill: false }, interactive: false });
+    }
+    const labels = L.layerGroup([
+      L.marker([-22.9125, -43.0960], { icon: L.divIcon({ className: 'map-label', html: 'Niterói' }), interactive: false }),
+      L.marker([-22.8930, -43.1380], { icon: L.divIcon({ className: 'map-label is-water', html: 'Baía de Guanabara' }), interactive: false }),
+    ]);
+    const TILES = {
+      carto: (dark) => [`https://{s}.basemaps.cartocdn.com/${dark ? 'dark_all' : 'rastertiles/voyager'}/{z}/{x}/{y}{r}.png`, { subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO' }],
+      osm: () => ['https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }],
+    };
+    let source = 'carto', tiles = null;
+    const noTiles = (on) => {
+      mapEl.classList.toggle('no-tiles', on);
+      if (on) { labels.addTo(map); outline?.addTo(map); } else { labels.remove(); outline?.remove(); }
+    };
+    const addTiles = () => {
+      if (tiles) { map.removeLayer(tiles); tiles = null; }
+      if (source === 'none') { noTiles(true); return; }
+      const [url, opt] = TILES[source](isDark());
+      let loaded = 0, errors = 0;
+      tiles = L.tileLayer(url, opt).addTo(map);
+      tiles.on('tileload', () => { loaded++; noTiles(false); });
+      tiles.on('tileerror', () => {
+        errors++;
+        if (errors >= 4 && loaded === 0) { source = source === 'carto' ? 'osm' : 'none'; addTiles(); }
+      });
+    };
+    noTiles(true);
+    addTiles();
+    document.addEventListener('themechange', () => {
+      land?.setStyle(landStyle);
+      if (source !== 'none') addTiles();
+    });
 
     // Trajeto e ocorrências fictícios; as regras e os limiares são os do Gêmeo
     const route = [[-22.8955, -43.1240], [-22.8990, -43.1190], [-22.9030, -43.1150], [-22.9065, -43.1100], [-22.9080, -43.1040], [-22.9050, -43.0990], [-22.9000, -43.1040], [-22.8965, -43.1120], [-22.8955, -43.1240]];

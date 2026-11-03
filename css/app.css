@@ -412,6 +412,100 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 
 .toast { background: var(--navy-800); color: var(--paper); border: 1px solid var(--navy-600); }
 
+/* Fundo do mapa de Niterói: mar atrás dos contornos do IBGE quando os mapas online não carregam */
+#gdn-map { background: #cfe0e6; }
+:root[data-bs-theme="dark"] #gdn-map { background: #0a1724; }
+.map-label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate-500); white-space: nowrap; }
+.map-label.is-water { color: #5b7f99; font-style: italic; }
+:root[data-bs-theme="dark"] .map-label { color: var(--steel-300); }
+.leaflet-div-icon.map-label { background: none; border: 0; width: auto !important; height: auto !important; }
+
+/* ---------- Trajetória em mapa de jogo ---------- */
+.journey-section { overflow: clip; }
+.journey-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 18px; }
+.journey-top h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0; }
+.journey-hud { display: grid; grid-template-columns: auto auto; gap: 4px 18px; align-items: center; padding: 12px 16px; min-width: min(100%, 320px); }
+.journey-hud .lvl { font-weight: 600; grid-column: 1 / -1; }
+.journey-hud .xp { height: 8px; border-radius: 8px; background: var(--surface-2); overflow: hidden; border: 1px solid var(--line); }
+.journey-hud .xp i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--teal-700), var(--teal-500)); transition: width 0.4s ease; }
+.journey-hud .cnt { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: right; }
+.journey-hud .cnt b { color: var(--ink); font-size: 1.05rem; }
+.journey-wrap {
+  position: relative; margin-inline: auto;
+  width: min(100%, calc((100vh - var(--header-h) - var(--timeline-h) - 230px) * 1000 / 560));
+  min-width: min(100%, 640px);
+}
+.journey-stage {
+  position: relative; width: 100%; aspect-ratio: 1000 / 560;
+  border-radius: 18px; border: 1px solid var(--line); overflow: hidden;
+  background: radial-gradient(120% 90% at 20% 10%, rgba(0, 166, 166, 0.10), transparent 60%), var(--navy-900);
+}
+.journey-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.jr-grid line { stroke: rgba(169, 188, 205, 0.06); stroke-width: 1; }
+.jr-road { fill: none; stroke: rgba(169, 188, 205, 0.12); stroke-width: 18; stroke-linecap: round; }
+.jr-path { fill: none; stroke: rgba(169, 188, 205, 0.35); stroke-width: 2; stroke-dasharray: 2 8; stroke-linecap: round; }
+.jr-trail { fill: none; stroke: var(--teal-500); stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(0, 166, 166, 0.7)); }
+.jr-branch { fill: none; stroke: rgba(169, 188, 205, 0.18); stroke-width: 1.5; stroke-dasharray: 4 6; transition: stroke 0.4s ease; }
+.jr-branch.unlocked { stroke: rgba(159, 217, 214, 0.6); }
+.jr-link.unlocked { stroke: rgba(232, 149, 90, 0.6); }
+.jr-shadow { fill: rgba(0, 166, 166, 0.35); filter: blur(1px); }
+.jr-pin {
+  position: absolute; z-index: 3; width: 38px; height: 38px; transform: translate(-50%, calc(-100% - 22px));
+  border-radius: 50% 50% 50% 0; rotate: -45deg; background: var(--teal-500); border: 3px solid var(--paper);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 166, 166, 0.55); display: grid; place-items: center; pointer-events: none;
+  animation: jr-float 2.4s ease-in-out infinite;
+}
+.jr-pin span { rotate: 45deg; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: var(--navy-900); }
+@keyframes jr-float { 50% { margin-top: -5px; } }
+.journey-nodes { position: absolute; inset: 0; pointer-events: none; }
+.jr-node {
+  position: absolute; transform: translate(-50%, -50%); pointer-events: auto;
+  background: none; border: 0; padding: 0; color: var(--paper); display: grid; justify-items: center; gap: 4px;
+}
+.jr-dot {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--navy-800); border: 2px solid var(--steel-300); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.jr-label { position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); white-space: nowrap; text-align: center; line-height: 1.15; pointer-events: none; }
+.jr-label b { display: block; font-size: 0.82rem; font-weight: 600; }
+.jr-label small { font-family: var(--font-mono); font-size: 0.68rem; color: var(--steel-300); }
+.jr-node.done .jr-dot { background: var(--teal-700); border-color: var(--teal-500); color: #fff; }
+.jr-node.active .jr-dot { background: var(--teal-500); border-color: var(--paper); color: var(--navy-900); box-shadow: 0 0 0 6px rgba(0, 166, 166, 0.25), 0 0 24px rgba(0, 166, 166, 0.6); }
+.jr-node.is-next .jr-dot { border-color: var(--orange-400); color: var(--orange-400); }
+.jr-node.is-next.active .jr-dot { background: var(--orange-400); color: var(--navy-900); box-shadow: 0 0 0 6px rgba(232, 149, 90, 0.25), 0 0 24px rgba(232, 149, 90, 0.5); }
+.jr-node:hover .jr-dot { border-color: var(--paper); }
+.jr-node:focus-visible { outline: none; }
+.jr-node:focus-visible .jr-dot { outline: 2px solid var(--teal-200); outline-offset: 4px; }
+.jr-proj .jr-dot { width: 24px; height: 24px; font-size: 0.6rem; border-style: dashed; opacity: 0.45; }
+.jr-proj .jr-label b { font-size: 0.74rem; font-weight: 500; color: var(--steel-300); }
+.jr-proj.unlocked .jr-dot { opacity: 1; border-style: solid; border-color: var(--teal-200); color: var(--teal-200); }
+.jr-proj.unlocked .jr-label b { color: var(--paper); }
+.journey-card {
+  position: absolute; z-index: 5; width: 320px; padding: 16px 18px; border-radius: 14px;
+  background: rgba(14, 27, 42, 0.94); color: var(--paper); border: 1px solid rgba(0, 166, 166, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px);
+}
+.journey-card .eyebrow { color: var(--teal-200); }
+@media (min-width: 768px) {
+  .journey-card { pointer-events: none; }
+  .journey-card a { pointer-events: auto; }
+}
+.journey-card p { color: var(--steel-300); font-size: 0.92rem; }
+.journey-card .tag { background: rgba(0, 166, 166, 0.14); border-color: rgba(0, 166, 166, 0.4); color: var(--paper); }
+.journey-card .btn-line { --bs-btn-bg: transparent; --bs-btn-color: var(--paper); --bs-btn-border-color: rgba(169, 188, 205, 0.4); --bs-btn-hover-color: var(--paper); --bs-btn-hover-bg: rgba(0, 166, 166, 0.2); }
+.jr-more { display: none; }
+.jr-spark { position: absolute; width: 7px; height: 7px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--teal-200); pointer-events: none; z-index: 4; }
+.journey-hint { font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); margin-top: 10px; text-align: center; }
+@media (max-width: 767.98px) {
+  .journey-wrap { width: 100%; min-width: 0; }
+  .journey-stage { aspect-ratio: 400 / 1000; border-radius: 14px; }
+  .journey-card { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: auto; margin-top: 14px; padding: 12px 14px; }
+  .journey-card p { font-size: 0.86rem; margin-bottom: 6px !important; }
+  .journey-card .jr-chip:nth-child(n+5) { display: none; }
+  .journey-card .jr-more { display: inline-block; color: var(--teal-200); }
+}
+
 /* Código com destaque da linha que decide */
 .code-block { font-family: var(--font-mono); font-size: 0.8rem; background: var(--navy-900); color: #d7e2ec; border-radius: 12px; padding: 14px 0; margin: 0; overflow-x: auto; }
 .code-block > span { display: block; padding: 1px 16px; white-space: pre; border-left: 3px solid transparent; transition: background 0.25s ease; }

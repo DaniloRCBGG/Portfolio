@@ -113,30 +113,4 @@
   }
 
   document.getElementById('start-tour')?.addEventListener('click', () => window.PORTFOLIO.startTour?.());
-
-  // Trajetória: marcos clicáveis, setas do teclado e painel de detalhe
-  const list = document.getElementById('career-line');
-  const detail = document.getElementById('career-detail');
-  if (list && detail) {
-    const items = [...list.querySelectorAll('.milestone')];
-    const select = (btn, focus) => {
-      items.forEach((b) => { b.setAttribute('aria-selected', String(b === btn)); b.tabIndex = b === btn ? 0 : -1; });
-      const tpl = document.getElementById(btn.dataset.tpl);
-      detail.innerHTML = tpl.innerHTML;
-      if (focus) btn.focus({ preventScroll: true });
-      // Rola só a faixa horizontal, nunca a página
-      const left = btn.offsetLeft - list.clientWidth / 2 + btn.offsetWidth / 2;
-      list.scrollTo({ left: Math.max(0, left), behavior: reduceMotion ? 'auto' : 'smooth' });
-    };
-    items.forEach((b, i) => {
-      b.addEventListener('click', () => select(b, false));
-      b.addEventListener('keydown', (e) => {
-        const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-        if (k) { e.preventDefault(); select(items[(i + k + items.length) % items.length], true); }
-        if (e.key === 'Home') { e.preventDefault(); select(items[0], true); }
-        if (e.key === 'End') { e.preventDefault(); select(items[items.length - 1], true); }
-      });
-    });
-    select(items.find((b) => b.classList.contains('is-now')) || items[items.length - 1], false);
-  }
 })();
