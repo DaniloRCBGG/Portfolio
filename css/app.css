@@ -839,8 +839,9 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 .lm.has-focus .lm-layer.is-on { border-color: var(--lc); box-shadow: 0 0 0 1px var(--lc), 0 0 34px color-mix(in srgb, var(--lc) 45%, transparent); }
 .lm-layer > svg { transition: opacity 0.35s ease; }
 /* Ícones em pé sobre cada plano, sempre de frente (a rotação desfaz a do empilhamento) */
-.lm-pin { position: absolute; width: 15px; height: 15px; margin: -15px 0 0 -7.5px; display: grid; place-items: center; border-radius: 4px; font-size: 9px; line-height: 1;
-  color: #fff; background: var(--pc, #00a6a6); box-shadow: 0 0 0 1.2px rgba(247, 247, 242, 0.9), 0 3px 6px rgba(0, 0, 0, 0.5);
+/* Sem sombra por fora: em 3D o navegador corta o que passa da caixa do ícone, então o contorno é uma borda por dentro */
+.lm-pin { position: absolute; width: 13px; height: 13px; margin: -13px 0 0 -6.5px; box-sizing: border-box; display: grid; place-items: center; border-radius: 4px; font-size: 7.5px; line-height: 1;
+  color: #fff; background: var(--pc, #00a6a6); border: 1.2px solid rgba(247, 247, 242, 0.92);
   transform-origin: 50% 100%; transform: translateZ(2px) rotateZ(42deg) rotateX(-58deg); transition: opacity 0.35s ease, background 0.4s ease; pointer-events: auto; cursor: pointer; }
 .lm-pin i { display: block; }
 .lm-pin.is-bus { border-radius: 50%; background: var(--s); color: #071019; }
@@ -849,9 +850,9 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 .lm-pin.is-jam { --pc: #d64545; }
 .lm-pin.is-rain { --pc: #5b8fd6; border-radius: 50%; }
 .lm-pin.is-bike { --pc: #7a3fd1; }
-.lm-pin.is-bike.is-full { --pc: #fff; color: #7a3fd1; box-shadow: 0 0 0 1.4px #7a3fd1, 0 3px 6px rgba(0, 0, 0, 0.5); }
+.lm-pin.is-bike.is-full { --pc: #fff; color: #7a3fd1; border-color: #7a3fd1; }
 .lm-pin.is-cam { --pc: #1b2733; color: #f7f7f2; }
-.lm-pin.is-stop { --pc: #9fd9d6; color: #0e1b2a; width: 13px; height: 13px; margin: -13px 0 0 -6.5px; font-size: 8px; border-radius: 50%; }
+.lm-pin.is-stop { --pc: #9fd9d6; color: #0e1b2a; width: 11px; height: 11px; margin: -11px 0 0 -5.5px; font-size: 6.5px; border-radius: 50%; }
 /* Edificações: caixas de verdade, com topo e duas faces, que crescem quando as camadas se afastam */
 .lm-bld { position: absolute; transform-style: preserve-3d; --h: calc(var(--gap) * var(--k)); }
 .lm-bld i { position: absolute; display: block; transition: opacity 0.35s ease; }
