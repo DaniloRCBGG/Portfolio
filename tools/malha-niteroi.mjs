@@ -40,6 +40,9 @@ async function fetchOverpass() {
 
 const json = await fetchOverpass();
 const classes = { major: [], minor: [], path: [] };
+// Nomes das vias principais (para os endereços dos pop-ups): uma lista de nomes únicos e, para cada via, o índice
+const nomes = [], indice = new Map(), nomeVias = { major: [] };
+const nomeDe = (n) => { if (!n) return -1; let i = indice.get(n); if (i === undefined) { i = nomes.length; nomes.push(n); indice.set(n, i); } return i; };
 let points = 0;
 for (const el of json.elements) {
   if (el.type !== 'way' || !el.geometry || !el.tags?.highway) continue;
@@ -50,17 +53,21 @@ for (const el of json.elements) {
     out.push(l - pl, a - pa);
     pl = l; pa = a;
   }
-  classes[classOf(el.tags.highway)].push(out);
+  const c = classOf(el.tags.highway);
+  classes[c].push(out);
+  if (c === 'major') nomeVias.major.push(nomeDe(el.tags.name));
   points += el.geometry.length;
 }
 const data = {
   fonte: 'OpenStreetMap, via Overpass API (© colaboradores do OpenStreetMap, ODbL)',
   area: AREA,
   gerado: new Date().toISOString(),
-  formato: 'coordenadas em graus × 1e5, [lng, lat] com diferenças em relação ao ponto anterior',
+  formato: 'coordenadas em graus × 1e5, [lng, lat] com diferenças em relação ao ponto anterior; nomeVias.major[i] é o índice em nomes da via classes.major[i] (-1 sem nome)',
   classes,
+  nomes,
+  nomeVias,
 };
 await mkdir('data', { recursive: true });
 await writeFile('data/niteroi-ruas.json', JSON.stringify(data));
 const n = Object.values(classes).reduce((s, c) => s + c.length, 0);
-console.log(`data/niteroi-ruas.json: ${n} vias, ${points} pontos (principais ${classes.major.length}, locais ${classes.minor.length}, caminhos ${classes.path.length})`);
+console.log(`data/niteroi-ruas.json: ${n} vias, ${points} pontos (principais ${classes.major.length}, locais ${classes.minor.length}, caminhos ${classes.path.length}), ${nomes.length} nomes de vias principais`);

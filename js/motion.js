@@ -86,6 +86,17 @@
     });
 
     window.addEventListener('load', () => ScrollTrigger.refresh());
+    // Conteúdo que chega depois (malha, tabelas, minifluxos que viram verticais) muda a altura da página:
+    // recalcula as animações ligadas à rolagem para elas não ficarem adiantadas ou atrasadas
+    let lastH = 0, refreshT = 0;
+    const main = document.querySelector('main');
+    if (main && window.ResizeObserver) new ResizeObserver(() => {
+      const h = main.offsetHeight;
+      if (Math.abs(h - lastH) < 4) return;
+      lastH = h;
+      clearTimeout(refreshT);
+      refreshT = setTimeout(() => ScrollTrigger.refresh(), 250);
+    }).observe(main);
   }
 
   // Ao abrir uma página com #capítulo, posiciona já descontando o cabeçalho

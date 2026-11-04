@@ -47,6 +47,8 @@ Os ônibus são simulados sobre as ruas reais. Não há uma API pública da MobN
 
 Também aparecem no mapa, sem entrar no cruzamento, as estações da NitBike (quadrado roxo com bike branca; branco com bike roxa quando a estação está cheia, como no app da NitBike) e câmeras urbanas da NITTRANS, ambas simuladas. A NitBike segue a lógica real: a cada 30 s um snapshot compara a contagem de bikes de cada estação com a anterior (caiu = saídas, subiu = entradas); a cada minuto os snapshots viram o total de saídas e entradas, numa janela dos últimos 5 minutos. As estações ficam em `NB`, em `js/gemeo.js`.
 
+Todos os ícones do mapa abrem um pop-up: ônibus (linha, estado e onde está), estação (endereço e bikes), alerta (tipo, tipo no Waze e onde), lentidão (onde e extensão), pluviômetro (região e chuva) e câmera (cruzamento e um clipe animado ilustrativo, porque o vídeo real vem de uma API da Prefeitura que não é pública). Os endereços usam os nomes das vias principais que o `tools/malha-niteroi.mjs` grava no arquivo da malha; sem eles, aparece o bairro aproximado.
+
 ## Como editar
 No GitHub, abra o arquivo, clique no lápis (Edit), altere e clique em **Commit changes**.
 - Habilidades e exemplos de uso: `js/data.js`.

@@ -69,10 +69,41 @@
       });
     });
 
-    // As camadas se afastam enquanto o bloco entra na tela
+    // As camadas se afastam enquanto o bloco entra na tela. No celular o mapa não fica fixo: a abertura
+    // vai até o mapa quase sair por cima, para a pessoa ver as camadas se separando enquanto rola.
     if (!reduce && window.gsap && window.ScrollTrigger) {
-      gsap.fromTo(lm, { '--gap': '8px' }, { '--gap': '38px', ease: 'none', scrollTrigger: { trigger: lm, start: 'top 90%', end: 'top 35%', scrub: true } });
-    } else lm.style.setProperty('--gap', '34px');
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 992px)', () => {
+        gsap.fromTo(lm, { '--gap': '8px' }, { '--gap': '38px', ease: 'none', scrollTrigger: { trigger: lm, start: 'top 90%', end: 'top 35%', scrub: true } });
+      });
+      mm.add('(max-width: 991.98px)', () => {
+        gsap.fromTo(lm, { '--gap': '6px' }, { '--gap': '46px', ease: 'none', scrollTrigger: { trigger: lm, start: 'top 95%', end: 'top 8%', scrub: 0.4 } });
+      });
+    } else lm.style.setProperty('--gap', window.matchMedia('(max-width: 991.98px)').matches ? '42px' : '34px');
+
+    // Balão de cada ícone dos planos: passar o mouse ou tocar mostra o que ele é
+    const tip = document.getElementById('lm-tip');
+    let tipFor = null;
+    const showTip = (pin) => {
+      if (!tip) return;
+      const [title, sub] = (pin.dataset.tip || '').split('|');
+      if (!title) return;
+      tip.innerHTML = `<b>${title}</b>${sub ? `<span>${sub}</span>` : ''}`;
+      tip.hidden = false;
+      const r = pin.getBoundingClientRect(), box = lm.getBoundingClientRect();
+      const x = Math.max(8, Math.min(box.width - tip.offsetWidth - 8, r.left + r.width / 2 - box.left - tip.offsetWidth / 2));
+      const y = r.top - box.top - tip.offsetHeight - 8;
+      tip.style.transform = `translate(${x}px, ${y < 6 ? r.bottom - box.top + 8 : y}px)`;
+      tipFor = pin;
+    };
+    const hideTip = () => { if (tip) tip.hidden = true; tipFor = null; };
+    lm.querySelectorAll('.lm-pin[data-tip]').forEach((pin) => {
+      pin.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') showTip(pin); });
+      pin.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') hideTip(); });
+      pin.addEventListener('click', (e) => { e.stopPropagation(); if (tipFor === pin) hideTip(); else showTip(pin); });
+    });
+    lm.addEventListener('click', hideTip);
+    window.addEventListener('scroll', () => { if (tipFor) hideTip(); }, { passive: true });
   }
 
   // ---------- n8n: card ↔ nó do fluxo ----------
