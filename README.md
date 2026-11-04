@@ -45,6 +45,8 @@ Para gerar o arquivo na sua máquina: `node tools/malha-niteroi.mjs` (Node 18 ou
 
 Os ônibus são simulados sobre as ruas reais. Não há uma API pública da MobNit acessível; se houver um feed de posições, a URL entra em `MOBNIT_URL`, no início de `js/gemeo.js`.
 
+Também aparecem no mapa, sem entrar no cruzamento, as estações da NitBike (quadrado roxo com bike branca; branco com bike roxa quando a estação está cheia, como no app da NitBike) e câmeras urbanas da NITTRANS, ambas simuladas. A NitBike segue a lógica real: a cada 30 s um snapshot compara a contagem de bikes de cada estação com a anterior (caiu = saídas, subiu = entradas); a cada minuto os snapshots viram o total de saídas e entradas, numa janela dos últimos 5 minutos. As estações ficam em `NB`, em `js/gemeo.js`.
+
 ## Como editar
 No GitHub, abra o arquivo, clique no lápis (Edit), altere e clique em **Commit changes**.
 - Habilidades e exemplos de uso: `js/data.js`.

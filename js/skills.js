@@ -13,7 +13,9 @@
   const areaDesc = lab.querySelector('.lab-area-desc');
   let area = P.areas[0], skill = null;
   // Onde o exemplo leva: a etapa do projeto que usa a habilidade (cards com data-skills) ou o próprio projeto
-  const target = (pid, s) => {
+  const target = (pid, s, anchor) => {
+    const own = anchor && document.getElementById(anchor);
+    if (own) return { href: `#${anchor}`, where: own.dataset.where || '' };
     const base = proj[pid].href;
     const sec = document.querySelector(base);
     const step = sec && (sec.closest('.project') || sec).querySelector(`.step-card[data-skills~="${P.slug(s)}"]`);
@@ -43,7 +45,7 @@
     const ex = P.examples[s] || [];
     detail.innerHTML = `
       <div class="lab-detail-head"><span class="eyebrow">${area.label}</span><h3>${esc(s)}</h3></div>
-      ${ex.length ? `<ol class="lab-examples">${ex.map(([pid, text]) => { const t = target(pid, s); return `
+      ${ex.length ? `<ol class="lab-examples">${ex.map(([pid, text, anchor]) => { const t = target(pid, s, anchor); return `
         <li><a class="lab-ex" href="${t.href}" data-from-skill="${esc(s)}">
           <span class="lab-ex-proj">${proj[pid].label}${t.where ? `<small> · ${t.where}</small>` : ''}</span>
           <span class="lab-ex-text">${text}</span>

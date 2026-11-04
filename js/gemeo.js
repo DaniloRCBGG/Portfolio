@@ -1,6 +1,8 @@
 // Mini Gêmeo: a malha viária de Niterói (OpenStreetMap, a mesma do city-roads) desenhada em canvas,
 // com ônibus simulados andando sobre as ruas reais. A cada ciclo o estado de cada ônibus é recalculado
-// com a mesma regra do Gêmeo (Bus.getStatus) e os mesmos limiares.
+// com a mesma regra do Gêmeo (Bus.getStatus) e os mesmos limiares. Estações da NitBike e câmeras só
+// aparecem (não entram no cruzamento); a NitBike segue a lógica real: snapshot a cada 30 s, saídas e
+// entradas pela diferença de contagem, soma por minuto e janela dos últimos 5 minutos.
 (() => {
   const wrap = document.getElementById('gdn-mini');
   if (!wrap) return;
@@ -43,6 +45,7 @@
   const ui = {
     alert: document.getElementById('lay-alert'), jam: document.getElementById('lay-jam'), rain: document.getElementById('lay-rain'),
     rainOut: document.getElementById('lay-rain-out'), roads: document.getElementById('lay-roads'), fail: document.getElementById('lay-fail'),
+    bike: document.getElementById('lay-bike'), cam: document.getElementById('lay-cam'),
     counts: document.getElementById('gdn-counts'), last: document.getElementById('gdn-last'), cycle: document.querySelector('#gdn-cycle i'),
   };
   const bctx = base.getContext('2d');
@@ -51,7 +54,8 @@
   const view = { x: 0, y: 300, mpp: 9 }; // centro da câmera em metros e metros por pixel
   let mesh = null; // { classes: { major: Path2D, minor, path }, count, graph }
   let land = null; // contornos do IBGE em Path2D
-  let routes = [], buses = [], alerts = [], jam = null, cell = null, selected = null, follow = false;
+  let routes = [], buses = [], alerts = [], jams = [], cell = null, selected = null, follow = false;
+  let stations = [], cams = [];
   let lastCycle = 0, running = !reduce, cycleClock = '';
 
   /* ---------------- Malha ---------------- */
@@ -224,11 +228,25 @@
       { p: pick(R[0], 0.45), kind: 'Acidente' },
       { p: pick(R[Math.min(2, R.length - 1)], 0.7), kind: 'Buraco na via' },
     ];
-    const jr = R[Math.min(1, R.length - 1)];
-    const L = jr.cum[jr.cum.length - 1];
-    const jpts = [];
-    for (let d = L * 0.3; d <= L * 0.3 + 260; d += 20) { const q = along(jr, d); jpts.push([q.x, q.y]); }
-    jam = { pts: jpts };
+    // Duas vias engarrafadas, em linhas diferentes
+    const jamOn = (r, f, len) => {
+      const L = r.cum[r.cum.length - 1], pts = [];
+      for (let d = L * f; d <= Math.min(L, L * f + len); d += 20) { const q = along(r, d); pts.push([q.x, q.y]); }
+      return { pts };
+    };
+    const r1 = Math.min(1, R.length - 1);
+    const j1 = jamOn(R[r1], 0.3, 600);
+    // A segunda fica perto de onde o mapa abre (para ser vista logo), longe da primeira e em outra linha
+    let spot = null, best = Infinity;
+    R.forEach((r, ri) => {
+      if (ri === r1 && R.length > 1) return;
+      for (let f = 0.15; f <= 0.75; f += 0.05) {
+        const q = along(r, r.cum[r.cum.length - 1] * f);
+        const dView = Math.hypot(q.x, q.y - 300), dJam = Math.hypot(q.x - j1.pts[0][0], q.y - j1.pts[0][1]);
+        if (dJam > 900 && dView < best) { best = dView; spot = [r, f]; }
+      }
+    });
+    jams = [j1, spot ? jamOn(spot[0], spot[1], 520) : jamOn(R[0], 0.62, 520)];
     const c = pick(R[Math.min(3, R.length - 1)], 0.5);
     cell = { center: c, poly: Array.from({ length: 6 }, (_, i) => [c[0] + Math.cos((Math.PI / 3) * i + 0.3) * 650, c[1] + Math.sin((Math.PI / 3) * i + 0.3) * 650]) };
     makeBuses();
@@ -254,6 +272,174 @@
     }
   }
 
+  /* ---------------- NitBike e câmeras ---------------- */
+  const poiLayer = wrap.querySelector('.gdn-poi');
+  // Estações simuladas, perto de onde ficariam; cada uma é encaixada na via principal mais próxima
+  const NB = [
+    { name: 'Praça Araribóia', bairro: 'Centro', ll: [-43.1262, -22.8935], cap: 14 },
+    { name: 'Rua da Conceição', bairro: 'Centro', ll: [-43.1208, -22.8962], cap: 12 },
+    { name: 'Campus do Gragoatá', bairro: 'São Domingos', ll: [-43.1335, -22.8988], cap: 12, full: true },
+    { name: 'Rua Tiradentes', bairro: 'Ingá', ll: [-43.1232, -22.9012], cap: 10 },
+    { name: 'Praia de Icaraí', bairro: 'Icaraí', ll: [-43.1120, -22.9058], cap: 16 },
+    { name: 'Campo de São Bento', bairro: 'Icaraí', ll: [-43.1058, -22.9028], cap: 12 },
+    { name: 'Rua Santa Rosa', bairro: 'Santa Rosa', ll: [-43.0975, -22.9072], cap: 10 },
+  ];
+  let seed2 = 7310;
+  const rnd2 = () => { seed2 = (seed2 * 1103515245 + 12345) >>> 0; return seed2 / 4294967296; };
+  const hhmm = (t) => new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  // Relógio simulado: começa 5 minutos atrás para a janela já nascer cheia
+  let simT = Math.floor(Date.now() / 60000) * 60000 - 5 * 60000, snapN = 0, nbWindow = [];
+
+  function makePois() {
+    poiLayer.innerHTML = '';
+    const g = mesh && mesh.graph;
+    const snap = (p, max = 500) => {
+      if (!g) return p;
+      let best = null, bd = max;
+      for (const q of g.pts) { const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if (d < bd) { bd = d; best = q; } }
+      return best ? [best[0], best[1]] : p;
+    };
+    stations = NB.map((s, i) => {
+      const [x, y] = snap(toXY(s.ll[0], s.ll[1]));
+      const st = { ...s, kind: 'station', id: i, x, y, bikes: s.full ? s.cap : Math.round(s.cap * (0.3 + rnd2() * 0.45)), acc: { out: 0, in: 0 }, mins: [], last: 0 };
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'gdn-station';
+      el.innerHTML = '<i class="bi bi-bicycle" aria-hidden="true"></i><span class="gdn-st-delta" aria-hidden="true"></span>';
+      el.addEventListener('click', (e) => { e.stopPropagation(); selected = st; follow = false; renderPop(); });
+      poiLayer.appendChild(el);
+      st.el = el;
+      return st;
+    });
+    // Câmeras em cruzamentos das vias principais, espalhadas
+    const spots = [];
+    if (g) {
+      const cand = g.pts.filter((p, i) => g.adj[i].length >= 3 && Math.hypot(p[0], p[1] - 300) < 2400);
+      let guard = 0;
+      while (spots.length < 5 && guard++ < 600 && cand.length) {
+        const p = cand[Math.floor(rnd2() * cand.length)];
+        if (spots.every((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) > 700) && stations.every((s) => Math.hypot(s.x - p[0], s.y - p[1]) > 200)) spots.push(p);
+      }
+    }
+    if (!spots.length) [0.15, 0.5, 0.85].forEach((f) => { const r = routes[0]; const q = along(r, r.cum[r.cum.length - 1] * f); spots.push([q.x, q.y]); });
+    cams = spots.map((p, i) => {
+      const c = { kind: 'cam', id: String(i + 1).padStart(2, '0'), x: p[0], y: p[1] };
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'gdn-cam';
+      el.setAttribute('aria-label', `Câmera urbana simulada ${c.id}`);
+      el.innerHTML = '<i class="bi bi-camera-video-fill" aria-hidden="true"></i>';
+      el.addEventListener('click', (e) => { e.stopPropagation(); selected = c; follow = false; renderPop(); });
+      poiLayer.appendChild(el);
+      c.el = el;
+      return c;
+    });
+    // Histórico: 10 snapshots (5 minutos) antes de começar
+    for (let k = 0; k < 10; k++) nbSnap(true);
+    renderNb(false);
+  }
+
+  const paintStation = (st) => {
+    const full = st.bikes >= st.cap;
+    st.el.classList.toggle('is-full', full);
+    st.el.classList.toggle('is-empty', st.bikes === 0);
+    st.el.setAttribute('aria-label', `Estação NitBike simulada ${st.name}, ${st.bairro}: ${st.bikes} de ${st.cap} bikes${full ? ', cheia' : ''}`);
+  };
+  const flashDelta = (st, d) => {
+    const tag = st.el.querySelector('.gdn-st-delta');
+    tag.textContent = d < 0 ? `−${-d}` : `+${d}`;
+    tag.className = `gdn-st-delta ${d < 0 ? 'is-out' : 'is-in'}`;
+    void tag.offsetWidth;
+    tag.classList.add('go');
+  };
+
+  // Um snapshot: a diferença de contagem diz quantas bikes saíram ou chegaram em cada estação
+  function nbSnap(quiet) {
+    if (!stations.length) return;
+    simT += 30000;
+    stations.forEach((st) => {
+      const prev = st.bikes;
+      let next;
+      if (st.full) next = prev < st.cap ? st.cap : (rnd2() < 0.22 ? st.cap - 1 : st.cap);
+      else { const r = rnd2(); next = Math.max(0, Math.min(st.cap, prev + (r < 0.16 ? -2 : r < 0.4 ? -1 : r < 0.6 ? 0 : r < 0.84 ? 1 : 2))); }
+      st.bikes = next;
+      st.last = next - prev;
+      st.acc.out += Math.max(0, prev - next);
+      st.acc.in += Math.max(0, next - prev);
+      paintStation(st);
+      if (!quiet && st.last && !reduce) flashDelta(st, st.last);
+    });
+    // A cada minuto (dois snapshots) fecha o total e a janela anda: sai o minuto mais antigo, entra o novo
+    if (++snapN % 2 === 0) {
+      const t = simT - 60000;
+      let out = 0, inn = 0;
+      stations.forEach((st) => {
+        st.mins.push({ t, out: st.acc.out, in: st.acc.in });
+        if (st.mins.length > 5) st.mins.shift();
+        out += st.acc.out; inn += st.acc.in;
+        st.acc = { out: 0, in: 0 };
+      });
+      nbWindow.push({ t, out, in: inn });
+      const gone = nbWindow.length > 5 ? nbWindow.shift() : null;
+      if (!quiet) renderNb(true, gone);
+    }
+    if (!quiet && selected && selected.kind === 'station') renderPop();
+  }
+
+  const nbEl = { rows: document.getElementById('nb-rows'), out: document.getElementById('nb-out'), in: document.getElementById('nb-in'), topOut: document.getElementById('nb-top-out'), topIn: document.getElementById('nb-top-in'), roll: document.getElementById('nb-roll') };
+  function renderNb(fresh, gone) {
+    if (!nbEl.rows) return;
+    nbEl.rows.innerHTML = nbWindow.slice().reverse().map((m, i) => `<tr class="${fresh && i === 0 ? 'is-new' : ''}"><th scope="row">${hhmm(m.t)}</th><td class="nb-o">${m.out}</td><td class="nb-i">${m.in}</td></tr>`).join('');
+    nbEl.out.textContent = nbWindow.reduce((n, m) => n + m.out, 0);
+    nbEl.in.textContent = nbWindow.reduce((n, m) => n + m.in, 0);
+    const sum = (st, k) => st.mins.reduce((n, m) => n + m[k], 0);
+    const top = (k) => {
+      const list = stations.map((st) => ({ st, n: sum(st, k) })).sort((a, b) => b.n - a.n).slice(0, 3);
+      const max = Math.max(1, list[0] ? list[0].n : 1);
+      return list.map(({ st, n }) => `<li><span>${st.name}</span><b>${n}</b><i style="width:${(n / max) * 100}%"></i></li>`).join('');
+    };
+    nbEl.topOut.innerHTML = top('out');
+    nbEl.topIn.innerHTML = top('in');
+    const last = nbWindow[nbWindow.length - 1];
+    if (nbEl.roll && last) nbEl.roll.textContent = gone ? `entrou ${hhmm(last.t)} · saiu ${hhmm(gone.t)}` : `até ${hhmm(last.t)}`;
+  }
+
+  function stationPop(st) {
+    const full = st.bikes >= st.cap;
+    const state = full ? 'cheia' : st.bikes === 0 ? 'vazia' : 'com bikes e vagas';
+    const last = st.last < 0 ? `${-st.last} saíram` : st.last > 0 ? `${st.last} chegaram` : 'sem mudança';
+    return `
+      <div class="d-flex justify-content-between align-items-start gap-2">
+        <div><div class="gdn-pop-eyebrow">Estação NitBike simulada · ${st.bairro}</div><b>${st.name}</b></div>
+        <button type="button" class="btn-close btn-close-white" aria-label="Fechar" data-close></button>
+      </div>
+      <div class="gdn-pop-state"><span class="lg-st${full ? ' is-full' : ''}"><i class="bi bi-bicycle" aria-hidden="true"></i></span><code>${state}</code></div>
+      <dl>
+        <dt>Bikes</dt><dd>${st.bikes} de ${st.cap} · ${st.cap - st.bikes} vagas</dd>
+        <dt>Último snapshot</dt><dd>${last}</dd>
+        <dt>Minuto em curso</dt><dd>${st.acc.out} saídas · ${st.acc.in} entradas</dd>
+      </dl>
+      <table class="gdn-pop-table"><thead><tr><th>minuto</th><th>saídas</th><th>entradas</th></tr></thead><tbody>${st.mins.slice().reverse().map((m) => `<tr><td>${hhmm(m.t)}</td><td>${m.out}</td><td>${m.in}</td></tr>`).join('')}</tbody></table>`;
+  }
+  function camPop(c) {
+    return `
+      <div class="d-flex justify-content-between align-items-start gap-2">
+        <div><div class="gdn-pop-eyebrow">Câmera urbana simulada ${c.id} · NITTRANS</div><b>Só aparece no mapa</b></div>
+        <button type="button" class="btn-close btn-close-white" aria-label="Fechar" data-close></button>
+      </div>
+      <p class="mb-0 mt-2">As câmeras urbanas só aparecem no mapa: não entram no cruzamento que decide a cor dos ônibus.</p>`;
+  }
+
+  function placePois() {
+    const put = (on, list) => list.forEach((p) => {
+      const [sx, sy] = worldToScreen(p.x, p.y);
+      p.el.style.transform = `translate(${sx}px, ${sy}px)`;
+      p.el.hidden = !on || sx < -30 || sy < -30 || sx > W + 30 || sy > H + 30;
+    });
+    put(!ui.bike || ui.bike.checked, stations);
+    put(!ui.cam || ui.cam.checked, cams);
+  }
+
   /* ---------------- Ciclo: estado recalculado como no BFF ---------------- */
   function cycle() {
     const tally = { normal: 0, alert: 0, jammed: 0, alert_jammed: 0 };
@@ -263,7 +449,7 @@
       const near = ui.alert.checked ? alerts.map((a) => ({ a, d: Math.hypot(p[0] - a.p[0], p[1] - a.p[1]) })).sort((x, y) => x.d - y.d)[0] : null;
       const isAlert = !!near && near.d <= ALERT_R;
       let jd = Infinity;
-      if (ui.jam.checked && jam) for (let i = 1; i < jam.pts.length; i++) jd = Math.min(jd, distSeg(p, jam.pts[i - 1], jam.pts[i]));
+      if (ui.jam.checked) jams.forEach((j) => { for (let i = 1; i < j.pts.length; i++) jd = Math.min(jd, distSeg(p, j.pts[i - 1], j.pts[i])); });
       const isJammed = jd <= JAM_D;
       const isFlooded = mm >= RAIN_T && cell && inPoly(p, cell.poly);
       b.status = getStatus({ isAlert, isFlooded, isJammed });
@@ -337,10 +523,16 @@
     }
     if (!failed) {
       // Lentidão
-      if (ui.jam.checked && jam) {
-        fctx.lineWidth = 7 * view.mpp; fctx.strokeStyle = 'rgba(214, 69, 69, 0.85)'; fctx.lineCap = 'round';
-        fctx.beginPath(); jam.pts.forEach((p, i) => (i ? fctx.lineTo(p[0], p[1]) : fctx.moveTo(p[0], p[1]))); fctx.stroke();
-      }
+      if (ui.jam.checked) jams.forEach((j) => {
+        const path = () => { fctx.beginPath(); j.pts.forEach((p, i) => (i ? fctx.lineTo(p[0], p[1]) : fctx.moveTo(p[0], p[1]))); };
+        fctx.lineCap = 'round'; fctx.lineJoin = 'round';
+        // brilho por baixo e o trecho lento por cima, com um tracejado andando devagar
+        fctx.lineWidth = 16 * view.mpp; fctx.strokeStyle = 'rgba(214, 69, 69, 0.18)'; path(); fctx.stroke();
+        fctx.lineWidth = 7 * view.mpp; fctx.strokeStyle = 'rgba(214, 69, 69, 0.9)'; path(); fctx.stroke();
+        fctx.setLineDash([10 * view.mpp, 14 * view.mpp]); fctx.lineDashOffset = reduce ? 0 : -(t / 90) * view.mpp;
+        fctx.lineWidth = 2.2 * view.mpp; fctx.strokeStyle = 'rgba(255, 214, 205, 0.85)'; path(); fctx.stroke();
+        fctx.setLineDash([]); fctx.lineDashOffset = 0;
+      });
       // Alertas com pulso de 150 m
       if (ui.alert.checked) alerts.forEach((a, i) => {
         const k = reduce ? 0.5 : ((t / 1600 + i * 0.5) % 1);
@@ -357,8 +549,9 @@
   function placeBuses() {
     const failed = ui.fail.checked;
     busLayer.hidden = failed;
-    if (failed) { pop.hidden = true; return; }
-    buses.forEach((b) => {
+    // Na falha do BFF somem só os ônibus: o pop-up de uma estação ou câmera continua
+    if (failed && selected && !selected.kind) { selected = null; follow = false; pop.hidden = true; }
+    if (!failed) buses.forEach((b) => {
       const [sx, sy] = worldToScreen(b.x, b.y);
       b.el.style.transform = `translate(${sx}px, ${sy}px)`;
       b.el.querySelector('.gdn-bus-dir').style.transform = `rotate(${b.ang + (b.dir < 0 ? Math.PI : 0)}rad)`;
@@ -371,6 +564,8 @@
     if (!selected) { pop.hidden = true; return; }
     const b = selected;
     pop.hidden = false;
+    if (b.kind === 'station') { pop.innerHTML = stationPop(b); pop.querySelector('[data-close]').onclick = closePop; return; }
+    if (b.kind === 'cam') { pop.innerHTML = camPop(b); pop.querySelector('[data-close]').onclick = closePop; return; }
     pop.innerHTML = `
       <div class="d-flex justify-content-between align-items-start gap-2">
         <div><div class="gdn-pop-eyebrow">Ônibus fictício ${b.id}</div><b>${b.r.name}</b></div>
@@ -383,9 +578,10 @@
         <dt>Último ciclo</dt><dd>${cycleClock}</dd>
       </dl>
       <button type="button" class="btn btn-sm gdn-follow" data-follow aria-pressed="${follow}">${follow ? '<i class="bi bi-pin-angle-fill"></i> Seguindo' : '<i class="bi bi-crosshair"></i> Seguir este ônibus'}</button>`;
-    pop.querySelector('[data-close]').onclick = () => { selected = null; follow = false; renderPop(); };
+    pop.querySelector('[data-close]').onclick = closePop;
     pop.querySelector('[data-follow]').onclick = () => { follow = !follow; renderPop(); };
   }
+  function closePop() { selected = null; follow = false; renderPop(); }
 
   let lastT = 0;
   function frame(t) {
@@ -399,12 +595,13 @@
         b.d += b.dir * (b.speed / 3.6) * SPEEDUP * dt;
         if (b.d > L) { b.d = L; b.dir = -1; } else if (b.d < 0) { b.d = 0; b.dir = 1; }
       });
-      if (t - lastCycle > CYCLE) { lastCycle = t; cycle(); }
+      if (t - lastCycle > CYCLE) { lastCycle = t; cycle(); nbSnap(false); }
       ui.cycle.style.width = `${Math.min(1, (t - lastCycle) / CYCLE) * 100}%`;
     }
     buses.forEach((b) => { const q = along(b.r, b.d); b.x = q.x; b.y = q.y; b.ang = q.ang; });
     if (follow && selected) { view.x = selected.x; view.y = selected.y; drawBase(); }
     drawFx(t);
+    placePois();
     placeBuses();
     requestAnimationFrame(frame);
   }
@@ -416,7 +613,7 @@
   document.getElementById('gdn-recenter')?.addEventListener('click', () => { view.x = 0; view.y = 300; view.mpp = W < 600 ? 13 : 9; follow = false; drawBase(); });
   let drag = null;
   wrap.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.gdn-bus, .gdn-pop, .gdn-tools')) return;
+    if (e.target.closest('.gdn-bus, .gdn-station, .gdn-cam, .gdn-pop, .gdn-tools')) return;
     drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
     wrap.setPointerCapture(e.pointerId);
     wrap.classList.add('is-dragging');
@@ -432,7 +629,7 @@
   wrap.addEventListener('pointerup', endDrag);
   wrap.addEventListener('pointercancel', endDrag);
   wrap.addEventListener('dblclick', () => zoomBy(0.6));
-  wrap.addEventListener('click', (e) => { if (!e.target.closest('.gdn-bus, .gdn-pop, .gdn-tools')) { selected = null; renderPop(); } });
+  wrap.addEventListener('click', (e) => { if (!e.target.closest('.gdn-bus, .gdn-station, .gdn-cam, .gdn-pop, .gdn-tools')) { selected = null; renderPop(); } });
 
   /* ---------------- Controles de camadas ---------------- */
   const syncRain = () => {
@@ -443,6 +640,9 @@
   ui.rain.addEventListener('input', () => { syncRain(); cycle(); });
   [ui.alert, ui.jam].forEach((c) => c.addEventListener('change', cycle));
   ui.roads.addEventListener('change', drawBase);
+  [ui.bike, ui.cam].forEach((c) => c?.addEventListener('change', () => {
+    if (selected && ((selected.kind === 'station' && !ui.bike.checked) || (selected.kind === 'cam' && !ui.cam.checked))) closePop();
+  }));
   ui.fail.addEventListener('change', () => {
     document.getElementById('gdn-fail-note').hidden = !ui.fail.checked;
     wrap.classList.toggle('is-failed', ui.fail.checked);
@@ -469,6 +669,7 @@
     }
     if (MOBNIT_URL) status.innerHTML += ' · posições da MobNit';
     makeRoutes();
+    makePois();
     buses.forEach((b) => { const q = along(b.r, b.d); b.x = q.x; b.y = q.y; });
     cycle();
     drawBase();

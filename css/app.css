@@ -831,12 +831,34 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 .lm-stage { position: absolute; inset: 0 0 34px; perspective: 1200px; }
 .lm-stack { position: absolute; left: 50%; top: calc(50% + var(--gap) * 2.1); width: var(--size); height: var(--size); margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2); transform-style: preserve-3d; transform: rotateX(58deg) rotateZ(-42deg); }
 .lm-layer { position: absolute; inset: 0; border-radius: 12px; background: rgba(14, 27, 42, 0.8); border: 1px solid rgba(159, 217, 214, 0.22); transform: translateZ(calc(var(--i) * var(--gap)));
-  transition: opacity 0.35s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+  transform-style: preserve-3d; transition: background 0.35s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
 .lm-layer svg { width: 100%; height: 100%; display: block; }
-.lm.has-focus .lm-layer { opacity: 0.22; }
-.lm.has-focus .lm-layer.is-on { opacity: 1; border-color: var(--lc); box-shadow: 0 0 0 1px var(--lc), 0 0 34px color-mix(in srgb, var(--lc) 45%, transparent); }
-.lm-bus { fill: var(--s); stroke: #f7f7f2; stroke-width: 1.5; transition: fill 0.4s ease; }
-.lm:is([data-step="0"], [data-step="1"], [data-step="2"]) .lm-bus { fill: #8796a5; }
+/* Apagar uma camada mexe só nos filhos: opacidade no plano achataria os ícones e prédios em pé */
+.lm.has-focus .lm-layer:not(.is-on) { background: rgba(14, 27, 42, 0.4); border-color: rgba(159, 217, 214, 0.08); }
+.lm.has-focus .lm-layer:not(.is-on) > svg, .lm.has-focus .lm-layer:not(.is-on) .lm-pin, .lm.has-focus .lm-layer:not(.is-on) .lm-bld i { opacity: 0.18; }
+.lm.has-focus .lm-layer.is-on { border-color: var(--lc); box-shadow: 0 0 0 1px var(--lc), 0 0 34px color-mix(in srgb, var(--lc) 45%, transparent); }
+.lm-layer > svg { transition: opacity 0.35s ease; }
+/* Ícones em pé sobre cada plano, sempre de frente (a rotação desfaz a do empilhamento) */
+.lm-pin { position: absolute; width: 15px; height: 15px; margin: -15px 0 0 -7.5px; display: grid; place-items: center; border-radius: 4px; font-size: 9px; line-height: 1;
+  color: #fff; background: var(--pc, #00a6a6); box-shadow: 0 0 0 1.2px rgba(247, 247, 242, 0.9), 0 3px 6px rgba(0, 0, 0, 0.5);
+  transform-origin: 50% 100%; transform: translateZ(2px) rotateZ(42deg) rotateX(-58deg); transition: opacity 0.35s ease, background 0.4s ease; }
+.lm-pin i { display: block; }
+.lm-pin.is-bus { border-radius: 50%; background: var(--s); color: #071019; }
+.lm:is([data-step="0"], [data-step="1"], [data-step="2"]) .lm-pin.is-bus { background: #8796a5; }
+.lm-pin.is-alert { --pc: #e8955a; color: #3a1a08; }
+.lm-pin.is-jam { --pc: #d64545; }
+.lm-pin.is-rain { --pc: #5b8fd6; border-radius: 50%; }
+.lm-pin.is-bike { --pc: #7a3fd1; }
+.lm-pin.is-bike.is-full { --pc: #fff; color: #7a3fd1; box-shadow: 0 0 0 1.4px #7a3fd1, 0 3px 6px rgba(0, 0, 0, 0.5); }
+.lm-pin.is-cam { --pc: #1b2733; color: #f7f7f2; }
+.lm-pin.is-stop { --pc: #9fd9d6; color: #0e1b2a; width: 13px; height: 13px; margin: -13px 0 0 -6.5px; font-size: 8px; border-radius: 50%; }
+/* Edificações: caixas de verdade, com topo e duas faces, que crescem quando as camadas se afastam */
+.lm-bld { position: absolute; transform-style: preserve-3d; --h: calc(var(--gap) * var(--k)); }
+.lm-bld i { position: absolute; display: block; transition: opacity 0.35s ease; }
+.lm-bld .t { inset: 0; transform: translateZ(var(--h)); background: #dbe3ea; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6); }
+.lm-bld .f { left: 0; top: 100%; width: 100%; height: var(--h); transform-origin: 50% 0; transform: rotateX(90deg); background: #8e9dac; }
+.lm-bld .l { top: 0; right: 100%; width: var(--h); height: 100%; transform-origin: 100% 50%; transform: rotateY(90deg); background: #64768a; }
+.lm-layer.is-on .lm-bld .t { background: #eef3f6; }
 .lm-caption { position: absolute; left: 14px; right: 14px; bottom: 10px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--steel-300); }
 .lm-caption b { color: var(--paper); font-weight: 600; }
 .lm-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
@@ -905,3 +927,58 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 @keyframes mf-dot-v { 0% { top: 0; opacity: 1; } 24% { top: 100%; opacity: 1; } 25%, 100% { top: 100%; opacity: 0; } }
 .mf-l:has(em) { min-width: 60px; }
 .mf.is-vertical .mf-l:has(em) { min-width: 0; }
+
+/* ---------- Mini Gêmeo: estações da NitBike e câmeras ---------- */
+.gdn-poi { position: absolute; inset: 0; pointer-events: none; }
+.gdn-station, .gdn-cam { position: absolute; left: 0; top: 0; padding: 0; display: grid; place-items: center; pointer-events: auto; }
+.gdn-station { width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 6px; background: #7a3fd1; color: #fff; border: 2px solid #fff; font-size: 1rem;
+  box-shadow: 0 0 0 3px rgba(122, 63, 209, 0.35), 0 4px 10px rgba(0, 0, 0, 0.45); }
+.gdn-station.is-full { background: #fff; color: #7a3fd1; border-color: #7a3fd1; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28), 0 4px 10px rgba(0, 0, 0, 0.45); }
+.gdn-station.is-empty { opacity: 0.6; }
+.gdn-cam { width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 6px; background: #1b2733; color: #f7f7f2; border: 1.5px solid rgba(247, 247, 242, 0.8); font-size: 0.72rem; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45); }
+.gdn-station:focus-visible, .gdn-cam:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.gdn-st-delta { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); padding: 1px 6px; border-radius: 999px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; color: #071019; white-space: nowrap; opacity: 0; pointer-events: none; }
+.gdn-st-delta.is-out { background: #ff9e94; }
+.gdn-st-delta.is-in { background: #7ee0a1; }
+.gdn-st-delta.go { animation: st-delta 1.7s ease-out; }
+@keyframes st-delta { 0% { opacity: 0; transform: translate(-50%, 4px); } 15% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -14px); } }
+.gdn-legend.is-poi b { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 4px; font-size: 0.62rem; font-weight: 400; }
+.lg-st { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: #7a3fd1; color: #fff; border: 1.5px solid #fff; font-size: 0.7rem; }
+.lg-st.is-full { background: #fff; color: #7a3fd1; border-color: #7a3fd1; }
+.lg-cam { background: #1b2733; color: #f7f7f2; border: 1px solid rgba(247, 247, 242, 0.8); }
+.gdn-legend.is-poi .lg-st { width: 16px; height: 16px; }
+.gdn-pop-table { width: 100%; font-family: var(--font-mono); font-size: 0.72rem; border-collapse: collapse; }
+.gdn-pop-table th { color: var(--steel-300); font-weight: 400; text-align: right; padding: 2px 4px; }
+.gdn-pop-table td { text-align: right; padding: 2px 4px; border-top: 1px solid rgba(169, 188, 205, 0.14); }
+.gdn-pop-table th:first-child, .gdn-pop-table td:first-child { text-align: left; }
+.gdn-pop-table td:nth-child(2) { color: #ff9e94; }
+.gdn-pop-table td:nth-child(3) { color: #7ee0a1; }
+
+/* ---------- NitBike: de onde saem e onde chegam as bikes ---------- */
+.nb { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px; margin-top: 28px; padding: clamp(18px, 3vw, 26px); border-radius: 18px;
+  background: linear-gradient(135deg, rgba(122, 63, 209, 0.18), rgba(14, 27, 42, 0.6) 60%); border: 1px solid rgba(155, 108, 240, 0.35); }
+.nb .app-label span { color: #c4a8ff; }
+.nb-title { font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin: 0 0 10px; }
+.nb p { color: var(--muted); font-size: 0.95rem; }
+.nb .mf { margin: 14px 0; --accent: #c4a8ff; }
+.nb-live { display: grid; gap: 12px; align-content: start; padding: 16px; border-radius: 14px; background: rgba(8, 17, 27, 0.72); border: 1px solid var(--line); }
+.nb-roll { font-family: var(--font-mono); font-size: 0.7rem; color: #c4a8ff; }
+.nb-table { width: 100%; font-family: var(--font-mono); font-size: 0.84rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.nb-table th, .nb-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+.nb-table th:first-child { text-align: left; font-weight: 400; }
+.nb-table thead th { color: var(--muted); font-weight: 400; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.nb-table .nb-o, .nb-table tfoot td:nth-child(2) { color: #ff9e94; }
+.nb-table .nb-i, .nb-table tfoot td:nth-child(3) { color: #7ee0a1; }
+.nb-table tfoot th, .nb-table tfoot td { border-bottom: 0; font-weight: 600; }
+.nb-table tbody tr.is-new { animation: nb-new 1.4s ease-out; }
+@keyframes nb-new { from { background: rgba(155, 108, 240, 0.4); } to { background: transparent; } }
+.nb-top { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.nb-top ol { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.8rem; }
+.nb-top li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; }
+.nb-top li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nb-top li b { font-family: var(--font-mono); font-weight: 600; }
+.nb-top li i { grid-column: 1 / -1; height: 4px; border-radius: 2px; transition: width 0.6s ease; }
+.nb-top div:first-child li i { background: #ff9e94; }
+.nb-top div:last-child li i { background: #7ee0a1; }
+@media (max-width: 991.98px) { .nb { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .nb-table tbody tr.is-new { animation: none; } }

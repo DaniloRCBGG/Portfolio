@@ -99,6 +99,7 @@ window.PORTFOLIO = {
   ],
 
   // Exemplos reais: em que projeto a habilidade apareceu e o que eu fiz com ela.
+  // Um terceiro item opcional é o id do bloco exato da página para onde o exemplo leva.
   examples: {
     'React': [['gemeo', 'Interface do mapa 3D: camadas, pop-ups próprios, símbolos, rótulos e filtros por período.'], ['inspira', 'Telas do Figma transformadas em componentes reutilizáveis e rotas.'], ['curly', 'Site público e painel da equipe do salão.']],
     'Next.js': [['curly', 'Site e sistema do salão no mesmo projeto, publicado no Netlify a cada envio para a main.']],
@@ -110,7 +111,7 @@ window.PORTFOLIO = {
     'Tailwind CSS': [['inspira', 'Estilo das páginas do site do projeto, montadas a partir das telas do Figma.']],
     'styled-components': [['gemeo', 'Todo o estilo da interface do Gêmeo: painéis, controles e pop-ups como componentes estilizados.']],
     'Supabase': [['curly', 'PostgreSQL, login com email e senha ou Google, e Storage para as fotos de antes e depois.']],
-    'APIs REST': [['gemeo', 'O BFF consome as camadas do Portal ArcGIS e a MobNit, e entrega o estado para o front.'], ['webhook', 'Serviço em FastAPI que recebe ocorrências em JSON.']],
+    'APIs REST': [['gemeo', 'O BFF consome as camadas do Portal ArcGIS e a MobNit, e entrega o estado para o front.'], ['gemeo', 'API da NitBike consultada a cada 30 s: endereço de cada estação e quantas bikes ela tem.', 'gemeo-nitbike'], ['webhook', 'Serviço em FastAPI que recebe ocorrências em JSON.']],
     'Server-Sent Events': [['gemeo', 'Um evento por ciclo para todos os navegadores conectados, com o Nginx ajustado para não segurar o stream.']],
     'Google OAuth': [['curly', 'Clientes entram com a conta Google, sem criar senha.']],
     'Docker': [['gemeo', 'Front, BFF e Nginx em contêineres, iguais em desenvolvimento e produção.'], ['n8n', 'n8n, PostgreSQL e Redis com healthchecks e reinício automático.']],
@@ -138,7 +139,7 @@ window.PORTFOLIO = {
     'Redis': [['gemeo', 'Estado corrente em cache com TTL de 60 s e lock distribuído do ciclo.'], ['n8n', 'Serviço de apoio na stack da plataforma.']],
     'Prefect': [['prefect', 'Arquitetei o uso do Prefect na Prefeitura: subi na máquina os fluxos que já tínhamos e criei uma máquina dedicada para ele.'], ['gemeo', 'Ciclo de ETL que mantém vivas as camadas de Waze, pluviômetros e NitBike.']],
     'n8n': [['n8n', 'Instância própria montada por mim, hoje ferramenta interna do Escritório de Dados.']],
-    'ETL': [['gemeo', 'Coleta, normalização e diferencial de três vias dos alertas, com histórico arquivado por tema.'], ['webhook', 'Ingestão de ocorrências organizadas por ano, mês e dia.']],
+    'ETL': [['gemeo', 'Coleta, normalização e diferencial de três vias dos alertas, com histórico arquivado por tema.'], ['gemeo', 'NitBike: snapshots de 30 s viram saídas e entradas por estação, somadas a cada minuto numa janela dos últimos 5 min.', 'gemeo-nitbike'], ['webhook', 'Ingestão de ocorrências organizadas por ano, mês e dia.']],
     'Microsoft Fabric': [['webhook', 'Destino dos dados da prova de conceito de ingestão.']],
     'OneLake': [['webhook', 'Arquivos brutos organizados por ano, mês e dia.']],
     'ArcGIS Maps SDK for JavaScript': [['gemeo', 'SceneView 3D com camadas hospedadas e em memória, e renderer por estado do ônibus.']],
