@@ -23,7 +23,9 @@ A `main` segue reta; cada parte é um ramo colorido que sai para cima ou para ba
 | `js/timeline.js` | Linha do tempo em grafo de commits e tour |
 | `js/journey.js` | Trajetória em mapa de jogo, conduzida pela rolagem |
 | `js/gemeo.js` | Mini Gêmeo: malha viária, ônibus simulados e camadas |
-| `js/curly.js` | Antes e depois e agendamento do salão |
+| `js/curly.js` | Antes e depois do salão (bonecas de pano ou fotos) |
+| `js/salao.js` | Site da cliente e painel da equipe do salão numa demonstração só: agendamento com sinal, agenda, estoque, consumo por serviço e valores |
+| `js/natureza.js` | Fundo do salão: gramado com brisa que reage ao cursor e ramos floridos nas laterais |
 | `js/n8n.js` | Fluxo do n8n como camada de transporte |
 | `js/skills.js` | Habilidades na prática e matriz habilidades × projetos |
 | `js/projects.js` | Partes técnicas ("Por dentro") e janelas de detalhe |

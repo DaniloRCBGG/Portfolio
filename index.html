@@ -9,7 +9,7 @@
 <script>(function () { var t = null; try { t = localStorage.getItem('tema'); } catch (e) {} document.documentElement.setAttribute('data-bs-theme', t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap">
 <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css">
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
@@ -331,18 +331,21 @@
     </div>
   </section>
   <section class="project app-curly" id="curly" aria-labelledby="t-curly">
-    <div class="container container-x">
+    <div class="cs-nature" aria-hidden="true"><canvas class="cs-grass"></canvas></div>
+    <div class="cs-flora is-left" aria-hidden="true"></div>
+    <div class="cs-flora is-right" aria-hidden="true"></div>
+    <div class="container container-x cs-inner">
       <div class="project-head">
         <img class="curly-logo" src="img/brand/carol-rios-logo.svg" alt="Carol Rios Curly Studio" width="434" height="93">
         <div class="d-flex flex-wrap gap-2"><span class="curly-badge">Projeto full stack</span><span class="curly-badge is-line">desde set/2026</span><span class="curly-badge is-green">Em testes com a cliente</span></div>
         <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
           <h2 id="t-curly" class="visually-hidden">Carol Rios Curly Studio</h2>
-          <p class="curly-lead mb-0">Site e sistema do salão especializado em cabelos cacheados: a cliente vê o antes e depois, entra com o Google, agenda e garante o horário pagando o sinal.</p>
+          <p class="curly-lead mb-0"><span class="cs-motto">seus cachos, do seu jeito.</span> O site do salão mostra os resultados e agenda o horário com sinal por Pix; por trás, é o sistema da equipe, com agenda, clientes, serviços e um estoque que baixa sozinho a cada atendimento.</p>
           <a class="btn curly-btn" href="https://curlystudio.netlify.app/" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Ver versão de testes</a>
         </div>
       </div>
       <div class="row g-4 align-items-stretch">
-        <div class="col-lg-7">
+        <div class="col-lg-6">
           <div class="app-label is-curly"><span>Antes e depois</span> arraste a linha</div>
           <div class="ba" id="ba">
             <div class="ba-before"><canvas></canvas><span class="ba-tag">Antes</span></div>
@@ -357,64 +360,81 @@
           </div>
           <p class="curly-note mt-2 mb-0" id="ba-note"></p>
         </div>
-        <div class="col-lg-5">
-          <div class="app-label is-curly"><span>Agendamento</span> do login ao estoque</div>
-          <div class="bk">
-            <div class="bk-state-row"><span>Estado</span><code id="bk-state" data-state="livre">livre</code><span class="ms-auto bk-clock" id="bk-clock">--:--</span></div>
-            <div class="bk-step"><button class="bk-step-head" type="button" aria-expanded="true"><span class="n">1</span>Entrar com Google</button>
-              <div class="bk-step-body">
-                <button class="btn curly-google" id="bk-google" type="button"><i class="bi bi-google" aria-hidden="true"></i> Entrar com Google</button>
-                <div class="bk-user" id="bk-user" hidden></div>
-                <p class="curly-note mb-0">Simulação: nenhum dado sai desta página.</p>
-              </div></div>
-            <div class="bk-step"><button class="bk-step-head" type="button" aria-expanded="false"><span class="n">2</span>Endereço pelo CEP</button>
-              <div class="bk-step-body">
-                <form id="cep-form" class="d-flex gap-2" novalidate><label class="visually-hidden" for="cep-input">CEP</label><input class="form-control" id="cep-input" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9"><button class="btn curly-btn" type="submit">Buscar</button></form>
-                <div class="curly-note mt-2" id="cep-out" aria-live="polite">O endereço aparece aqui.</div>
-                <button class="btn curly-btn btn-sm mt-2" id="cep-next" type="button" disabled>Continuar</button>
-              </div></div>
-            <div class="bk-step"><button class="bk-step-head" type="button" aria-expanded="false"><span class="n">3</span>Tamanho e horário</button>
-              <div class="bk-step-body">
-                <div class="btn-group mb-2" role="group" aria-label="Tamanho do cabelo" id="bk-sizes">
-                  <input type="radio" class="btn-check" name="bk-size" id="bk-p" value="P" autocomplete="off"><label class="btn curly-chip" for="bk-p">P</label>
-                  <input type="radio" class="btn-check" name="bk-size" id="bk-m" value="M" autocomplete="off"><label class="btn curly-chip" for="bk-m">M</label>
-                  <input type="radio" class="btn-check" name="bk-size" id="bk-g" value="G" autocomplete="off"><label class="btn curly-chip" for="bk-g">G</label>
-                  <input type="radio" class="btn-check" name="bk-size" id="bk-gg" value="GG" autocomplete="off"><label class="btn curly-chip" for="bk-gg">GG</label>
-                </div>
-                <div class="d-flex flex-wrap gap-2 mb-2" id="bk-slots"><button class="btn curly-chip btn-sm" type="button" data-slot="09:00" aria-pressed="false">09:00</button><button class="btn curly-chip btn-sm" type="button" data-slot="10:30" aria-pressed="false">10:30</button><button class="btn curly-chip btn-sm" type="button" data-slot="14:00" aria-pressed="false">14:00</button><button class="btn curly-chip btn-sm" type="button" data-slot="16:30" aria-pressed="false">16:30</button></div>
-                <button class="btn curly-btn" id="bk-reserve" type="button" disabled><i class="bi bi-calendar-check" aria-hidden="true"></i> Reservar horário</button>
-              </div></div>
-            <div class="bk-step"><button class="bk-step-head" type="button" aria-expanded="false"><span class="n">4</span>Sinal por Pix</button>
-              <div class="bk-step-body">
-                <div class="d-flex gap-3 align-items-center"><div class="bk-qr" aria-hidden="true"></div><p class="curly-note mb-0">O horário fica reservado por 30 min enquanto o sinal não chega. QR ilustrativo; relógio acelerado (1 s = 1 min).</p></div>
-                <button class="btn curly-btn mt-2" id="bk-confirm" type="button" disabled><i class="bi bi-whatsapp" aria-hidden="true"></i> Equipe confirma o sinal</button>
-              </div></div>
-            <div class="bk-step"><button class="bk-step-head" type="button" aria-expanded="false"><span class="n">5</span>Atendimento e estoque</button>
-              <div class="bk-step-body">
-                <button class="btn curly-btn" id="bk-done" type="button"><i class="bi bi-check2-circle" aria-hidden="true"></i> Concluir atendimento</button>
-                <p class="curly-note mt-2 mb-0">Ao concluir, um gatilho no banco dá baixa nos produtos que o serviço consome naquele tamanho de cabelo.</p>
-              </div></div>
-            <ul class="event-log bk-log" id="bk-log" aria-live="polite"></ul>
-            <button class="btn btn-sm curly-link" id="bk-reset" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Recomeçar</button>
+        <div class="col-lg-6">
+          <div class="cs-intro">
+            <h3 class="cs-h">um site que também é sistema</h3>
+            <ul class="cs-points">
+              <li><i class="bi bi-flower1" aria-hidden="true"></i><div><b>Para a cliente</b><span>Escolhe serviço e tamanho do cabelo (o valor muda com o tamanho), profissional, dia e horário, entra com o Google e garante o horário com o sinal por Pix.</span></div></li>
+              <li><i class="bi bi-calendar-heart" aria-hidden="true"></i><div><b>Para a equipe</b><span>Agenda do dia, confirmação do sinal, cadastro no balcão, serviços e valores, e o estoque com o consumo de cada serviço, tudo configurável no painel.</span></div></li>
+              <li><i class="bi bi-database-lock" aria-hidden="true"></i><div><b>No banco</b><span>As regras moram no Supabase: quem vê o quê, reservas que expiram e a baixa do estoque quando o atendimento é concluído.</span></div></li>
+            </ul>
+            <p class="curly-note mb-0">Experimente abaixo: reserve como cliente e depois confirme, conclua e veja o estoque mudar no painel da equipe.</p>
           </div>
         </div>
       </div>
-      <div class="row g-4 mt-1">
-        <div class="col-lg-4 reveal"><h3 class="h5">Para que serve</h3><p class="mb-0">No salão, um horário só fica garantido depois do sinal. O sistema leva essa regra para o site e tira da dona o trabalho de controlar agenda, sinal e estoque na mão.</p></div>
-        <div class="col-lg-4 reveal"><h3 class="h5">O que a cliente faz</h3><p class="mb-0">Vê os resultados no antes e depois, entra com a conta Google, preenche o endereço pelo CEP, escolhe serviço, tamanho e horário e paga o sinal por Pix.</p></div>
-        <div class="col-lg-4 reveal"><h3 class="h5">Como eu fiz</h3><ul class="contrib"><li>Site e painel da equipe em Next.js e TypeScript, sobre o brandbook.</li><li>Galeria de antes e depois com fotos no Supabase Storage, em revisão com a cliente.</li><li>Agendamento, login, CEP e Pix de ponta a ponta. Desenvolvido com apoio do Claude Code.</li></ul></div>
+
+      <div class="app-label is-curly mt-5"><span>Site e sistema</span> a mesma demonstração nas duas pontas · dados fictícios</div>
+      <div class="cs-app" id="cs-app">
+        <div class="cs-bar">
+          <span class="cs-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="cs-url" id="cs-url">curlystudio.netlify.app/agendar</span>
+          <div class="cs-switch" role="tablist" aria-label="Escolha a visão">
+            <button type="button" role="tab" aria-selected="true" data-view="site" aria-controls="cs-view"><i class="bi bi-phone" aria-hidden="true"></i> Site da cliente</button>
+            <button type="button" role="tab" aria-selected="false" data-view="equipe" aria-controls="cs-view"><i class="bi bi-person-badge" aria-hidden="true"></i> Painel da equipe <span class="cs-badge" id="cs-badge-top" hidden></span></button>
+          </div>
+        </div>
+        <div class="cs-view" id="cs-view" role="tabpanel"></div>
+      </div>
+      <p class="visually-hidden" id="cs-status" role="status" aria-live="polite"></p>
+      <div class="row g-3 mt-1">
+        <div class="col-lg-7"><div class="cs-machine" id="cs-machine"></div></div>
+        <div class="col-lg-5"><div class="cs-logbox"><span class="eyebrow">Registro do banco</span><ul class="cs-log" id="cs-log"></ul></div></div>
+      </div>
+
+      <div class="row g-4 mt-2">
+        <div class="col-lg-4 reveal"><h3 class="h5">Para que serve</h3><p class="mb-0">No salão, um horário só fica garantido depois do sinal. O site leva essa regra para a internet e tira da Carol o trabalho de controlar agenda, sinal e estoque na mão.</p></div>
+        <div class="col-lg-4 reveal"><h3 class="h5">A equipe no painel</h3><p class="mb-0">Confere o Pix e confirma o sinal, conclui o atendimento, cadastra produtos medidos em ml, g ou unidades, registra o que chegou, saiu ou foi contado, e diz quanto cada serviço gasta em cada tamanho de cabelo.</p></div>
+        <div class="col-lg-4 reveal"><h3 class="h5">Como eu fiz</h3><ul class="contrib"><li>Site e painel em Next.js, TypeScript e Tailwind, sobre o brandbook.</li><li>Regras no banco: RLS, funções, gatilhos e testes em SQL.</li><li>Agendamento, login, CEP, Pix e estoque de ponta a ponta. Desenvolvido com apoio do Claude Code.</li></ul></div>
       </div>
 <div class="proj-skills" data-project="curly"></div>
       <details class="inside" id="curly-dentro">
-        <summary><span class="inside-kicker"><i class="bi bi-cpu" aria-hidden="true"></i> Por dentro</span><span class="inside-title">Banco, login, pagamento e deploy</span><span class="inside-hint">abrir a parte técnica</span></summary>
+        <summary><span class="inside-kicker"><i class="bi bi-cpu" aria-hidden="true"></i> Por dentro</span><span class="inside-title">Banco, regras, pagamento e testes</span><span class="inside-hint">abrir a parte técnica</span></summary>
         <div class="inside-body">
           <div class="row g-3">
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-window-stack" aria-hidden="true"></i><b>Next.js + TypeScript</b><span>Site e painel no mesmo projeto, a partir do brandbook da marca.</span></div></div>
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-database" aria-hidden="true"></i><b>Supabase</b><span>PostgreSQL, Auth com email/senha ou Google, e Storage das fotos de antes e depois.</span></div></div>
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-shield-lock" aria-hidden="true"></i><b>Regras no banco</b><span>RLS por perfil, reservas que expiram e baixa de estoque por gatilho.</span></div></div>
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-qr-code" aria-hidden="true"></i><b>Sinal por Pix</b><span>QR Code estático e copia e cola, com o Asaas pronto como modo automático.</span></div></div>
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-cloud-upload" aria-hidden="true"></i><b>Deploy no Netlify</b><span>Cada envio para a branch main publica o site.</span></div></div>
-            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-archive" aria-hidden="true"></i><b>Backup</b><span>pg_dump criptografado duas vezes por semana no GitHub Actions, guardado por 90 dias.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-window-stack" aria-hidden="true"></i><b>Next.js 16 + TypeScript</b><span>Site e painel no mesmo projeto, com Tailwind 4, a partir do brandbook e do guia de estilo da marca.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-database" aria-hidden="true"></i><b>Supabase</b><span>PostgreSQL, login com e-mail e senha ou Google, e Storage das fotos de antes e depois.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-shield-lock" aria-hidden="true"></i><b>Regras no banco</b><span>RLS por perfil (cliente, funcionária, gerente). A reserva confere expediente, grade de 30 min e limite de reservas no próprio banco.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-qr-code" aria-hidden="true"></i><b>Sinal por Pix</b><span>Pix na chave da Carol, com "Já paguei" e conferência da equipe; o Asaas fica pronto como confirmação automática.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-cloud-upload" aria-hidden="true"></i><b>Netlify</b><span>Cada envio para a main publica o site; uma função agendada libera às 3h as reservas sem sinal.</span></div></div>
+            <div class="col-md-6 col-lg-4"><div class="curly-card"><i class="bi bi-archive" aria-hidden="true"></i><b>Backup</b><span>Banco inteiro criptografado, domingo e quarta, no GitHub Actions, guardado por 90 dias.</span></div></div>
+          </div>
+          <div class="row g-4 mt-1">
+            <div class="col-lg-7">
+              <h4 class="h5">Como as tabelas se ligam</h4>
+              <div class="cs-erd">
+                <div class="cs-erd-t"><b>clientes</b><span>nome, telefone, CPF</span></div>
+                <div class="cs-erd-t is-core"><b>agendamentos</b><span>início, tamanho, status</span></div>
+                <div class="cs-erd-t"><b>sinais</b><span>valor, forma, status</span></div>
+                <div class="cs-erd-t"><b>servicos</b><span>preço P, M, G, GG e sinal</span></div>
+                <div class="cs-erd-t is-core"><b>consumo_servico</b><span>serviço × produto × tamanho</span></div>
+                <div class="cs-erd-t"><b>produtos</b><span>ml, g ou un; embalagem; mínimo</span></div>
+                <div class="cs-erd-t"><b>movimentacoes_estoque</b><span>entrada, saída, ajuste; agendamento</span></div>
+                <div class="cs-erd-t"><b>fornecedores</b><span>WhatsApp, observação</span></div>
+                <div class="cs-erd-t"><b>funcionarias</b><span>cargo, quem atende o quê</span></div>
+              </div>
+              <ul class="infra-list mt-3">
+                <li><i class="bi bi-lightning-charge" aria-hidden="true"></i><span><b>Gatilho de baixa:</b> quando o agendamento vira <code>concluido</code>, o banco lê <code>consumo_servico</code> no tamanho do cabelo e grava as saídas em <code>movimentacoes_estoque</code>, ligadas ao atendimento.</span></li>
+                <li><i class="bi bi-lock" aria-hidden="true"></i><span><b>Saldo protegido:</b> o estoque só muda pela função <code>movimentar_estoque</code>, para o histórico sempre bater com o saldo.</span></li>
+              </ul>
+            </div>
+            <div class="col-lg-5">
+              <h4 class="h5">Testes</h4>
+              <ul class="infra-list">
+                <li><i class="bi bi-check2-square" aria-hidden="true"></i><span><b>Vitest:</b> horários livres, CPF, Pix estático, contatos (vCard) e conversões do estoque.</span></li>
+                <li><i class="bi bi-database-check" aria-hidden="true"></i><span><b>No banco, em SQL:</b> agendamento, estoque, consumo por serviço, permissões, login com Google, Pix manual e segurança.</span></li>
+                <li><i class="bi bi-people" aria-hidden="true"></i><span><b>Fichas do balcão:</b> só se juntam à conta do site com prova (e-mail confirmado, ou CPF junto com telefone ou e-mail); o resto vira sugestão para a equipe conferir.</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </details>
@@ -844,6 +864,8 @@
 <script src="js/niteroi-geo.js"></script>
 <script src="js/gemeo.js"></script>
 <script src="js/curly.js"></script>
+<script src="js/salao.js"></script>
+<script src="js/natureza.js"></script>
 <script src="js/n8n.js"></script>
 <script src="js/prefect.js"></script>
 <script src="js/projects.js"></script>
