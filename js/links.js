@@ -75,7 +75,7 @@
 
   // De onde a pessoa saiu, para o botão de volta
   const origin = (a) => {
-    let box = a.closest('.step-card, .nb, .mini-card, .jr-card, .proj-skills, #mapa, .project, section[id]');
+    let box = a.closest('.step-card, .pf-card, .nb, .mini-card, .jr-card, .proj-skills, #mapa, .project, section[id]');
     if (!box) return null;
     if (box.matches('.proj-skills.is-compact')) box = box.closest('.mini-card') || box;
     const proj = a.closest('.project');
@@ -83,6 +83,7 @@
     let label = name || box.querySelector('h2, h3')?.textContent.trim() || 'onde estava';
     if (box.matches('.step-card')) label = `${name} · etapa ${box.querySelector('.step-no').textContent}`;
     else if (box.matches('.nb')) label = `${name} · NitBike`;
+    else if (box.matches('.pf-card')) label = `${name} · ${box.dataset.where}`;
     else if (box.matches('.mini-card')) label = box.querySelector('h3').textContent.trim();
     else if (box.matches('.jr-card')) label = 'Trajetória';
     else if (box.id === 'mapa') label = 'Habilidades × projetos';

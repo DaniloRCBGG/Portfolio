@@ -18,9 +18,11 @@
     if (own) return { href: `#${anchor}`, where: own.dataset.where || '' };
     const base = proj[pid].href;
     const sec = document.querySelector(base);
-    const step = sec && (sec.closest('.project') || sec).querySelector(`.step-card[data-skills~="${P.slug(s)}"]`);
+    const step = sec && (sec.closest('.project') || sec).querySelector(`[data-skills~="${P.slug(s)}"]`);
     if (!step) return { href: base, where: '' };
-    return { href: `#${step.id}`, where: `etapa ${step.querySelector('.step-no').textContent} · ${step.querySelector('.eyebrow').textContent}` };
+    if (!step.id) step.id = `${pid}-${P.slug(step.dataset.where || 'parte')}`;
+    const no = step.querySelector('.step-no');
+    return { href: `#${step.id}`, where: no ? `etapa ${no.textContent} · ${step.querySelector('.eyebrow').textContent}` : (step.dataset.where || '') };
   };
 
   tabs.innerHTML = P.areas.map((a, i) => `<button type="button" class="lab-tab" role="tab" id="lab-tab-${a.id}" aria-controls="lab-panel" aria-selected="${i === 0}" data-area="${a.id}"><i class="bi ${a.icon}" aria-hidden="true"></i><span>${a.label}</span><small>${a.groups.reduce((n, g) => n + g.skills.length, 0)}</small></button>`).join('');

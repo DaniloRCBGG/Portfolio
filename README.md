@@ -27,6 +27,7 @@ A `main` segue reta; cada parte é um ramo colorido que sai para cima ou para ba
 | `js/n8n.js` | Fluxo do n8n como camada de transporte |
 | `js/skills.js` | Habilidades na prática e matriz habilidades × projetos |
 | `js/projects.js` | Partes técnicas ("Por dentro") e janelas de detalhe |
+| `js/prefect.js` | Prefect: fundo com luz no cursor, mapa da orquestração com execuções animadas, gráfico de execuções e queda simulada do worker |
 | `js/steps.js` | Cards de etapa: mapa em camadas do Gêmeo, nós do n8n e minifluxos |
 | `js/links.js` | Ligações projeto ↔ habilidade, rolagem suave dos links internos e botão de volta |
 | `js/niteroi-geo.js` | Limites do IBGE de Niterói e vizinhos, fundo do mapa quando a malha não carrega |
@@ -45,7 +46,7 @@ Para gerar o arquivo na sua máquina: `node tools/malha-niteroi.mjs` (Node 18 ou
 
 Os ônibus são simulados sobre as ruas reais. Não há uma API pública da MobNit acessível; se houver um feed de posições, a URL entra em `MOBNIT_URL`, no início de `js/gemeo.js`.
 
-Também aparecem no mapa, sem entrar no cruzamento, as estações da NitBike (quadrado roxo com bike branca; branco com bike roxa quando a estação está cheia, como no app da NitBike) e câmeras urbanas da NITTRANS, ambas simuladas. A NitBike segue a lógica real: a cada 30 s um snapshot compara a contagem de bikes de cada estação com a anterior (caiu = saídas, subiu = entradas); a cada minuto os snapshots viram o total de saídas e entradas, numa janela dos últimos 5 minutos. As estações ficam em `NB`, em `js/gemeo.js`.
+Também aparecem no mapa, sem entrar no cruzamento, as estações da NitBike (quadrado roxo com bike branca; branco com bike roxa quando a estação está cheia, como no app da NitBike) e câmeras urbanas da NITTRANS, ambas simuladas. A NitBike segue a lógica real: a cada 10 s um snapshot compara a contagem de bikes de cada estação com a anterior (caiu = saídas, subiu = entradas); a cada minuto os snapshots viram o total de saídas e entradas, numa janela dos últimos 5 minutos. As estações ficam em `NB`, em `js/gemeo.js`.
 
 Todos os ícones do mapa abrem um pop-up: ônibus (linha, estado e onde está), estação (endereço e bikes), alerta (tipo, tipo no Waze e onde), lentidão (onde e extensão), pluviômetro (região e chuva) e câmera (cruzamento e um clipe animado ilustrativo, porque o vídeo real vem de uma API da Prefeitura que não é pública). Os endereços usam os nomes das vias principais que o `tools/malha-niteroi.mjs` grava no arquivo da malha; sem eles, aparece o bairro aproximado.
 

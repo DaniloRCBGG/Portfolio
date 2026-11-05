@@ -1,7 +1,7 @@
 // Mini Gêmeo: a malha viária de Niterói (OpenStreetMap, a mesma do city-roads) desenhada em canvas,
 // com ônibus simulados andando sobre as ruas reais. A cada ciclo o estado de cada ônibus é recalculado
 // com a mesma regra do Gêmeo (Bus.getStatus) e os mesmos limiares. Estações da NitBike e câmeras só
-// aparecem (não entram no cruzamento); a NitBike segue a lógica real: snapshot a cada 30 s, saídas e
+// aparecem (não entram no cruzamento); a NitBike segue a lógica real: snapshot a cada 10 s, saídas e
 // entradas pela diferença de contagem, soma por minuto e janela dos últimos 5 minutos.
 (() => {
   const wrap = document.getElementById('gdn-mini');
@@ -379,8 +379,8 @@
     gauges.forEach((g2, i) => { g2.id = String(i + 1).padStart(2, '0'); g2.bairro = bairroAt([g2.x, g2.y]); mark(g2, 'gdn-gauge', 'bi-cloud-rain-fill', `Pluviômetro simulado ${g2.id}, ${g2.bairro}`); });
     const rainLabel = document.querySelector('label[for="lay-rain"]');
     if (rainLabel) rainLabel.textContent = `Chuva no pluviômetro de ${gauges[0].bairro}`;
-    // Histórico: 10 snapshots (5 minutos) antes de começar
-    for (let k = 0; k < 10; k++) nbSnap(true);
+    // Histórico: 30 snapshots de 10 s (5 minutos) antes de começar
+    for (let k = 0; k < 30; k++) nbSnap(true);
     renderNb(false);
   }
 
@@ -437,12 +437,13 @@
   // Um snapshot: a diferença de contagem diz quantas bikes saíram ou chegaram em cada estação
   function nbSnap(quiet) {
     if (!stations.length) return;
-    simT += 30000;
+    simT += 10000;
     stations.forEach((st) => {
       const prev = st.bikes;
       let next;
-      if (st.full) next = prev < st.cap ? st.cap : (rnd2() < 0.22 ? st.cap - 1 : st.cap);
-      else { const r = rnd2(); next = Math.max(0, Math.min(st.cap, prev + (r < 0.16 ? -2 : r < 0.4 ? -1 : r < 0.6 ? 0 : r < 0.84 ? 1 : 2))); }
+      // Em 10 s quase sempre nada muda; às vezes sai ou chega uma bike (raramente duas)
+      if (st.full) next = prev < st.cap ? (rnd2() < 0.6 ? st.cap : prev) : (rnd2() < 0.08 ? st.cap - 1 : st.cap);
+      else { const r = rnd2(); next = Math.max(0, Math.min(st.cap, prev + (r < 0.05 ? -2 : r < 0.2 ? -1 : r < 0.8 ? 0 : r < 0.95 ? 1 : 2))); }
       st.bikes = next;
       st.last = next - prev;
       st.acc.out += Math.max(0, prev - next);
@@ -450,8 +451,8 @@
       paintStation(st);
       if (!quiet && st.last && !reduce) flashDelta(st, st.last);
     });
-    // A cada minuto (dois snapshots) fecha o total e a janela anda: sai o minuto mais antigo, entra o novo
-    if (++snapN % 2 === 0) {
+    // A cada minuto (seis snapshots) fecha o total e a janela anda: sai o minuto mais antigo, entra o novo
+    if (++snapN % 6 === 0) {
       const t = simT - 60000;
       let out = 0, inn = 0;
       stations.forEach((st) => {
@@ -827,7 +828,8 @@
         b.d += b.dir * (b.speed / 3.6) * SPEEDUP * dt;
         if (b.d > L) { b.d = L; b.dir = -1; } else if (b.d < 0) { b.d = 0; b.dir = 1; }
       });
-      if (t - lastCycle > CYCLE) { lastCycle = t; cycle(); nbSnap(false); }
+      // Cada ciclo de 3 s vale 30 s simulados: três snapshots da NitBike, de 10 s cada
+      if (t - lastCycle > CYCLE) { lastCycle = t; cycle(); nbSnap(false); setTimeout(() => running && nbSnap(false), CYCLE / 3); setTimeout(() => running && nbSnap(false), (CYCLE * 2) / 3); }
       ui.cycle.style.width = `${Math.min(1, (t - lastCycle) / CYCLE) * 100}%`;
     }
     buses.forEach((b) => { const q = along(b.r, b.d); b.x = q.x; b.y = q.y; b.ang = q.ang; });
