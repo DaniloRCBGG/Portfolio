@@ -986,7 +986,8 @@ a.contact-card:hover { border-color: var(--accent-fill); color: var(--ink); }
 .pf-kpi::after, .pf-card::after, .pf-frente::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
   background: radial-gradient(220px circle at var(--x, 50%) var(--y, 50%), rgba(156, 195, 255, 0.85), transparent 60%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-.pf-kpi:hover::before, .pf-card:hover::before, .pf-frente:hover::before, .pf-panel:hover::before, .pf-kpi:hover::after, .pf-card:hover::after, .pf-frente:hover::after { opacity: 1; }
+.pf-kpi:hover::before, .pf-card:hover::before, .pf-frente:hover::before, .pf-panel:hover::before, .pf-kpi:hover::after, .pf-card:hover::after, .pf-frente:hover::after,
+.pf-kpi.is-lit::before, .pf-card.is-lit::before, .pf-frente.is-lit::before, .pf-panel.is-lit::before, .pf-kpi.is-lit::after, .pf-card.is-lit::after, .pf-frente.is-lit::after { opacity: 1; }
 .pf-kpi { padding: 18px; height: 100%; display: grid; gap: 6px; align-content: start; }
 .pf-kpi b { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1; color: #fff; text-shadow: 0 0 24px rgba(91, 143, 214, 0.6); }
 .pf-kpi b small { font-size: 0.42em; margin: 0 3px; color: var(--muted); font-family: var(--font-mono); }

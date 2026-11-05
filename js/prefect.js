@@ -22,12 +22,35 @@
     BW = bg.clientWidth; BH = bg.clientHeight;
     bg.width = Math.round(BW * bdpr); bg.height = Math.round(BH * bdpr);
   };
-  sec.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    const r = bg.getBoundingClientRect();
-    light.tx = e.clientX - r.left; light.ty = e.clientY - r.top; light.on = true;
-  });
-  sec.addEventListener('pointerleave', () => { light.on = false; });
+  // A luz segue o cursor e, no celular, o dedo (também enquanto ele rola a página)
+  const aim = (x, y) => { const r = bg.getBoundingClientRect(); light.tx = x - r.left; light.ty = y - r.top; light.on = true; };
+  sec.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') aim(e.clientX, e.clientY); });
+  sec.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') light.on = false; });
+  let litCard = null, unlit = 0;
+  const touch = (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    aim(t.clientX, t.clientY);
+    light.touch = true;
+    // Os cartões também acendem sob o dedo, como no hover do cursor
+    const card = document.elementFromPoint(t.clientX, t.clientY)?.closest('.pf-card, .pf-kpi, .pf-frente, .pf-panel');
+    if (card !== litCard) { litCard?.classList.remove('is-lit'); litCard = card; }
+    if (card) {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--x', `${t.clientX - r.left}px`);
+      card.style.setProperty('--y', `${t.clientY - r.top}px`);
+      card.classList.add('is-lit');
+    }
+    clearTimeout(unlit);
+  };
+  sec.addEventListener('touchstart', touch, { passive: true });
+  sec.addEventListener('touchmove', touch, { passive: true });
+  sec.addEventListener('touchend', () => {
+    // Depois que o dedo sai, a luz fica um instante onde estava e volta a passear
+    light.hold = performance.now() + 1400;
+    light.on = false;
+    unlit = setTimeout(() => { litCard?.classList.remove('is-lit'); litCard = null; light.touch = false; }, 900);
+  }, { passive: true });
   const COLORS = ['0, 166, 166', '91, 143, 214', '155, 108, 240', '159, 217, 214'];
   const newStream = () => {
     const horiz = Math.random() < 0.6;
@@ -39,15 +62,22 @@
   };
   let streams = [];
   function drawBg(t, dt) {
-    if (!light.on) { light.tx = BW * (0.5 + 0.34 * Math.sin(t / 4300)); light.ty = BH * (0.45 + 0.28 * Math.sin(t / 3100)); }
-    light.x += (light.tx - light.x) * Math.min(1, dt * 6);
-    light.y += (light.ty - light.y) * Math.min(1, dt * 6);
+    if (!light.on && !(light.hold > performance.now())) { light.tx = BW * (0.5 + 0.34 * Math.sin(t / 4300)); light.ty = BH * (0.45 + 0.28 * Math.sin(t / 3100)); }
+    const follow = light.touch ? 14 : 6;
+    light.x += (light.tx - light.x) * Math.min(1, dt * follow);
+    light.y += (light.ty - light.y) * Math.min(1, dt * follow);
     bctx.setTransform(bdpr, 0, 0, bdpr, 0, 0);
     bctx.clearRect(0, 0, BW, BH);
-    const R = Math.max(260, Math.min(BW, BH) * 0.42);
+    const R = light.touch ? Math.max(180, Math.min(BW, BH) * 0.34) : Math.max(260, Math.min(BW, BH) * 0.42);
     const g = bctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, R);
-    g.addColorStop(0, 'rgba(91, 143, 214, 0.20)'); g.addColorStop(0.45, 'rgba(0, 166, 166, 0.07)'); g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    g.addColorStop(0, `rgba(91, 143, 214, ${light.touch ? 0.38 : 0.2})`); g.addColorStop(0.45, 'rgba(0, 166, 166, 0.07)'); g.addColorStop(1, 'rgba(0, 0, 0, 0)');
     bctx.fillStyle = g; bctx.fillRect(0, 0, BW, BH);
+    // Sob o dedo, um núcleo mais claro, para a luz ficar evidente no celular
+    if (light.touch) {
+      const core = bctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, 70);
+      core.addColorStop(0, 'rgba(156, 195, 255, 0.4)'); core.addColorStop(1, 'rgba(156, 195, 255, 0)');
+      bctx.fillStyle = core; bctx.fillRect(light.x - 70, light.y - 70, 140, 140);
+    }
     // grade: os pontos acendem perto da luz (parallax leve com a rolagem)
     const oy = -((window.scrollY * 0.15) % GRID);
     const buckets = [[], [], [], [], []];

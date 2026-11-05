@@ -1,6 +1,6 @@
 // Salão: um ar de natureza, como pede o guia da marca (formas orgânicas, terra, areia e folha).
-// No fundo, um gramado que balança com ondas de brisa e se curva quando o cursor passa por perto, com
-// sementes e pétalas levadas pelo vento. Nas laterais, ramos com folhas e flores que oscilam devagar.
+// No fundo, uma textura de grãos finos que o cursor ou o dedo sopram como uma brisa, com sementes e
+// pétalas levadas pelo vento. Nas laterais, ramos com folhas e flores que oscilam devagar.
 (() => {
   const sec = document.getElementById('curly');
   if (!sec) return;
@@ -53,83 +53,129 @@
     });
   };
 
-  /* ---------------- Gramado com brisa ---------------- */
+  /* ---------------- Fundo granulado com brisa ---------------- */
+  // A seção inteira tem uma textura de grãos finos, como capim visto de perto. O cursor (ou o dedo, no
+  // celular) é a brisa: o sopro empurra e acende os grãos por onde passa, se espalha um pouco e se acalma.
   const cv = sec.querySelector('.cs-grass');
   const ctx = cv.getContext('2d');
-  let W = 0, H = 0, dpr = 1, blades = [], seeds = [];
-  const pointer = { x: -9999, y: 0, vx: 0, lastX: null, t: 0 };
-  const LAYERS = [
-    { colors: ['rgba(108, 147, 53, 0.22)', 'rgba(74, 107, 34, 0.18)'], hMin: 0.09, hMax: 0.16, gap: 5, w: 2.6 },
-    { colors: ['rgba(108, 147, 53, 0.55)', 'rgba(74, 107, 34, 0.6)', 'rgba(140, 170, 80, 0.5)'], hMin: 0.05, hMax: 0.12, gap: 4, w: 3 },
-  ];
+  let W = 0, H = 0, dpr = 1, grains = [], petals = [];
+  const CELL = 34;
+  let GW = 0, GH = 0, wx = null, wy = null, tx = null, ty = null;
   const size = () => {
     dpr = Math.min(1.5, window.devicePixelRatio || 1);
     W = cv.clientWidth; H = cv.clientHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    GW = Math.ceil(W / CELL) + 2; GH = Math.ceil(H / CELL) + 2;
+    wx = new Float32Array(GW * GH); wy = new Float32Array(GW * GH); tx = new Float32Array(GW * GH); ty = new Float32Array(GW * GH);
     const R = rng(7);
-    blades = LAYERS.map((L) => {
-      const list = [];
-      for (let x = -10; x < W + 10; x += L.gap * (0.6 + R() * 0.8)) {
-        list.push({ x, h: H * (L.hMin + R() * (L.hMax - L.hMin)) * (W < 600 ? 0.7 : 1), c: Math.floor(R() * L.colors.length), ph: R() * 6.28, k: 0.6 + R() * 0.8, bend: 0 });
+    const gap = W < 600 ? 13 : 14;
+    grains = [];
+    for (let y = gap / 2; y < H; y += gap) {
+      for (let x = gap / 2; x < W; x += gap) {
+        grains.push({ x: x + (R() - 0.5) * gap * 0.9, y: y + (R() - 0.5) * gap * 0.9, a: -1.25 + (R() - 0.5) * 1.1, len: 3 + R() * 4, dot: R() < 0.12, ph: R() * 6.28, bx: 0, by: 0 });
       }
-      return list;
-    });
+    }
     const R2 = rng(11);
-    seeds = Array.from({ length: W < 600 ? 10 : 22 }, () => ({ x: R2() * W, y: H * (0.2 + R2() * 0.7), s: 1.5 + R2() * 2.5, ph: R2() * 6.28, kind: R2() < 0.55 ? 'semente' : 'petala', rot: R2() * 6.28 }));
+    petals = Array.from({ length: W < 600 ? 9 : 16 }, () => ({ x: R2() * W, y: R2() * H, vx: 0, vy: 0, s: 1.6 + R2() * 2.4, ph: R2() * 6.28, kind: R2() < 0.5 ? 'semente' : 'petala', rot: R2() * 6.28 }));
   };
-  sec.addEventListener('pointermove', (e) => {
+  // Sopro: cada movimento do cursor ou do dedo empurra o vento das células por onde passou
+  const blows = [];
+  let last = null;
+  const blow = (x, y) => {
     const r = cv.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    if (pointer.lastX != null) pointer.vx = Math.max(-40, Math.min(40, x - pointer.lastX));
-    pointer.lastX = x; pointer.x = x; pointer.y = e.clientY - r.top; pointer.t = performance.now();
-  });
-  sec.addEventListener('pointerleave', () => { pointer.lastX = null; });
-  // Brisa: uma onda de base, rajadas que atravessam a tela de tempos em tempos e o "vento" do cursor
-  const wind = (x, t) => {
-    const base = Math.sin(x * 0.012 - t * 1.4) * 0.35 + Math.sin(x * 0.004 - t * 0.6) * 0.25;
-    const gx = ((t * 160) % (W + 900)) - 450;
-    const gust = Math.exp(-((x - gx) ** 2) / (2 * 140 * 140)) * 1.1;
-    const near = performance.now() - pointer.t < 900 ? Math.exp(-((x - pointer.x) ** 2) / (2 * 90 * 90)) * (pointer.vx / 14) * (1 - (performance.now() - pointer.t) / 900) : 0;
-    return base + gust + near;
+    const px = x - r.left, py = y - r.top;
+    if (last && performance.now() - last.t < 120) blows.push([last.x, last.y, px, py]);
+    last = { x: px, y: py, t: performance.now() };
   };
+  sec.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') blow(e.clientX, e.clientY); });
+  sec.addEventListener('touchstart', (e) => { last = null; if (e.touches[0]) blow(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+  sec.addEventListener('touchmove', (e) => { if (e.touches[0]) blow(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+  sec.addEventListener('pointerleave', () => { last = null; });
+  // Ao rolar com o dedo, a página anda e o dedo fica parado na tela: a rolagem também vira sopro
+  let lastScroll = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const d = window.scrollY - lastScroll;
+    lastScroll = window.scrollY;
+    if (last && performance.now() - last.t < 600 && Math.abs(d) < 200) blows.push([last.x, last.y + d, last.x, last.y]);
+  }, { passive: true });
+  const stepWind = (t) => {
+    // espalha um pouco o vento para os vizinhos e deixa ele se acalmar
+    for (let j = 1; j < GH - 1; j++) {
+      for (let i = 1; i < GW - 1; i++) {
+        const k = j * GW + i;
+        tx[k] = (wx[k] * 0.6 + (wx[k - 1] + wx[k + 1] + wx[k - GW] + wx[k + GW]) * 0.1) * 0.955;
+        ty[k] = (wy[k] * 0.6 + (wy[k - 1] + wy[k + 1] + wy[k - GW] + wy[k + GW]) * 0.1) * 0.955;
+      }
+    }
+    [wx, tx] = [tx, wx]; [wy, ty] = [ty, wy];
+    // os sopros desta rodada: ao longo do caminho, com força pelo tamanho do movimento
+    blows.splice(0).forEach(([x0, y0, x1, y1]) => {
+      const dx = x1 - x0, dy = y1 - y0, dist = Math.hypot(dx, dy);
+      if (dist < 0.5) return;
+      const n = Math.max(1, Math.ceil(dist / (CELL / 2)));
+      const fx = Math.max(-3, Math.min(3, dx / 9)), fy = Math.max(-3, Math.min(3, dy / 9));
+      for (let s = 0; s <= n; s++) {
+        const px = x0 + (dx * s) / n, py = y0 + (dy * s) / n;
+        const ci = Math.floor(px / CELL) + 1, cj = Math.floor(py / CELL) + 1;
+        for (let j = cj - 2; j <= cj + 2; j++) {
+          for (let i = ci - 2; i <= ci + 2; i++) {
+            if (i < 0 || j < 0 || i >= GW || j >= GH) continue;
+            const ddx = (i - 1 + 0.5) * CELL - px, ddy = (j - 1 + 0.5) * CELL - py;
+            const f = Math.exp(-(ddx * ddx + ddy * ddy) / (2 * 46 * 46)) / n;
+            wx[j * GW + i] += fx * f * 1.6; wy[j * GW + i] += fy * f * 1.6;
+          }
+        }
+      }
+    });
+  };
+  const windAt = (x, y) => {
+    const i = Math.max(0, Math.min(GW - 1, Math.floor(x / CELL) + 1)), j = Math.max(0, Math.min(GH - 1, Math.floor(y / CELL) + 1));
+    return [wx[j * GW + i], wy[j * GW + i]];
+  };
+  const BUCKETS = ['rgba(108, 147, 53, 0.15)', 'rgba(108, 147, 53, 0.36)', 'rgba(90, 128, 44, 0.55)', 'rgba(74, 107, 34, 0.78)'];
   const draw = (t) => {
+    if (!reduce) stepWind(t);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    // sementes e pétalas levadas pela brisa
-    seeds.forEach((s) => {
-      if (!reduce) { s.x += (0.35 + wind(s.x, t) * 0.9) * 1.1; s.y += Math.sin(t * 1.3 + s.ph) * 0.25; s.rot += 0.01; }
-      if (s.x > W + 20) { s.x = -20; s.y = H * (0.2 + Math.random() * 0.7); }
-      if (s.x < -30) s.x = W + 10;
+    // brisa de fundo: uma onda lenta que atravessa a seção na diagonal
+    const paths = BUCKETS.map(() => new Path2D());
+    const dots = new Path2D();
+    const band = ((t * 120) % (W + H + 600)) - 300;
+    grains.forEach((g) => {
+      const [vx, vy] = windAt(g.x, g.y);
+      const amb = reduce ? 0 : Math.sin(g.x * 0.01 + g.y * 0.006 - t * 1.2 + g.ph * 0.15) * 0.22 + Math.exp(-(((g.x + g.y * 0.6) - band) ** 2) / (2 * 120 * 120)) * 0.7;
+      const tgx = vx * 7 + amb * 3, tgy = vy * 7 + amb * 0.8;
+      g.bx += (tgx - g.bx) * 0.18; g.by += (tgy - g.by) * 0.18;
+      const m = Math.hypot(g.bx, g.by);
+      if (g.dot) { dots.moveTo(g.x + g.bx * 0.5 + 1, g.y + g.by * 0.5); dots.arc(g.x + g.bx * 0.5, g.y + g.by * 0.5, 1, 0, 6.28); return; }
+      const lx = Math.cos(g.a) * g.len + g.bx * 0.9, ly = Math.sin(g.a) * g.len + g.by * 0.9;
+      const p = paths[m < 1.2 ? 0 : m < 3 ? 1 : m < 6 ? 2 : 3];
+      p.moveTo(g.x + g.bx * 0.35, g.y + g.by * 0.35);
+      p.lineTo(g.x + g.bx * 0.35 + lx, g.y + g.by * 0.35 + ly);
+    });
+    ctx.lineCap = 'round';
+    paths.forEach((p, i) => { ctx.strokeStyle = BUCKETS[i]; ctx.lineWidth = 1.1 + i * 0.25; ctx.stroke(p); });
+    ctx.fillStyle = 'rgba(61, 28, 17, 0.14)'; ctx.fill(dots);
+    // sementes e pétalas que o vento carrega
+    petals.forEach((s) => {
+      if (!reduce) {
+        const [vx, vy] = windAt(s.x, s.y);
+        s.vx += (0.25 + vx * 2.2 - s.vx) * 0.06; s.vy += (Math.sin(t * 1.1 + s.ph) * 0.18 + vy * 2.2 - s.vy) * 0.06;
+        s.x += s.vx; s.y += s.vy; s.rot += 0.008 + Math.abs(s.vx) * 0.01;
+      }
+      if (s.x > W + 20) s.x = -20; if (s.x < -20) s.x = W + 20;
+      if (s.y > H + 20) s.y = -20; if (s.y < -20) s.y = H + 20;
       ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.rot);
       if (s.kind === 'semente') {
-        ctx.strokeStyle = 'rgba(61, 28, 17, 0.28)'; ctx.lineWidth = 0.8;
-        for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(i) * s.s * 2.2, Math.sin(i) * s.s * 2.2 - s.s); ctx.stroke(); }
-        ctx.fillStyle = 'rgba(61, 28, 17, 0.4)'; ctx.beginPath(); ctx.arc(0, 0, 1, 0, 6.28); ctx.fill();
+        ctx.strokeStyle = 'rgba(61, 28, 17, 0.3)'; ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) { ctx.moveTo(0, 0); ctx.lineTo(Math.cos(i) * s.s * 2.2, Math.sin(i) * s.s * 2.2 - s.s); }
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(61, 28, 17, 0.42)'; ctx.beginPath(); ctx.arc(0, 0, 1, 0, 6.28); ctx.fill();
       } else {
-        ctx.fillStyle = 'rgba(108, 147, 53, 0.38)'; ctx.beginPath(); ctx.ellipse(0, 0, s.s * 2, s.s, 0, 0, 6.28); ctx.fill();
+        ctx.fillStyle = 'rgba(108, 147, 53, 0.4)'; ctx.beginPath(); ctx.ellipse(0, 0, s.s * 2, s.s, 0, 0, 6.28); ctx.fill();
       }
       ctx.restore();
-    });
-    // capim: cada lâmina é uma curva que afina até a ponta
-    blades.forEach((list, li) => {
-      const L = LAYERS[li];
-      L.colors.forEach((col, ci) => {
-        ctx.fillStyle = col;
-        ctx.beginPath();
-        list.forEach((b) => {
-          if (b.c !== ci) return;
-          const target = reduce ? 0.15 : wind(b.x, t) * b.k + Math.sin(t * 2 + b.ph) * 0.08;
-          b.bend += (target - b.bend) * 0.08;
-          const lean = b.bend * b.h * 0.55;
-          const tipX = b.x + lean, tipY = H - b.h + Math.abs(lean) * 0.25;
-          const cx = b.x + lean * 0.35, cy = H - b.h * 0.55;
-          const w = L.w;
-          ctx.moveTo(b.x - w, H);
-          ctx.quadraticCurveTo(cx - w * 0.5, cy, tipX, tipY);
-          ctx.quadraticCurveTo(cx + w * 0.5, cy, b.x + w, H);
-        });
-        ctx.fill();
-      });
     });
   };
 
@@ -139,7 +185,7 @@
     visible = e.isIntersecting;
     if (visible && !raf && !reduce) raf = requestAnimationFrame(loop);
   }, { rootMargin: '100px 0px' }).observe(sec);
-  // Só refaz o que mudou: o gramado quando a tela muda de tamanho, os ramos quando cabe outro número deles
+  // Só refaz o que mudou: os grãos quando a tela muda de tamanho, os ramos quando cabe outro número deles
   let lastW = 0, lastH = 0, lastN = 0;
   const resize = () => {
     if (cv.clientWidth !== lastW || cv.clientHeight !== lastH) { lastW = cv.clientWidth; lastH = cv.clientHeight; size(); }
