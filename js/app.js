@@ -103,6 +103,10 @@
       const drop = () => { btn.remove(); refresh(); };
       if (img.complete && img.naturalWidth === 0) drop();
       img.addEventListener('error', drop);
+      // A imagem é lazy: confere logo se o arquivo existe, para o espaço vazio não aparecer e sumir depois
+      const probe = new Image();
+      probe.onerror = drop;
+      probe.src = img.getAttribute('src');
       btn.addEventListener('click', () => {
         if (!modalEl || !window.bootstrap) { window.open(img.src, '_blank', 'noopener'); return; }
         const imgs = [...box.querySelectorAll('.shot img')];

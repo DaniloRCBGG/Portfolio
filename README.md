@@ -59,6 +59,7 @@ No GitHub, abra o arquivo, clique no lápis (Edit), altere e clique em **Commit 
 | Onde | Arquivos |
 | --- | --- |
 | Prints do Gêmeo | `img/gemeo-1.png`, `img/gemeo-2.png`, `img/gemeo-3.png` |
+| Prints do n8n | `img/n8n-1.png` (workflow no editor) e `img/n8n-2.png` (execução bem-sucedida) |
 | Antes e depois do salão | `img/curly/antes-1.jpg` e `img/curly/depois-1.jpg` (e `-2`, `-3` para os outros resultados) |
 
-Enquanto um arquivo não existe, os prints do Gêmeo não aparecem e o antes e depois mostra bonecas de pano desenhadas no navegador (pele negra e parda, cabelo de lã cacheado), uma para cada resultado. Antes de subir prints, confira se não aparecem IPs, tokens ou endereços internos; e use fotos de clientes só com autorização.
+Enquanto um arquivo não existe, os prints do Gêmeo e do n8n não aparecem e o antes e depois mostra bonecas de pano desenhadas no navegador (pele negra e parda, cabelo de lã cacheado), uma para cada resultado. Antes de subir prints, confira se não aparecem IPs, tokens ou endereços internos; e use fotos de clientes só com autorização.

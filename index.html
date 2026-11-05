@@ -425,10 +425,14 @@
       <div class="project-head">
         <div class="d-flex flex-wrap gap-2"><span class="badge-soft">Automação e integração</span><span class="badge-soft badge-line">Prefeitura de Niterói</span><span class="badge-soft">Ferramenta interna em uso</span></div>
         <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
-          <h2 id="t-n8n">Plataforma de automação com n8n</h2>
+          <h2 id="t-n8n">Plataforma de automação e integração de sistemas com n8n</h2>
           <span class="badge-soft badge-line"><i class="bi bi-lock" aria-hidden="true"></i> Uso interno · sem acesso público</span>
         </div>
-        <p class="text-muted-2 mb-0">Uma instância própria do n8n, montada por mim para o Escritório de Dados criar e rodar integrações entre sistemas sem depender de serviço externo. Nasceu na VM de homologação e hoje é ferramenta interna da equipe.</p>
+        <p class="text-muted-2 mb-0">Uma instância própria do n8n, montada por mim para o Escritório de Dados criar e rodar integrações entre sistemas sem depender de serviço externo. Preparei o ambiente, integrei os serviços em contêineres, defini como os eventos são validados e gravados e investiguei os problemas que apareceram nos testes. Nasceu na VM de homologação e hoje é ferramenta interna da equipe.</p>
+      </div>
+      <div class="shots" data-project="n8n">
+        <button class="shot" type="button"><img src="img/n8n-1.png" alt="Workflow do webhook no editor do n8n (captura sem dados internos)" loading="lazy"></button>
+        <button class="shot" type="button"><img src="img/n8n-2.png" alt="Execução bem-sucedida, com o evento gravado" loading="lazy"></button>
       </div>
       <div class="app-label is-n8n"><span>Camada de transporte</span> cada evento é um ponto de luz que viaja pelo fluxo</div>
       <div class="flow-scroll">
@@ -470,7 +474,7 @@
       </div>
       <div class="row g-4 mt-1">
         <div class="col-lg-6 reveal"><h3 class="h5">Para que serve</h3><p class="text-muted-2 mb-0">Recebe eventos de outros sistemas, confere os dados e grava o que é válido, sem cada integração precisar de um serviço novo. O primeiro fluxo tem webhook autenticado, validação, lógica condicional e gravação no PostgreSQL.</p></div>
-        <div class="col-lg-6 reveal"><h3 class="h5">Como eu fiz</h3><ul class="contrib"><li>Montei a stack com Docker Compose e o primeiro workflow da plataforma.</li><li>Testei payloads válidos e inválidos, inclusive JSON como objeto ou como lista.</li><li>Diagnóstico pelos logs e atualização de versão da instância.</li></ul></div>
+        <div class="col-lg-6 reveal"><h3 class="h5">Como eu fiz</h3><ul class="contrib"><li>Montei a stack com Docker Compose (n8n, PostgreSQL e Redis numa rede dedicada) e o primeiro workflow da plataforma.</li><li>Defini o contrato do evento e testei payloads válidos e inválidos, inclusive JSON como objeto ou como lista.</li><li>Diagnóstico pelos logs, configuração por variáveis de ambiente e atualização da instância da 1.108.2 para a 2.32.6.</li></ul></div>
       </div>
 <div class="proj-skills" data-project="n8n"></div>
       <div class="howto" id="n8n-etapas">
@@ -480,11 +484,11 @@
         </div>
         <div class="row g-3">
         <div class="col-lg-6">
-          <article class="step-card" id="n8n-etapa-1" data-skills="webhooks n8n" data-node="webhook">
+          <article class="step-card" id="n8n-etapa-1" data-skills="webhooks apis-rest n8n" data-node="webhook">
             <header><span class="step-no">1</span><div><span class="eyebrow">Entrada</span><h4>O sistema de origem chama o webhook</h4></div></header>
             <div class="mf" aria-hidden="true"><span class="mf-n"><i class="bi bi-hdd-rack" aria-hidden="true"></i>origem</span><span class="mf-l"><em>POST JSON</em></span><span class="mf-n is-core"><i class="bi bi-plug" aria-hidden="true"></i>Webhook</span><span class="mf-l"></span><span class="mf-n"><i class="bi bi-key" aria-hidden="true"></i>Bearer</span></div>
             <p>Outro sistema manda o evento num POST com JSON. O webhook só aceita a chamada com o token Bearer certo; sem ele, a resposta é 403 e nada segue.</p>
-            <div class="skill-links"><span class="sl-label">Habilidades desta etapa</span><a class="skill-link" href="#habilidade-webhooks" data-skill="Webhooks">Webhooks</a><a class="skill-link" href="#habilidade-n8n" data-skill="n8n">n8n</a></div>
+            <div class="skill-links"><span class="sl-label">Habilidades desta etapa</span><a class="skill-link" href="#habilidade-webhooks" data-skill="Webhooks">Webhooks</a><a class="skill-link" href="#habilidade-apis-rest" data-skill="APIs REST">APIs REST</a><a class="skill-link" href="#habilidade-n8n" data-skill="n8n">n8n</a></div>
           </article>
         </div>
         <div class="col-lg-6">
@@ -523,25 +527,50 @@
           <article class="step-card" id="n8n-etapa-6" data-skills="docker-compose docker linux redis python" data-node="origem webhook code if pg resp erro">
             <header><span class="step-no">6</span><div><span class="eyebrow">Infraestrutura</span><h4>A stack que segura o fluxo</h4></div></header>
             <div class="mf" aria-hidden="true"><span class="mf-n is-core"><i class="bi bi-boxes" aria-hidden="true"></i>Docker Compose</span><span class="mf-l"></span><span class="mf-c"><span class="mf-n"><i class="bi bi-diagram-2" aria-hidden="true"></i>n8n</span><span class="mf-n"><i class="bi bi-database" aria-hidden="true"></i>PostgreSQL</span><span class="mf-n"><i class="bi bi-lightning-charge" aria-hidden="true"></i>Redis</span></span></div>
-            <p>n8n, PostgreSQL e Redis sobem juntos com Docker Compose numa VM Linux, com rede dedicada, volumes, healthchecks e reinício automático. Atualizei a instância da 1.108.2 para a 2.32.6 testando Code Nodes em JavaScript e Python.</p>
+            <p>n8n, PostgreSQL e Redis sobem juntos com Docker Compose numa VM Linux, na rede dedicada automation-network, com volumes, healthchecks e reinício automático. Atualizei a instância da 1.108.2 para a 2.32.6 e testei Code Nodes em JavaScript e Python; o Python esbarrou na falta do runtime no ambiente, que encontrei pelos logs.</p>
             <div class="skill-links"><span class="sl-label">Habilidades desta etapa</span><a class="skill-link" href="#habilidade-docker-compose" data-skill="Docker Compose">Docker Compose</a><a class="skill-link" href="#habilidade-docker" data-skill="Docker">Docker</a><a class="skill-link" href="#habilidade-linux" data-skill="Linux">Linux</a><a class="skill-link" href="#habilidade-redis" data-skill="Redis">Redis</a><a class="skill-link" href="#habilidade-python" data-skill="Python">Python</a></div>
           </article>
         </div>
         </div>
       </div>
       <details class="inside" id="n8n-dentro">
-        <summary><span class="inside-kicker"><i class="bi bi-cpu" aria-hidden="true"></i> Por dentro</span><span class="inside-title">Serviços, configuração e versão</span><span class="inside-hint">abrir a parte técnica</span></summary>
+        <summary><span class="inside-kicker"><i class="bi bi-cpu" aria-hidden="true"></i> Por dentro</span><span class="inside-title">Serviços, contrato do evento e diagnóstico</span><span class="inside-hint">abrir a parte técnica</span></summary>
         <div class="inside-body">
           <div class="row g-3">
             <div class="col-md-4"><div class="n8n-card"><span class="pulse" aria-hidden="true"></span><b>n8n</b><span>Editor e execução dos workflows, autogerenciado.</span></div></div>
             <div class="col-md-4"><div class="n8n-card"><span class="pulse" aria-hidden="true"></span><b>PostgreSQL</b><span>Persistência dos eventos na tabela webhook_events.</span></div></div>
             <div class="col-md-4"><div class="n8n-card"><span class="pulse" aria-hidden="true"></span><b>Redis</b><span>Serviço de apoio na mesma stack.</span></div></div>
           </div>
-          <ul class="infra-list mt-3">
-            <li><i class="bi bi-hdd-network" aria-hidden="true"></i><span><b>Docker Compose</b> com rede dedicada, volumes persistentes, healthchecks, reinício automático e rotação de logs.</span></li>
-            <li><i class="bi bi-key" aria-hidden="true"></i><span><b>Variáveis de ambiente</b>: configuração e credenciais fora dos arquivos do projeto.</span></li>
-            <li><i class="bi bi-arrow-up-circle" aria-hidden="true"></i><span><b>Atualização</b> da instância da versão 1.108.2 para a 2.32.6, com testes de Code Nodes em JavaScript e Python.</span></li>
-          </ul>
+          <div class="row g-4 mt-1">
+            <div class="col-lg-6">
+              <h4 class="h5">Infraestrutura</h4>
+              <ul class="infra-list">
+                <li><i class="bi bi-hdd-network" aria-hidden="true"></i><span><b>Docker Compose</b> com a rede dedicada <code>automation-network</code>, volumes persistentes, healthchecks, reinício automático e rotação de logs.</span></li>
+                <li><i class="bi bi-key" aria-hidden="true"></i><span><b>Variáveis de ambiente</b>: configuração e credenciais fora dos arquivos do projeto.</span></li>
+                <li><i class="bi bi-hdd" aria-hidden="true"></i><span><b>VM de homologação</b> da Prefeitura, com o n8n autogerenciado.</span></li>
+              </ul>
+              <h4 class="h5 mt-4">Contrato do evento</h4>
+              <table class="table table-sm table-events mb-0"><thead><tr><th>campo</th><th>o que é</th></tr></thead><tbody>
+                <tr><td><code>event_id</code></td><td>identificador do evento</td></tr>
+                <tr><td><code>source</code></td><td>sistema de origem</td></tr>
+                <tr><td><code>timestamp</code></td><td>data e hora, no padrão ISO 8601</td></tr>
+                <tr><td><code>data</code></td><td>conteúdo do evento, como objeto</td></tr>
+              </tbody></table>
+            </div>
+            <div class="col-lg-6">
+              <h4 class="h5">Diagnóstico e manutenção</h4>
+              <ul class="infra-list">
+                <li><i class="bi bi-arrow-up-circle" aria-hidden="true"></i><span><b>Atualização</b> da instância da versão 1.108.2 para a 2.32.6.</span></li>
+                <li><i class="bi bi-filetype-js" aria-hidden="true"></i><span><b>Code Nodes</b> testados em JavaScript e Python. O Python esbarrou na falta do runtime no ambiente, o que encontrei investigando os logs.</span></li>
+                <li><i class="bi bi-braces" aria-hidden="true"></i><span><b>JSON como objeto ou lista</b>: diferenças no mapeamento tratadas e testadas com payloads válidos e inválidos.</span></li>
+                <li><i class="bi bi-journal-code" aria-hidden="true"></i><span><b>API do n8n</b>: a documentação em <code>/api/v1/docs</code> passou a responder depois da configuração.</span></li>
+              </ul>
+              <h4 class="h5 mt-4">Explorado, ainda não concluído</h4>
+              <ul class="infra-list">
+                <li><i class="bi bi-compass" aria-hidden="true"></i><span><b>MCP Server Trigger</b> e possibilidades de integração com o Copilot, para usar os workflows a partir de assistentes de IA.</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </details>
     </div>
