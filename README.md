@@ -60,6 +60,7 @@ No GitHub, abra o arquivo, clique no lápis (Edit), altere e clique em **Commit 
 | Onde | Arquivos |
 | --- | --- |
 | Prints do Gêmeo | `img/gemeo-1.png`, `img/gemeo-2.png`, `img/gemeo-3.png` |
+| Currículo para baixar | `cv/Curriculo_Danilo_Rios.pdf` (versão pública, sem telefone) |
 | Prints do n8n | `img/n8n-1.png` (workflow no editor) e `img/n8n-2.png` (execução bem-sucedida) |
 | Antes e depois do salão | `img/curly/antes-1.jpg` e `img/curly/depois-1.jpg` (e `-2`, `-3` para os outros resultados) |
 

@@ -3,7 +3,7 @@
 window.PORTFOLIO = {
   links: {
     github: 'https://github.com/DaniloRCBGG',
-    portfolio: 'https://danilorcbgg.github.io/Portfolio/',
+    curriculo: 'cv/Curriculo_Danilo_Rios.pdf',
     linkedin: 'https://www.linkedin.com/in/danilo-rios-cerqueira',
     email: 'danilorios67@gmail.com',
   },
